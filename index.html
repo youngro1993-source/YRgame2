@@ -565,7 +565,7 @@
         <div style="font-size:0.8rem; color:#94a3b8; margin-top: 4px;">은하 수호대 본부</div>
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div class="coin-badge">🪙 <span id="mainCoinDisplay">0</span></div>
-          <div class="coin-info-text">(1000킬당 10코인)</div>
+          <div class="coin-info-text">(100킬당 10코인)</div>
           <div class="coin-info-text" style="color: #93c5fd; margin-top: 2px;">누적 킬: <span id="mainTotalKills">0</span></div>
         </div>
       </div>
@@ -775,7 +775,7 @@
     var shopAppleCost = parseFloat(localStorage.getItem("yoon_apple_cost") || "200");
     var shopAppleCount = parseInt(localStorage.getItem("yoon_apple_count") || "0");
     
-    // 현재 세션(판)에서 획득한 코인
+    // 이번 게임 세션에서 획득한 코인
     var sessionCoinsEarned = 0;
 
     function saveShopData() {
@@ -1090,7 +1090,7 @@
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 2 + 0.5,
-          speed: Math.random() * 1.5 + 0.5,
+          speed: (Math.random() * 1.5 + 0.5) * 0.85, // 배경별 흐름도 살짝 낮춤
           alpha: Math.random() * 0.8 + 0.2
         });
       }
@@ -1166,9 +1166,9 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 3.2, 
-      tilt: 0,        // 기체 기울기 각도
-      maxTilt: 0.35,  // 최대 기울기
+      speed: 2.7,     // [속도 조절] 비행기 이동 속도를 기존 3.2에서 2.7로 완화
+      tilt: 0,        
+      maxTilt: 0.35,  
       lives: 3, 
       invincibleTimer: 0 
     };
@@ -1179,7 +1179,6 @@
     var keys = {};
 
     var lastShootTime = 0;
-    // 기본 연사 속도 (기존 100ms에서 30% 감속되어 약 130ms)
     var shootInterval = 100 * 1.3;
 
     var touchLeftPressed = false;
@@ -1200,7 +1199,7 @@
     function updateShopUI() {
       document.getElementById('mainCoinDisplay').innerText = userCoins;
       document.getElementById('shopCoinDisplay').innerText = userCoins;
-      document.getElementById('mainTotalKills').innerText = userTotalKills; // 누적 킬 업데이트
+      document.getElementById('mainTotalKills').innerText = userTotalKills;
       
       var currentBaseDmg = 1 + shopMeatBonusDmg;
       var currentInterval = (100 * 1.3) * Math.pow(0.9, shopAppleCount);
@@ -1224,11 +1223,11 @@
       if (type === 'meat' && userCoins >= shopMeatCost) {
         userCoins -= Math.floor(shopMeatCost);
         shopMeatBonusDmg += 1;
-        shopMeatCost *= 1.2; // 20% 상승
+        shopMeatCost *= 1.2;
       } else if (type === 'apple' && userCoins >= shopAppleCost) {
         userCoins -= Math.floor(shopAppleCost);
         shopAppleCount += 1;
-        shopAppleCost *= 1.2; // 20% 상승
+        shopAppleCost *= 1.2;
       }
       saveShopData();
       updateShopUI();
@@ -1245,7 +1244,6 @@
       nicknameWarning.textContent = "";
       playerNickname = inputVal;
       
-      // 출격 시 닉네임을 로컬스토리지에 저장
       localStorage.setItem("yoon_nickname", playerNickname);
 
       storyPilotName.textContent = playerNickname;
@@ -1270,7 +1268,7 @@
         color: isCrit ? "#f97316" : "#facc15",
         fontScale: isCrit ? 1.4 : 1.0,
         alpha: 1,
-        vy: -1.2
+        vy: -1.0
       });
     }
 
@@ -1280,7 +1278,7 @@
       for (var i = 0; i < count; i++) {
         if (particles.length >= 40) particles.shift();
         var angle = Math.random() * Math.PI * 2;
-        var speed = Math.random() * 3 + 1;
+        var speed = Math.random() * 2.5 + 0.8;
         particles.push({
           x: x,
           y: y,
@@ -1441,14 +1439,14 @@
           bullets.push({ 
             x: startX - (2 + sizeBonus * 0.5), y: startY, 
             width: 4 + sizeBonus, height: 30 + sizeBonus * 2, 
-            speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set(), damage: playerDamage
+            speed: 13, type: "laser", vx: 0, vy: -13, pierce: true, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "saw") {
           var sawSize = 20 + sizeBonus * 1.5;
           bullets.push({ 
             x: startX - sawSize / 2, y: startY, 
             width: sawSize, height: sawSize, 
-            speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set(), damage: playerDamage
+            speed: 5.5, type: "saw", vx: 0, vy: -5.5, angle: 0, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "shotgun") {
           var sgSize = 5 + sizeBonus * 0.8;
@@ -1456,7 +1454,7 @@
             bullets.push({ 
               x: startX - sgSize / 2, y: startY, 
               width: sgSize, height: sgSize, 
-              type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7, damage: playerDamage 
+              type: "shotgun", vx: Math.sin(ang) * 6, vy: -Math.cos(ang) * 6, damage: playerDamage 
             });
           });
         } else {
@@ -1465,19 +1463,17 @@
           bullets.push({ 
             x: startX - normW / 2, y: startY, 
             width: normW, height: normH, 
-            type: "normal", vx: 0, vy: -8.5, damage: playerDamage 
+            type: "normal", vx: 0, vy: -7.5, damage: playerDamage 
           });
         }
       });
     }
 
-    // 기울기(Tilt) 연출이 추가된 drawPlayer
     function drawPlayer(ctx, x, y, width, height) {
       ctx.save();
       var cx = x + width / 2;
       var cy = y + height / 2;
 
-      // 비행기 중심점으로 축 이동 후 회전
       ctx.translate(cx, cy);
       ctx.rotate(player.tilt);
       ctx.translate(-cx, -cy);
@@ -1792,7 +1788,6 @@
       player.invincibleTimer = 0;
       player.tilt = 0;
 
-      // 상점 업그레이드 수치를 매 게임 시작 시 깨끗하게 초기화
       playerDamage = 1 + shopMeatBonusDmg;
       shootInterval = (100 * 1.3) * Math.pow(0.9, shopAppleCount);
 
@@ -1800,7 +1795,7 @@
       stage = 1;
       killCount = 0;
       bossKillCount = 0;
-      sessionCoinsEarned = 0; // 이번 판에서 얻은 코인 초기화
+      sessionCoinsEarned = 0;
 
       nextBossKillTarget = 20; 
       nextEliteKillTarget = 15;
@@ -1844,20 +1839,20 @@
       var x = Math.random() * (canvas.width - width);
       
       var type = "normal";
-      var speed = 0.85; 
+      var speed = 0.7; // [속도 조절] 일반 몬스터 낙하 속도 완화 (0.85 -> 0.7)
       var hp = 1;
 
       if (rand < 0.3) {
         type = "fast";
-        speed = 1.6;
+        speed = 1.35; // [속도 조절] 빠른 몬스터 속도 완화 (1.6 -> 1.35)
         hp = 1;
       } else if (rand < 0.55) {
         type = "shooter";
-        speed = 0.55;
+        speed = 0.45; // [속도 조절] 슈터 속도 완화 (0.55 -> 0.45)
         hp = 2;
       } else if (rand < 0.75) {
         type = "zigzag";
-        speed = 0.95;
+        speed = 0.8;  // [속도 조절] 지그재그 속도 완화 (0.95 -> 0.8)
         hp = 1;
       }
 
@@ -1890,7 +1885,7 @@
         y: -height,
         width: width,
         height: height,
-        speed: 0.45,
+        speed: 0.38, // [속도 조절] 엘리트 낙하 속도 완화
         type: "elite",
         hp: hp,
         maxHp: hp,
@@ -1909,8 +1904,8 @@
         baseY: 40,
         width: 80,
         height: 60,
-        speedX: 1.2,
-        speedY: 0.8,
+        speedX: 1.0, // [속도 조절] 보스 좌우 이동 속도 완화 (1.2 -> 1.0)
+        speedY: 0.7,
         hp: calculatedHp,
         maxHp: calculatedHp,
         lastShoot: 0,
@@ -1921,7 +1916,7 @@
 
     function spawnItem(x, y, forcedType) {
       if (forcedType) {
-        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: forcedType });
+        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.0, type: forcedType });
       } else {
         var randWeapon = Math.random();
         var weaponType = "laser";
@@ -1929,7 +1924,7 @@
         else if (randWeapon < 0.60) weaponType = "saw";
         else weaponType = "laser";
 
-        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: weaponType });
+        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.0, type: weaponType });
       }
     }
 
@@ -1970,8 +1965,8 @@
             y: originY - 10,
             width: 10,
             height: 10,
-            vx: Math.cos(angle) * 2.2,
-            vy: Math.sin(angle) * 2.2,
+            vx: Math.cos(angle) * 1.8, // [속도 조절] 보스 탄환 속도 완화
+            vy: Math.sin(angle) * 1.8,
             isHeavy: true
           });
         }
@@ -1983,8 +1978,8 @@
             y: originY,
             width: 10,
             height: 10,
-            vx: Math.sin(angle) * 2.5,
-            vy: Math.cos(angle) * 2.5,
+            vx: Math.sin(angle) * 2.1,
+            vy: Math.cos(angle) * 2.1,
             isHeavy: true
           });
         });
@@ -1992,7 +1987,7 @@
         var dx = (player.x + player.width / 2) - originX;
         var dy = (player.y + player.height / 2) - originY;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var speed = 2.8;
+        var speed = 2.3; // [속도 조절]
 
         enemyBullets.push({
           x: originX - 6,
@@ -2019,7 +2014,7 @@
 
       for (var i = 0; i < count; i++) {
         var angle = (Math.PI * 2 / count) * i;
-        var speed = 2.5;
+        var speed = 2.1; // [속도 조절]
         enemyBullets.push({
           x: originX - 5,
           y: originY - 5,
@@ -2051,7 +2046,7 @@
         lastShootTime = now;
       }
 
-      var currentSpawnInterval = Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1)));
+      var currentSpawnInterval = Math.max(22, Math.floor(70 / Math.pow(1.2, stage - 1))); // [속도 조절] 스폰 간격도 살짝 여유롭게
       if (gameTime % currentSpawnInterval === 0) {
         spawnMonster();
       }
@@ -2077,7 +2072,6 @@
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
 
-      // 좌우 이동에 따른 기체 기울기(Tilt) 로직
       if (moveX < 0) {
         player.tilt = Math.max(player.tilt - 0.05, -player.maxTilt);
       } else if (moveX > 0) {
@@ -2100,7 +2094,7 @@
         b.y += b.vy !== undefined ? b.vy : -b.speed;
 
         if (b.type === "saw") {
-          b.angle = (b.angle || 0) + 0.2;
+          b.angle = (b.angle || 0) + 0.18;
         }
 
         if (b.y < -30 || b.y > canvas.height + 30 || b.x < -30 || b.x > canvas.width + 30) {
@@ -2135,7 +2129,7 @@
 
         boss.y = boss.baseY + Math.sin(gameTime * 0.04) * 45;
 
-        var bossShootInterval = Math.max(45, 90 - (stage - 1) * 4);
+        var bossShootInterval = Math.max(50, 100 - (stage - 1) * 4);
         if (gameTime - boss.lastShoot > bossShootInterval) {
           fireBossPattern(boss);
           boss.lastShoot = gameTime;
@@ -2234,8 +2228,8 @@
           m.x = m.startX + Math.sin(m.y * 0.025) * 35;
         }
 
-        var shooterInterval = Math.max(120, 180 - (stage - 1) * 5);
-        var bulletSpeed = 1.8 + (stage - 1) * 0.15;
+        var shooterInterval = Math.max(140, 200 - (stage - 1) * 5);
+        var bulletSpeed = 1.5 + (stage - 1) * 0.12; // [속도 조절] 적 탄환 발사 속도 완화
 
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
@@ -2253,7 +2247,7 @@
         }
 
         if (m.type === "elite") {
-          if (gameTime - m.lastShoot > 90) {
+          if (gameTime - m.lastShoot > 100) {
             var dx = (player.x + player.width / 2) - (m.x + m.width / 2);
             var dy = (player.y + player.height / 2) - (m.y + m.height);
             var dist = Math.sqrt(dx * dx + dy * dy);
@@ -2262,8 +2256,8 @@
               y: m.y + m.height,
               width: 10,
               height: 10,
-              vx: (dx / dist) * 2.2,
-              vy: (dy / dist) * 2.2,
+              vx: (dx / dist) * 1.9,
+              vy: (dy / dist) * 1.9,
               isHeavy: true
             });
             m.lastShoot = gameTime;
@@ -2297,10 +2291,9 @@
               createExplosion(m.x + m.width / 2, m.y + m.height / 2, m.type === "elite" ? "#0284c7" : "#f97316", m.type === "elite" ? 20 : 10);
               killCount++;
 
-              // killCount > 0 조건을 추가하여 정확히 1000킬 단위일 때만 코인 보상 지급
-              if (killCount > 0 && killCount % 1000 === 0) {
+              if (killCount > 0 && killCount % 100 === 0) {
                 userCoins += 10;
-                sessionCoinsEarned += 10; // 이번 판 코인 누적
+                sessionCoinsEarned += 10;
                 saveShopData();
                 addDamageText(m.x, m.y, "+10 COINS!", true);
               }
@@ -2440,7 +2433,6 @@
       playSound('gameover');
       cancelAnimationFrame(gameAnimationId);
 
-      // 이번 판 킬수를 누적 킬수에 더하고 저장
       userTotalKills += killCount;
       saveShopData();
 
@@ -2450,7 +2442,6 @@
 
       finalScoreText.textContent = "Pilot: " + playerNickname + " | DMG: " + playerDamage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
       
-      // 이번 게임 획득 코인 및 킬수 안내 텍스트 반영
       sessionResultText.textContent = "이번 게임: " + killCount + "킬 / " + sessionCoinsEarned + "코인 획득!";
       
       saveScore(playerNickname, score, killCount, bossKillCount);
