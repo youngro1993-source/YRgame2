@@ -515,11 +515,11 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.9.0 (조작 및 가시성 디테일 강화)</div>
+            <div class="version-title">v3.10.0 (보스 패턴 및 밸런스 개편)</div>
             <ul>
-              <li><b>조이스틱 속도 동기화</b>: 조이스틱과 좌우 버튼 이동 감도를 완전히 동일하게 동기화.</li>
-              <li><b>탄환 크기 성장 연출</b>: 데미지 1 상승 시마다 총알 크기가 미세하게 확대.</li>
-              <li><b>보스 HP 수치 표시</b>: 보스 체력 바에 현재/최대 HP 텍스트 추가 표기.</li>
+              <li><b>보스 앞뒤(상하) 왕복 패턴 추가</b>: 보스가 상하로 접근했다가 후퇴하며 더욱 위협적인 공격 전개.</li>
+              <li><b>보스 체력 1.8배 상향</b>: 보스 기본 체력이 대폭 강화되어 전략적 플레이 요구.</li>
+              <li><b>비행기 이동 속도 미세 하향</b>: 기체 조작 속도를 3.2로 낮추어 정밀한 회피 제어 지원.</li>
             </ul>
           </div>
         </div>
@@ -949,7 +949,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 45;    
+    var bossBaseHp = 81; // 2. 보스 체력 1.8배 상향 (45 * 1.8 = 81)
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -959,7 +959,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 3.8, // 좌우 및 전체 기체 속도 기준
+      speed: 3.2, // 3. 비행기 이동 속도를 아주 조금 낮춤 (3.8 -> 3.2)
       lives: 3, 
       invincibleTimer: 0 
     };
@@ -1079,7 +1079,6 @@
 
     var joystickTouchId = null;
 
-    // 1. 조이스틱 조작 비율을 1.0 풀 스케일로 맞춰 버튼/키보드 감도와 완전 동기화
     function handleJoystickMove(clientX, clientY) {
       var rect = joystickArea.getBoundingClientRect();
       var centerX = rect.left + rect.width / 2;
@@ -1167,7 +1166,6 @@
       keys[e.code] = false;
     });
 
-    // 2. 데미지 상승 시 탄환 크기 확대 계산 보정 함수 (DMG당 +0.6~1px)
     function shoot() {
       playSound(currentWeapon);
 
@@ -1182,7 +1180,7 @@
       };
 
       var offsets = bulletOffsets[level];
-      var sizeBonus = (playerDamage - 1) * 0.8; // DMG 증가에 따른 탄환 스케일 보너스
+      var sizeBonus = (playerDamage - 1) * 0.8;
 
       offsets.forEach(function(offset) {
         var startX = player.x + player.width / 2 + offset;
@@ -1355,7 +1353,6 @@
       ctx.fillRect(m.x, m.y - 8, m.width * hpRatio, 4);
     }
 
-    // 3. 보스 체력 게이지 및 텍스트 숫자 표기 기능 추가
     function drawBoss(ctx, boss) {
       ctx.save();
       var cx = boss.x + boss.width / 2;
@@ -1427,7 +1424,6 @@
       ctx.lineWidth = 1.5;
       ctx.strokeRect(barX, barY, barWidth, barHeight);
 
-      // 3. 보스 HP 숫자 표기 (예: HP: 32 / 45)
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "center";
@@ -1639,9 +1635,11 @@
       boss = {
         x: canvas.width / 2 - 40,
         y: 40,
+        baseY: 40, // 상하 왕복 기준 Y 위치
         width: 80,
         height: 60,
         speedX: 1.2,
+        speedY: 0.8, // 상하 이동 속도
         hp: calculatedHp,
         maxHp: calculatedHp,
         lastShoot: 0,
@@ -1808,7 +1806,6 @@
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
 
-      // 1. 조이스틱 및 버튼의 이동속도 감도 수치 보정
       player.x += moveX * player.speed;
       player.y += moveY * player.speed;
 
@@ -1851,10 +1848,14 @@
       }
 
       if (boss) {
+        // 1. 보스 좌우 이동 및 앞(아래)뒤(위) 상하 왕복 이동 패턴 적용
         boss.x += boss.speedX;
         if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
           boss.speedX *= -1;
         }
+
+        // 사인파를 이용한 앞뒤(Y축 상하) 왕복 이동 구현
+        boss.y = boss.baseY + Math.sin(gameTime * 0.04) * 45;
 
         var bossShootInterval = Math.max(45, 90 - (stage - 1) * 4);
         if (gameTime - boss.lastShoot > bossShootInterval) {
