@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>은하 수호대: YOON 행성을 지켜라</title>
   
-  <!-- Firebase SDK 라이브러리 (v10) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDK (가장 안정적인 CDN 호환 구문) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
   <style>
     * {
@@ -453,7 +453,9 @@
               <th>점수</th>
             </tr>
           </thead>
-          <tbody id="mainRankingBody"></tbody>
+          <tbody id="mainRankingBody">
+            <tr><td colspan="5">로딩 중...</td></tr>
+          </tbody>
         </table>
       </div>
 
@@ -517,7 +519,9 @@
               <th>점수</th>
             </tr>
           </thead>
-          <tbody id="rankingBody"></tbody>
+          <tbody id="rankingBody">
+            <tr><td colspan="5">로딩 중...</td></tr>
+          </tbody>
         </table>
       </div>
 
@@ -537,8 +541,8 @@
   </div>
 
   <script>
-    // === Firebase 설정 적용 ===
-    const firebaseConfig = {
+    // === Firebase 설정 및 초기화 ===
+    var firebaseConfig = {
       apiKey: "AIzaSyAJRx2UmQBrwxdGU0OaTLDix9xv7DgQLds",
       authDomain: "yoon-space-game-2fbae.firebaseapp.com",
       projectId: "yoon-space-game-2fbae",
@@ -548,8 +552,10 @@
       measurementId: "G-G3W3P6XYE0"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    var db = firebase.firestore();
 
     // === Firebase 점수 저장 함수 ===
     function saveScore(nickname, score, monsterKills, bossKills) {
@@ -560,10 +566,10 @@
         bossKills: bossKills || 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
-      .then(() => {
+      .then(function() {
         updateLeaderboardUI();
       })
-      .catch((error) => {
+      .catch(function(error) {
         console.error("서버 점수 저장 실패:", error);
       });
     }
@@ -574,40 +580,44 @@
         .orderBy("score", "desc")
         .limit(5)
         .get()
-        .then((querySnapshot) => {
-          let rankings = [];
-          querySnapshot.forEach((doc) => {
+        .then(function(querySnapshot) {
+          var rankings = [];
+          querySnapshot.forEach(function(doc) {
             rankings.push(doc.data());
           });
 
-          const htmlContent = rankings.length === 0 
-            ? `<tr><td colspan="5">등록된 기록이 없습니다.</td></tr>`
-            : rankings.map((r, index) => `
-                <tr>
-                  <td>${index + 1}</td>
-                  <td>${r.nickname}</td>
-                  <td>${r.bossKills || 0}</td>
-                  <td>${r.monsterKills || 0}</td>
-                  <td>${r.score}</td>
-                </tr>
-              `).join("");
+          var htmlContent = "";
+          if (rankings.length === 0) {
+            htmlContent = "<tr><td colspan='5'>등록된 기록이 없습니다.</td></tr>";
+          } else {
+            for (var i = 0; i < rankings.length; i++) {
+              var r = rankings[i];
+              htmlContent += "<tr>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td>" + (r.nickname || "익명") + "</td>" +
+                "<td>" + (r.bossKills || 0) + "</td>" +
+                "<td>" + (r.monsterKills || 0) + "</td>" +
+                "<td>" + (r.score || 0) + "</td>" +
+                "</tr>";
+            }
+          }
 
           document.getElementById("rankingBody").innerHTML = htmlContent;
           document.getElementById("mainRankingBody").innerHTML = htmlContent;
         })
-        .catch((error) => {
+        .catch(function(error) {
           console.error("랭킹 로딩 실패:", error);
         });
     }
 
-    document.addEventListener("touchmove", (e) => {
+    document.addEventListener("touchmove", function(e) {
       if (e.target.closest('.screen') || e.target.closest('.modal-overlay')) return; 
       e.preventDefault();
     }, { passive: false });
 
     // Web Audio 사운드 엔진
-    let audioCtx = null;
-    let bgmInterval = null;
+    var audioCtx = null;
+    var bgmInterval = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -621,12 +631,12 @@
     function playSound(type) {
       if (!audioCtx) return;
 
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
-      const now = audioCtx.currentTime;
+      var now = audioCtx.currentTime;
 
       if (type === 'normal') {
         osc.type = 'square';
@@ -700,14 +710,14 @@
       if (bgmInterval) return;
       if (!audioCtx) return;
 
-      const notes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
-      let step = 0;
+      var notes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
+      var step = 0;
 
-      bgmInterval = setInterval(() => {
+      bgmInterval = setInterval(function() {
         if (!audioCtx || isGameOver) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        var now = audioCtx.currentTime;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
 
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(notes[step % notes.length], now);
@@ -731,24 +741,24 @@
       }
     }
 
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
+    var canvas = document.getElementById("gameCanvas");
+    var ctx = canvas.getContext("2d");
 
-    const startScreen = document.getElementById("startScreen");
-    const rankScreen = document.getElementById("rankScreen");
-    const controlArea = document.getElementById("controlArea");
-    const updateModal = document.getElementById("updateModal");
-    const storyModal = document.getElementById("storyModal");
-    const storyPilotName = document.getElementById("storyPilotName");
-    const nicknameInput = document.getElementById("nicknameInput");
-    const nicknameWarning = document.getElementById("nicknameWarning");
-    const finalScoreText = document.getElementById("finalScoreText");
-    const rankingBody = document.getElementById("rankingBody");
-    const mainRankingBody = document.getElementById("mainRankingBody");
-    const joystickStatusNotice = document.getElementById("joystickStatusNotice");
+    var startScreen = document.getElementById("startScreen");
+    var rankScreen = document.getElementById("rankScreen");
+    var controlArea = document.getElementById("controlArea");
+    var updateModal = document.getElementById("updateModal");
+    var storyModal = document.getElementById("storyModal");
+    var storyPilotName = document.getElementById("storyPilotName");
+    var nicknameInput = document.getElementById("nicknameInput");
+    var nicknameWarning = document.getElementById("nicknameWarning");
+    var finalScoreText = document.getElementById("finalScoreText");
+    var rankingBody = document.getElementById("rankingBody");
+    var mainRankingBody = document.getElementById("mainRankingBody");
+    var joystickStatusNotice = document.getElementById("joystickStatusNotice");
 
     function resizeCanvas() {
-      const container = canvas.parentElement;
+      var container = canvas.parentElement;
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
       if (player) {
@@ -756,20 +766,20 @@
       }
     }
 
-    let playerNickname = "";
-    let score = 0;
-    let stage = 1;
-    let isGameOver = false;
-    let gameAnimationId;
-    let gameTime = 0;
-    let killCount = 0;
-    let bossKillCount = 0;
-    let nextBossKillTarget = 20; 
-    let bulletCount = 1;
+    var playerNickname = "";
+    var score = 0;
+    var stage = 1;
+    var isGameOver = false;
+    var gameAnimationId;
+    var gameTime = 0;
+    var killCount = 0;
+    var bossKillCount = 0;
+    var nextBossKillTarget = 20; 
+    var bulletCount = 1;
 
-    let currentWeapon = "normal";
+    var currentWeapon = "normal";
 
-    const weaponNames = {
+    var weaponNames = {
       "normal": "기본 탄환",
       "laser": "레이저 (L)",
       "saw": "톱니바퀴 (S)",
@@ -777,16 +787,16 @@
     };
 
     function updateStatusDisplay() {
-      joystickStatusNotice.textContent = `무기: ${weaponNames[currentWeapon]} | 탄환 x${bulletCount}`;
+      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount;
     }
 
-    let boss = null;
-    let bossBaseHp = 45;    
-    let bossSpawnCount = 0;  
-    let enemyBullets = [];
-    let particles = [];
+    var boss = null;
+    var bossBaseHp = 45;    
+    var bossSpawnCount = 0;  
+    var enemyBullets = [];
+    var particles = [];
 
-    const player = { 
+    var player = { 
       x: 0, 
       y: 0, 
       width: 28, 
@@ -796,32 +806,32 @@
       invincibleTimer: 0 
     };
 
-    let bullets = [];
-    let monsters = [];
-    let items = [];
-    let keys = {};
+    var bullets = [];
+    var monsters = [];
+    var items = [];
+    var keys = {};
 
-    let lastShootTime = 0;
-    const shootInterval = 100;
+    var lastShootTime = 0;
+    var shootInterval = 100;
 
-    let touchLeftPressed = false;
-    let touchRightPressed = false;
+    var touchLeftPressed = false;
+    var touchRightPressed = false;
     
-    let joystickAxisX = 0; 
-    let joystickAxisY = 0; 
+    var joystickAxisX = 0; 
+    var joystickAxisY = 0; 
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
     function toggleModal(id, show) {
-      const target = document.getElementById(id);
+      var target = document.getElementById(id);
       if (show) target.classList.remove("hidden");
       else target.classList.add("hidden");
     }
 
     function openStoryScreen() {
       initAudio();
-      const inputVal = nicknameInput.value.trim();
+      var inputVal = nicknameInput.value.trim();
       if (!inputVal) {
         nicknameWarning.textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!";
         nicknameInput.focus();
@@ -833,10 +843,12 @@
       storyModal.classList.remove("hidden");
     }
 
-    function createExplosion(x, y, color = "#f97316", count = 12) {
-      for (let i = 0; i < count; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 3 + 1;
+    function createExplosion(x, y, color, count) {
+      color = color || "#f97316";
+      count = count || 12;
+      for (var i = 0; i < count; i++) {
+        var angle = Math.random() * Math.PI * 2;
+        var speed = Math.random() * 3 + 1;
         particles.push({
           x: x,
           y: y,
@@ -850,84 +862,84 @@
       }
     }
 
-    const btnLeft = document.getElementById("btnLeft");
-    const btnRight = document.getElementById("btnRight");
-    const joystickArea = document.getElementById("joystickArea");
-    const joystickKnob = document.getElementById("joystickKnob");
+    var btnLeft = document.getElementById("btnLeft");
+    var btnRight = document.getElementById("btnRight");
+    var joystickArea = document.getElementById("joystickArea");
+    var joystickKnob = document.getElementById("joystickKnob");
 
-    btnLeft.addEventListener("touchstart", (e) => {
+    btnLeft.addEventListener("touchstart", function(e) {
       e.preventDefault();
       initAudio();
       touchLeftPressed = true;
       btnLeft.classList.add("pressed");
     });
-    btnLeft.addEventListener("touchend", (e) => {
+    btnLeft.addEventListener("touchend", function(e) {
       e.preventDefault();
       touchLeftPressed = false;
       btnLeft.classList.remove("pressed");
     });
 
-    btnRight.addEventListener("touchstart", (e) => {
+    btnRight.addEventListener("touchstart", function(e) {
       e.preventDefault();
       initAudio();
       touchRightPressed = true;
       btnRight.classList.add("pressed");
     });
-    btnRight.addEventListener("touchend", (e) => {
+    btnRight.addEventListener("touchend", function(e) {
       e.preventDefault();
       touchRightPressed = false;
       btnRight.classList.remove("pressed");
     });
 
-    btnLeft.addEventListener("mousedown", () => { touchLeftPressed = true; btnLeft.classList.add("pressed"); });
-    btnLeft.addEventListener("mouseup", () => { touchLeftPressed = false; btnLeft.classList.remove("pressed"); });
-    btnRight.addEventListener("mousedown", () => { touchRightPressed = true; btnRight.classList.add("pressed"); });
-    btnRight.addEventListener("mouseup", () => { touchRightPressed = false; btnRight.classList.remove("pressed"); });
+    btnLeft.addEventListener("mousedown", function() { touchLeftPressed = true; btnLeft.classList.add("pressed"); });
+    btnLeft.addEventListener("mouseup", function() { touchLeftPressed = false; btnLeft.classList.remove("pressed"); });
+    btnRight.addEventListener("mousedown", function() { touchRightPressed = true; btnRight.classList.add("pressed"); });
+    btnRight.addEventListener("mouseup", function() { touchRightPressed = false; btnRight.classList.remove("pressed"); });
 
-    let joystickTouchId = null;
+    var joystickTouchId = null;
 
     function handleJoystickMove(clientX, clientY) {
-      const rect = joystickArea.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const maxRadius = rect.width / 2;
+      var rect = joystickArea.getBoundingClientRect();
+      var centerX = rect.left + rect.width / 2;
+      var centerY = rect.top + rect.height / 2;
+      var maxRadius = rect.width / 2;
 
-      let deltaX = clientX - centerX;
-      let deltaY = clientY - centerY;
+      var deltaX = clientX - centerX;
+      var deltaY = clientY - centerY;
       
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
       if (distance > maxRadius) {
         deltaX = (deltaX / distance) * maxRadius;
         deltaY = (deltaY / distance) * maxRadius;
       }
 
-      joystickKnob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      joystickKnob.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
       
       joystickAxisX = (deltaX / maxRadius) * 0.5;
       joystickAxisY = (deltaY / maxRadius) * 0.5;
     }
 
     function resetJoystick() {
-      joystickKnob.style.transform = `translate(0px, 0px)`;
+      joystickKnob.style.transform = "translate(0px, 0px)";
       joystickAxisX = 0;
       joystickAxisY = 0;
       joystickTouchId = null;
     }
 
-    joystickArea.addEventListener("touchstart", (e) => {
+    joystickArea.addEventListener("touchstart", function(e) {
       e.preventDefault();
       initAudio();
       if (joystickTouchId === null && e.changedTouches.length > 0) {
-        const touch = e.changedTouches[0];
+        var touch = e.changedTouches[0];
         joystickTouchId = touch.identifier;
         handleJoystickMove(touch.clientX, touch.clientY);
       }
     });
 
-    joystickArea.addEventListener("touchmove", (e) => {
+    joystickArea.addEventListener("touchmove", function(e) {
       e.preventDefault();
-      for (let i = 0; i < e.touches.length; i++) {
+      for (var i = 0; i < e.touches.length; i++) {
         if (e.touches[i].identifier === joystickTouchId) {
           handleJoystickMove(e.touches[i].clientX, e.touches[i].clientY);
           break;
@@ -935,9 +947,9 @@
       }
     });
 
-    joystickArea.addEventListener("touchend", (e) => {
+    joystickArea.addEventListener("touchend", function(e) {
       e.preventDefault();
-      for (let i = 0; i < e.changedTouches.length; i++) {
+      for (var i = 0; i < e.changedTouches.length; i++) {
         if (e.changedTouches[i].identifier === joystickTouchId) {
           resetJoystick();
           break;
@@ -947,37 +959,37 @@
 
     joystickArea.addEventListener("touchcancel", resetJoystick);
 
-    let isMouseDownJoystick = false;
-    joystickArea.addEventListener("mousedown", (e) => {
+    var isMouseDownJoystick = false;
+    joystickArea.addEventListener("mousedown", function(e) {
       initAudio();
       isMouseDownJoystick = true;
       handleJoystickMove(e.clientX, e.clientY);
     });
-    window.addEventListener("mousemove", (e) => {
+    window.addEventListener("mousemove", function(e) {
       if (isMouseDownJoystick) {
         handleJoystickMove(e.clientX, e.clientY);
       }
     });
-    window.addEventListener("mouseup", () => {
+    window.addEventListener("mouseup", function() {
       if (isMouseDownJoystick) {
         isMouseDownJoystick = false;
         resetJoystick();
       }
     });
 
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", function(e) {
       initAudio();
       keys[e.code] = true;
     });
-    document.addEventListener("keyup", (e) => {
+    document.addEventListener("keyup", function(e) {
       keys[e.code] = false;
     });
 
     function shoot() {
       playSound(currentWeapon);
 
-      const level = Math.min(bulletCount, 6);
-      const bulletOffsets = {
+      var level = Math.min(bulletCount, 6);
+      var bulletOffsets = {
         1: [0],
         2: [-10, 10],
         3: [-16, 0, 16],
@@ -986,11 +998,11 @@
         6: [-40, -24, -8, 8, 24, 40]
       };
 
-      const offsets = bulletOffsets[level];
+      var offsets = bulletOffsets[level];
 
-      offsets.forEach(offset => {
-        const startX = player.x + player.width / 2 + offset;
-        const startY = player.y;
+      offsets.forEach(function(offset) {
+        var startX = player.x + player.width / 2 + offset;
+        var startY = player.y;
 
         if (currentWeapon === "laser") {
           bullets.push({ 
@@ -1003,7 +1015,7 @@
             speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set()
           });
         } else if (currentWeapon === "shotgun") {
-          [-0.15, 0.15].forEach(ang => {
+          [-0.15, 0.15].forEach(function(ang) {
             bullets.push({ 
               x: startX - 2.5, y: startY, width: 5, height: 5, 
               type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7 
@@ -1019,11 +1031,11 @@
     }
 
     function drawPlayer(ctx, x, y, width, height) {
-      const cx = x + width / 2;
+      var cx = x + width / 2;
 
       if (player.invincibleTimer > 0) {
         ctx.save();
-        ctx.strokeStyle = `rgba(56, 189, 248, ${0.4 + Math.sin(gameTime * 0.3) * 0.3})`;
+        ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(cx, y + height / 2, width + 4, 0, Math.PI * 2);
@@ -1074,16 +1086,16 @@
 
     function drawPixelMonster(ctx, x, y, width, height, color, shape) {
       ctx.fillStyle = color;
-      const unit = width / 8;
-      for (let r = 0; r < shape.length; r++) {
-        for (let c = 0; c < shape[r].length; c++) {
+      var unit = width / 8;
+      for (var r = 0; r < shape.length; r++) {
+        for (var c = 0; c < shape[r].length; c++) {
           if (shape[r][c] === 1) ctx.fillRect(x + c * unit, y + r * unit, unit, unit);
         }
       }
     }
 
     function drawNormalMonster(ctx, x, y, width, height) {
-      const shape = [
+      var shape = [
         [0,0,1,0,0,1,0,0],
         [0,1,1,1,1,1,1,0],
         [1,1,0,1,1,0,1,1],
@@ -1096,7 +1108,7 @@
     }
 
     function drawFastMonster(ctx, x, y, width, height) {
-      const shape = [
+      var shape = [
         [0,0,0,1,1,0,0,0],
         [0,0,1,1,1,1,0,0],
         [0,1,1,1,1,1,1,0],
@@ -1109,7 +1121,7 @@
     }
 
     function drawShooterMonster(ctx, x, y, width, height) {
-      const shape = [
+      var shape = [
         [1,1,1,1,1,1,1,1],
         [1,0,1,1,1,1,0,1],
         [1,1,1,1,1,1,1,1],
@@ -1121,7 +1133,7 @@
     }
 
     function drawZigzagMonster(ctx, x, y, width, height) {
-      const shape = [
+      var shape = [
         [0,1,0,0,0,0,1,0],
         [1,1,1,0,0,1,1,1],
         [1,0,1,1,1,1,0,1],
@@ -1134,8 +1146,8 @@
 
     function drawBoss(ctx, boss) {
       ctx.save();
-      const cx = boss.x + boss.width / 2;
-      const cy = boss.y + boss.height / 2;
+      var cx = boss.x + boss.width / 2;
+      var cy = boss.y + boss.height / 2;
 
       if (boss.designType === 0) {
         ctx.fillStyle = "#dc2626";
@@ -1189,11 +1201,11 @@
       }
       ctx.restore();
 
-      const barWidth = canvas.width * 0.6;
-      const barHeight = 12;
-      const barX = (canvas.width - barWidth) / 2;
-      const barY = 15;
-      const hpRatio = Math.max(0, boss.hp / boss.maxHp);
+      var barWidth = canvas.width * 0.6;
+      var barHeight = 12;
+      var barX = (canvas.width - barWidth) / 2;
+      var barY = 15;
+      var hpRatio = Math.max(0, boss.hp / boss.maxHp);
 
       ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
       ctx.fillRect(barX, barY, barWidth, barHeight);
@@ -1204,7 +1216,7 @@
     }
 
     function drawItem(ctx, item) {
-      const colorMap = {
+      var colorMap = {
         "laser": "#22c55e",
         "saw": "#c084fc",
         "shotgun": "#f97316",
@@ -1222,7 +1234,7 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      const textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "2X", "heart": "H" };
+      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "2X", "heart": "H" };
       ctx.fillText(textMap[item.type] || "2X", item.x + item.width / 2, item.y + item.height / 2);
     }
 
@@ -1302,14 +1314,14 @@
     }
 
     function spawnMonster() {
-      const rand = Math.random();
-      const width = 32;
-      const height = 32;
-      const x = Math.random() * (canvas.width - width);
+      var rand = Math.random();
+      var width = 32;
+      var height = 32;
+      var x = Math.random() * (canvas.width - width);
       
-      let type = "normal";
-      let speed = 0.85; 
-      let hp = 1;
+      var type = "normal";
+      var speed = 0.85; 
+      var hp = 1;
 
       if (rand < 0.3) {
         type = "fast";
@@ -1341,7 +1353,7 @@
 
     function spawnBoss() {
       bossSpawnCount++;
-      const calculatedHp = Math.floor(bossBaseHp * Math.pow(1.3, bossSpawnCount - 1));
+      var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.3, bossSpawnCount - 1));
       
       boss = {
         x: canvas.width / 2 - 40,
@@ -1357,17 +1369,17 @@
       };
     }
 
-    function spawnItem(x, y, forcedType = null) {
+    function spawnItem(x, y, forcedType) {
       if (forcedType) {
-        items.push({ x, y, width: 22, height: 22, speed: 1.2, type: forcedType });
+        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: forcedType });
       } else {
-        const randWeapon = Math.random();
-        let weaponType = "laser";
+        var randWeapon = Math.random();
+        var weaponType = "laser";
         if (randWeapon < 0.22) weaponType = "shotgun";
         else if (randWeapon < 0.60) weaponType = "saw";
         else weaponType = "laser";
 
-        items.push({ x, y, width: 22, height: 22, speed: 1.2, type: weaponType });
+        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: weaponType });
       }
     }
 
@@ -1395,12 +1407,12 @@
     }
 
     function fireBossPattern(boss) {
-      const originX = boss.x + boss.width / 2;
-      const originY = boss.y + boss.height;
+      var originX = boss.x + boss.width / 2;
+      var originY = boss.y + boss.height;
 
       if (boss.patternTimer % 2 === 0) {
-        const angles = [-0.25, 0, 0.25];
-        angles.forEach(angle => {
+        var angles = [-0.25, 0, 0.25];
+        angles.forEach(function(angle) {
           enemyBullets.push({
             x: originX - 4,
             y: originY,
@@ -1411,10 +1423,10 @@
           });
         });
       } else {
-        const dx = (player.x + player.width / 2) - originX;
-        const dy = (player.y + player.height / 2) - originY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const speed = 2.8;
+        var dx = (player.x + player.width / 2) - originX;
+        var dy = (player.y + player.height / 2) - originY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var speed = 2.8;
 
         enemyBullets.push({
           x: originX - 5,
@@ -1431,15 +1443,15 @@
 
     function explodeBoss(boss) {
       playSound('explosion');
-      const originX = boss.x + boss.width / 2;
-      const originY = boss.y + boss.height / 2;
+      var originX = boss.x + boss.width / 2;
+      var originY = boss.y + boss.height / 2;
       createExplosion(originX, originY, "#ef4444", 30);
 
-      const count = 10 + (stage - 1) * 2; 
+      var count = 10 + (stage - 1) * 2; 
 
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 / count) * i;
-        const speed = 2.5;
+      for (var i = 0; i < count; i++) {
+        var angle = (Math.PI * 2 / count) * i;
+        var speed = 2.5;
         enemyBullets.push({
           x: originX - 4,
           y: originY - 4,
@@ -1460,13 +1472,13 @@
         player.invincibleTimer--;
       }
 
-      const now = Date.now();
+      var now = Date.now();
       if (now - lastShootTime > shootInterval) {
         shoot();
         lastShootTime = now;
       }
 
-      const currentSpawnInterval = Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1)));
+      var currentSpawnInterval = Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1)));
       if (gameTime % currentSpawnInterval === 0) {
         spawnMonster();
       }
@@ -1476,8 +1488,8 @@
         nextBossKillTarget += 20;
       }
 
-      let moveX = 0;
-      let moveY = 0;
+      var moveX = 0;
+      var moveY = 0;
 
       if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 1;
       if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 1;
@@ -1492,11 +1504,11 @@
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
       
-      const maxPlayerY = canvas.height - player.height - 160;
+      var maxPlayerY = canvas.height - player.height - 160;
       player.y = Math.max(0, Math.min(maxPlayerY, player.y));
 
-      for (let i = bullets.length - 1; i >= 0; i--) {
-        const b = bullets[i];
+      for (var i = bullets.length - 1; i >= 0; i--) {
+        var b = bullets[i];
         b.x += b.vx || 0;
         b.y += b.vy !== undefined ? b.vy : -b.speed;
 
@@ -1509,8 +1521,8 @@
         }
       }
 
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
         p.alpha -= p.decay;
@@ -1525,14 +1537,14 @@
           boss.speedX *= -1;
         }
 
-        const bossShootInterval = Math.max(55, 100 - (stage - 1) * 4);
+        var bossShootInterval = Math.max(55, 100 - (stage - 1) * 4);
         if (gameTime - boss.lastShoot > bossShootInterval) {
           fireBossPattern(boss);
           boss.lastShoot = gameTime;
         }
 
-        for (let j = bullets.length - 1; j >= 0; j--) {
-          const b = bullets[j];
+        for (var j = bullets.length - 1; j >= 0; j--) {
+          var b = bullets[j];
           if (checkCollision(b, boss)) {
             if (b.pierce) {
               if (!b.hitEnemies.has('boss')) {
@@ -1569,8 +1581,8 @@
         }
       }
 
-      for (let i = enemyBullets.length - 1; i >= 0; i--) {
-        const eb = enemyBullets[i];
+      for (var i = enemyBullets.length - 1; i >= 0; i--) {
+        var eb = enemyBullets[i];
         eb.x += eb.vx;
         eb.y += eb.vy;
 
@@ -1585,12 +1597,12 @@
         }
       }
 
-      for (let i = items.length - 1; i >= 0; i--) {
+      for (var i = items.length - 1; i >= 0; i--) {
         items[i].y += items[i].speed;
 
         if (checkCollision(player, items[i])) {
           playSound('item');
-          const itemType = items[i].type;
+          var itemType = items[i].type;
           
           if (itemType === "upgrade") {
             bulletCount = Math.min(6, bulletCount + 1);
@@ -1609,16 +1621,16 @@
         if (items[i].y > canvas.height) items.splice(i, 1);
       }
 
-      for (let i = monsters.length - 1; i >= 0; i--) {
-        const m = monsters[i];
+      for (var i = monsters.length - 1; i >= 0; i--) {
+        var m = monsters[i];
         m.y += m.speed;
 
         if (m.type === "zigzag") {
           m.x = m.startX + Math.sin(m.y * 0.025) * 35;
         }
 
-        const shooterInterval = Math.max(120, 180 - (stage - 1) * 5);
-        const bulletSpeed = 1.8 + (stage - 1) * 0.15;
+        var shooterInterval = Math.max(120, 180 - (stage - 1) * 5);
+        var bulletSpeed = 1.8 + (stage - 1) * 0.15;
 
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
@@ -1638,8 +1650,8 @@
           handlePlayerHit();
         }
 
-        for (let j = bullets.length - 1; j >= 0; j--) {
-          const b = bullets[j];
+        for (var j = bullets.length - 1; j >= 0; j--) {
+          var b = bullets[j];
           if (checkCollision(b, m)) {
             if (b.pierce) {
               if (!b.hitEnemies.has(m.id)) {
@@ -1657,7 +1669,7 @@
               killCount++;
               score += m.type === "fast" ? 150 : (m.type === "shooter" ? 200 : 100);
 
-              const randItem = Math.random();
+              var randItem = Math.random();
               if (randItem < 0.05) {
                 spawnItem(m.x, m.y, "upgrade");
               } 
@@ -1680,22 +1692,24 @@
 
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
 
-      for (let b of bullets) {
-        drawBullet(ctx, b);
+      for (var i = 0; i < bullets.length; i++) {
+        drawBullet(ctx, bullets[i]);
       }
 
       ctx.fillStyle = "#ff2222";
-      for (let eb of enemyBullets) {
+      for (var i = 0; i < enemyBullets.length; i++) {
+        var eb = enemyBullets[i];
         ctx.beginPath();
         ctx.arc(eb.x + eb.width / 2, eb.y + eb.height / 2, eb.width / 2, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      for (let item of items) {
-        drawItem(ctx, item);
+      for (var i = 0; i < items.length; i++) {
+        drawItem(ctx, items[i]);
       }
 
-      for (let m of monsters) {
+      for (var i = 0; i < monsters.length; i++) {
+        var m = monsters[i];
         if (m.type === "fast") drawFastMonster(ctx, m.x, m.y, m.width, m.height);
         else if (m.type === "shooter") drawShooterMonster(ctx, m.x, m.y, m.width, m.height);
         else if (m.type === "zigzag") drawZigzagMonster(ctx, m.x, m.y, m.width, m.height);
@@ -1706,7 +1720,8 @@
         drawBoss(ctx, boss);
       }
 
-      for (let p of particles) {
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
@@ -1719,12 +1734,12 @@
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 15px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText(`Stage: ${stage}`, 15, 25);
-      ctx.fillText(`Score: ${score}`, 15, 45);
-      ctx.fillText(`Kills: ${killCount} | Boss: ${bossKillCount}`, 15, 65);
+      ctx.fillText("Stage: " + stage, 15, 25);
+      ctx.fillText("Score: " + score, 15, 45);
+      ctx.fillText("Kills: " + killCount + " | Boss: " + bossKillCount, 15, 65);
 
-      let heartsText = "LIFE: ";
-      for (let h = 0; h < player.lives; h++) {
+      var heartsText = "LIFE: ";
+      for (var h = 0; h < player.lives; h++) {
         heartsText += "❤️";
       }
       ctx.fillText(heartsText, 15, 85);
@@ -1747,7 +1762,7 @@
       controlArea.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
-      finalScoreText.textContent = `Pilot: ${playerNickname} | Stage: ${stage} | Kills: ${killCount} | Boss: ${bossKillCount} | Score: ${score}`;
+      finalScoreText.textContent = "Pilot: " + playerNickname + " | Stage: " + stage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
       
       saveScore(playerNickname, score, killCount, bossKillCount);
     }
