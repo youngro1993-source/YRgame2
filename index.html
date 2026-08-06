@@ -460,7 +460,7 @@
 
       <div class="info-box">
         <h4>🎁 아이템 드롭 확률 정보</h4>
-        <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가 (3%)</b>: 탄환 데미지 +1</span></div>
+        <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가 (3%)</b>: 탄환 데미지 +1 & 크기 커짐</span></div>
         <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가 (5%)</b>: 발사 탄환 수 +1</span></div>
         <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기 (4%)</b>: 소형 2연발 방사 탄환</span></div>
         <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기 (7%)</b>: 관통 빔</span></div>
@@ -515,13 +515,11 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.8.0 (완정 최적화 및 연출 대폭 강화)</div>
+            <div class="version-title">v3.9.0 (조작 및 가시성 디테일 강화)</div>
             <ul>
-              <li><b>메모리 최적화 & 튕김 방지</b>: 파티클/사운드 리소스 제한으로 장시간 플레이 안정성 확보.</li>
-              <li><b>WARNING 연출</b>: 보스 및 중급 몬스터 출현 시 시각적 점멸 경고 효과.</li>
-              <li><b>카운트다운 기능</b>: 일시정지 해제 시 3초 카운트다운 후 재개.</li>
-              <li><b>크리티컬 히트</b>: 20% 확률로 주황색 대형 크리티컬 데미지 팝업 연출.</li>
-              <li><b>최고 기록 저장</b>: 내 기기의 최고 점수를 자동 저장하고 HUD에 즉시 반영.</li>
+              <li><b>조이스틱 속도 동기화</b>: 조이스틱과 좌우 버튼 이동 감도를 완전히 동일하게 동기화.</li>
+              <li><b>탄환 크기 성장 연출</b>: 데미지 1 상승 시마다 총알 크기가 미세하게 확대.</li>
+              <li><b>보스 HP 수치 표시</b>: 보스 체력 바에 현재/최대 HP 텍스트 추가 표기.</li>
             </ul>
           </div>
         </div>
@@ -587,7 +585,7 @@
     var soundMuted = false;
     var isPaused = false;
     var isCountingDown = false;
-    var lastSoundTime = 0; // 사운드 중복 오버플로우 방지 쿨타임
+    var lastSoundTime = 0;
 
     function loadScript(src, callback) {
       var s = document.createElement('script');
@@ -716,7 +714,6 @@
       }
     }
 
-    // 일시정지 해제 시 3초 카운트다운 적용
     function resumeGameWithCountdown() {
       if (isCountingDown) return;
       isCountingDown = true;
@@ -747,7 +744,6 @@
       gameOver();
     }
 
-    // 오디오 노드 폭주 예방 쿨타임 처리
     function playSound(type) {
       if (!audioCtx || soundMuted) return;
       var nowTime = Date.now();
@@ -879,7 +875,6 @@
     var finalScoreText = document.getElementById("finalScoreText");
     var joystickStatusNotice = document.getElementById("joystickStatusNotice");
 
-    // 패럴랙스 우주 배경 별 정보
     var stars = [];
     function initStars() {
       stars = [];
@@ -934,11 +929,9 @@
     var bulletCount = 1;
     var playerDamage = 1;
 
-    // Warning 연출 타이머
     var warningTimer = 0;
     var warningTextStr = "";
 
-    // 연출 변수: 화면 흔들림 & 데미지 텍스트
     var shakeTimer = 0;
     var damageTexts = [];
 
@@ -966,7 +959,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 3.8,
+      speed: 3.8, // 좌우 및 전체 기체 속도 기준
       lives: 3, 
       invincibleTimer: 0 
     };
@@ -1013,11 +1006,10 @@
     }
 
     function triggerWarning(text) {
-      warningTimer = 90; // 1.5초간 경고
+      warningTimer = 90;
       warningTextStr = text || "WARNING!";
     }
 
-    // 데미지 텍스트 인스턴스 25개로 제한 (메모리 누수 차단)
     function addDamageText(x, y, damage, isCrit) {
       if (damageTexts.length > 25) damageTexts.shift();
       damageTexts.push({
@@ -1031,7 +1023,6 @@
       });
     }
 
-    // 파티클 최대 40개 제한 (성능 저하 및 튕김 방지)
     function createExplosion(x, y, color, count) {
       color = color || "#f97316";
       count = count || 10;
@@ -1088,6 +1079,7 @@
 
     var joystickTouchId = null;
 
+    // 1. 조이스틱 조작 비율을 1.0 풀 스케일로 맞춰 버튼/키보드 감도와 완전 동기화
     function handleJoystickMove(clientX, clientY) {
       var rect = joystickArea.getBoundingClientRect();
       var centerX = rect.left + rect.width / 2;
@@ -1106,8 +1098,8 @@
 
       joystickKnob.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
       
-      joystickAxisX = (deltaX / maxRadius) * 0.55;
-      joystickAxisY = (deltaY / maxRadius) * 0.55;
+      joystickAxisX = (deltaX / maxRadius);
+      joystickAxisY = (deltaY / maxRadius);
     }
 
     function resetJoystick() {
@@ -1175,6 +1167,7 @@
       keys[e.code] = false;
     });
 
+    // 2. 데미지 상승 시 탄환 크기 확대 계산 보정 함수 (DMG당 +0.6~1px)
     function shoot() {
       playSound(currentWeapon);
 
@@ -1189,6 +1182,7 @@
       };
 
       var offsets = bulletOffsets[level];
+      var sizeBonus = (playerDamage - 1) * 0.8; // DMG 증가에 따른 탄환 스케일 보너스
 
       offsets.forEach(function(offset) {
         var startX = player.x + player.width / 2 + offset;
@@ -1196,24 +1190,32 @@
 
         if (currentWeapon === "laser") {
           bullets.push({ 
-            x: startX - 2, y: startY, width: 4, height: 30, 
+            x: startX - (2 + sizeBonus * 0.5), y: startY, 
+            width: 4 + sizeBonus, height: 30 + sizeBonus * 2, 
             speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "saw") {
+          var sawSize = 20 + sizeBonus * 1.5;
           bullets.push({ 
-            x: startX - 10, y: startY, width: 20, height: 20, 
+            x: startX - sawSize / 2, y: startY, 
+            width: sawSize, height: sawSize, 
             speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "shotgun") {
+          var sgSize = 5 + sizeBonus * 0.8;
           [-0.15, 0.15].forEach(function(ang) {
             bullets.push({ 
-              x: startX - 2.5, y: startY, width: 5, height: 5, 
+              x: startX - sgSize / 2, y: startY, 
+              width: sgSize, height: sgSize, 
               type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7, damage: playerDamage 
             });
           });
         } else {
+          var normW = 6 + sizeBonus;
+          var normH = 14 + sizeBonus * 1.2;
           bullets.push({ 
-            x: startX - 3, y: startY, width: 6, height: 14, 
+            x: startX - normW / 2, y: startY, 
+            width: normW, height: normH, 
             type: "normal", vx: 0, vy: -8.5, damage: playerDamage 
           });
         }
@@ -1353,6 +1355,7 @@
       ctx.fillRect(m.x, m.y - 8, m.width * hpRatio, 4);
     }
 
+    // 3. 보스 체력 게이지 및 텍스트 숫자 표기 기능 추가
     function drawBoss(ctx, boss) {
       ctx.save();
       var cx = boss.x + boss.width / 2;
@@ -1411,17 +1414,25 @@
       ctx.restore();
 
       var barWidth = canvas.width * 0.6;
-      var barHeight = 12;
+      var barHeight = 14;
       var barX = (canvas.width - barWidth) / 2;
       var barY = 15;
       var hpRatio = Math.max(0, boss.hp / boss.maxHp);
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
       ctx.fillRect(barX, barY, barWidth, barHeight);
       ctx.fillStyle = "#ef4444";
       ctx.fillRect(barX, barY, barWidth * hpRatio, barHeight);
       ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
       ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+      // 3. 보스 HP 숫자 표기 (예: HP: 32 / 45)
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 10px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("HP: " + Math.max(0, boss.hp) + " / " + boss.maxHp, canvas.width / 2, barY + barHeight / 2 + 1);
     }
 
     function drawItem(ctx, item) {
@@ -1460,9 +1471,9 @@
         ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
         ctx.rotate(b.angle || 0);
         ctx.fillStyle = "#a855f7";
-        ctx.fillRect(-8, -8, 16, 16);
+        ctx.fillRect(-b.width / 2, -b.height / 2, b.width, b.height);
         ctx.fillStyle = "#e9d5ff";
-        ctx.fillRect(-4, -4, 8, 8);
+        ctx.fillRect(-b.width / 4, -b.height / 4, b.width / 2, b.height / 2);
         ctx.restore();
       } else if (b.type === "shotgun") {
         ctx.fillStyle = "#fb923c";
@@ -1673,7 +1684,7 @@
       if (player.lives <= 0) {
         gameOver();
       } else {
-        player.invincibleTimer = 90; // 무적 타이머 부여
+        player.invincibleTimer = 90;
       }
     }
 
@@ -1797,6 +1808,7 @@
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
 
+      // 1. 조이스틱 및 버튼의 이동속도 감도 수치 보정
       player.x += moveX * player.speed;
       player.y += moveY * player.speed;
 
@@ -1853,7 +1865,7 @@
         for (var j = bullets.length - 1; j >= 0; j--) {
           var b = bullets[j];
           if (checkCollision(b, boss)) {
-            var isCrit = Math.random() < 0.20; // 20% 확률 크리티컬
+            var isCrit = Math.random() < 0.20;
             var hitDmg = (b.damage || 1) * (isCrit ? 2 : 1);
 
             if (b.pierce) {
@@ -2100,7 +2112,6 @@
         ctx.restore();
       }
 
-      // WARNING 경고 문구 연출
       if (warningTimer > 0) {
         ctx.save();
         ctx.fillStyle = (Math.floor(warningTimer / 8) % 2 === 0) ? "#ef4444" : "#facc15";
@@ -2114,7 +2125,6 @@
 
       ctx.restore();
 
-      // 상단 HUD 텍스트 (Best 점수 포함)
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 14px sans-serif";
       ctx.textAlign = "left";
