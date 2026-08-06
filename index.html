@@ -179,10 +179,11 @@
         <h3>📜 업데이트 히스토리</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title" style="color:#facc15;">v4.1.0 (컨트롤 동기화 & 가시성 개선)</div>
+            <div class="version-title" style="color:#facc15;">v4.0.0 (코인 상점 업데이트)</div>
             <ul style="font-size:0.8rem; color:#cbd5e1; line-height:1.6;">
-              <li><b>조작성 강화</b>: 버튼/키보드 이동 속도를 조이스틱 속도와 완벽하게 동일하게 맞춤.</li>
-              <li><b>적 탄환 가시성 향상</b>: 고대비 네온 오렌지/핑크 이중 발광 탄환 연출 적용.</li>
+              <li><b>코인 재화 시스템</b>: 적 처치 시 우주 코인(C) 드롭.</li>
+              <li><b>기체 연구소 오픈</b>: 모은 코인으로 최대 체력, 기체 속도, 드롭률 영구 강화.</li>
+              <li><b>비주얼 연출</b>: 패럴랙스 우주 별 스크롤 및 화면 흔들림 연출.</li>
             </ul>
           </div>
         </div>
@@ -239,6 +240,7 @@
     var soundMuted = false;
     var isPaused = false;
 
+    // 코인 및 강화 데이터 (로컬저장)
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     var upgrades = JSON.parse(localStorage.getItem("yoon_upgrades") || '{"hp":0, "speed":0, "drop":0}');
 
@@ -266,7 +268,12 @@
     }
 
     function buyUpgrade(type) {
-      var costs = { hp: [100, 200, 400], speed: [80, 160, 320], drop: [120, 240, 480] };
+      var costs = {
+        hp: [100, 200, 400],
+        speed: [80, 160, 320],
+        drop: [120, 240, 480]
+      };
+      
       var currentLv = upgrades[type];
       if (currentLv >= 3) return alert("이미 최고 레벨입니다!");
 
@@ -521,31 +528,6 @@
       ctx.fillText(item.type === "coin" ? "C" : (item.type === "heart" ? "H" : "2X"), item.x + 10, item.y + 10);
     }
 
-    // 적 탄환 그리기 (네온 오렌지/핑크 고대비 적용)
-    function drawEnemyBullet(ctx, eb) {
-      ctx.save();
-      var cx = eb.x + eb.width / 2;
-      var cy = eb.y + eb.height / 2;
-      var radius = Math.max(eb.width, eb.height) / 2 + 1; // 가시성을 위해 약간 확대
-
-      // 외곽 네온 발광 아우라
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = "#ff0055";
-
-      ctx.fillStyle = "#ff0055";
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 중심부 고대비 밝은 코어
-      ctx.fillStyle = "#ffeedd";
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius - 1, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-    }
-
     function startGame() {
       document.getElementById("storyModal").classList.add("hidden");
       document.getElementById("startScreen").classList.add("hidden");
@@ -555,6 +537,7 @@
 
       resizeCanvas(); isPaused = false; if (!soundMuted) startBGM();
       
+      // 연구소 업그레이드 적용
       player.speed = 4.8 * (1 + upgrades.speed * 0.1);
       player.lives = 3 + upgrades.hp;
 
@@ -612,15 +595,10 @@
       if (gameTime % Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1))) === 0) spawnMonster();
       if (!boss && killCount >= nextBossKillTarget) { spawnBoss(); nextBossKillTarget += 20; }
 
-      // 속도 가중치 완전 통일 (조이스틱 0.5 비율과 통합)
       var moveX = 0, moveY = 0;
-      if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 0.5;
-      if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 0.5;
-      if (keys["ArrowUp"] || keys["KeyW"]) moveY -= 0.5;
-      if (keys["ArrowDown"] || keys["KeyS"]) moveY += 0.5;
-
-      if (joystickAxisX !== 0) moveX += joystickAxisX; 
-      if (joystickAxisY !== 0) moveY += joystickAxisY;
+      if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 1;
+      if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 1;
+      if (joystickAxisX !== 0) moveX += joystickAxisX; if (joystickAxisY !== 0) moveY += joystickAxisY;
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x + moveX * player.speed));
       player.y = Math.max(0, Math.min(canvas.height - player.height - 160, player.y + moveY * player.speed));
@@ -628,18 +606,6 @@
       bullets.forEach((b, bi) => {
         b.y += b.vy || -b.speed;
         if (b.y < -30) bullets.splice(bi, 1);
-      });
-
-      // 적 총알 이동
-      enemyBullets.forEach((eb, ebi) => {
-        eb.x += eb.vx;
-        eb.y += eb.vy;
-        if (checkCollision(player, eb)) {
-          handlePlayerHit();
-          enemyBullets.splice(ebi, 1);
-        } else if (eb.y > canvas.height + 20 || eb.y < -20 || eb.x < -20 || eb.x > canvas.width + 20) {
-          enemyBullets.splice(ebi, 1);
-        }
       });
 
       if (boss) {
@@ -689,10 +655,6 @@
       updateAndDrawStars();
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
       bullets.forEach(b => { ctx.fillStyle = "#facc15"; ctx.fillRect(b.x, b.y, b.width, b.height); });
-      
-      // 고대비 네온 적 탄환 출력
-      enemyBullets.forEach(eb => drawEnemyBullet(ctx, eb));
-
       monsters.forEach(m => drawMonster(ctx, m));
       items.forEach(item => drawItem(ctx, item));
       if (boss) drawBoss(ctx, boss);
