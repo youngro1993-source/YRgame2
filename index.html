@@ -6,438 +6,92 @@
   <title>은하 수호대: YOON 행성을 지켜라</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      position: fixed;
-      touch-action: none;
-      background-color: #050515;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #fff;
-    }
-
-    #gameContainer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-      touch-action: none;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-    }
-
-    .screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      background: rgba(2, 6, 23, 0.92);
-      backdrop-filter: blur(8px);
-      z-index: 10;
-      padding: 20px 15px;
-      text-align: center;
-      overflow-y: auto;
-      touch-action: pan-y;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin-top: 5px;
-      margin-bottom: 12px;
-      color: #38bdf8;
-      text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
-      word-break: keep-all;
-    }
-
-    p {
-      margin-bottom: 12px;
-      color: #94a3b8;
-      font-size: 0.85rem;
-    }
-
-    .info-box {
-      width: 100%;
-      max-width: 380px;
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; background-color: #050515; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
+    #gameContainer { position: relative; width: 100%; height: 100%; max-width: 500px; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(8px); z-index: 10; padding: 20px 15px; text-align: center; overflow-y: auto; touch-action: pan-y; }
+    .hidden { display: none !important; }
+    h1 { font-size: 1.8rem; margin-top: 5px; margin-bottom: 8px; color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    
+    .coin-display {
       background: rgba(30, 41, 59, 0.9);
-      border: 1.5px solid rgba(56, 189, 248, 0.4);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-      text-align: left;
-      line-height: 1.5;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .info-box h4 {
+      border: 1px solid #facc15;
       color: #facc15;
-      margin-bottom: 8px;
-      text-align: center;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: bold;
       font-size: 0.9rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 4px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 6px;
-      color: #f1f5f9;
-    }
-
-    .badge {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      color: #000;
-      font-weight: bold;
-      text-align: center;
-      line-height: 24px;
-      font-size: 0.75rem;
-      margin-right: 10px;
-      flex-shrink: 0;
-    }
-
-    .badge.upgrade { background: #eab308; }
-    .badge.laser { background: #22c55e; }
-    .badge.saw { background: #c084fc; }
-    .badge.shotgun { background: #f97316; }
-    .badge.heart { background: #ec4899; color: #fff; }
-
-    input[type="text"] {
-      width: 85%;
-      max-width: 260px;
-      padding: 10px;
-      border: 2px solid #3b82f6;
-      border-radius: 8px;
-      background: #1e293b;
-      color: #fff;
-      font-size: 0.95rem;
-      text-align: center;
-      outline: none;
       margin-bottom: 8px;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
     }
 
-    input[type="text"]:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
-    }
-
-    .warning-text {
-      color: #f87171;
-      font-size: 0.78rem;
-      margin-bottom: 8px;
-      min-height: 1.1em;
-    }
-
-    button.btn {
-      padding: 10px 28px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-      transition: transform 0.1s, background 0.2s;
-      margin: 4px;
-    }
-
-    button.btn:active {
-      transform: scale(0.95);
-    }
-
-    .btn-update {
-      background: linear-gradient(135deg, #059669, #047857) !important;
-      font-size: 0.85rem !important;
-      padding: 8px 18px !important;
-      margin-bottom: 10px !important;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
-    }
-
-    .top-controls {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 15;
-      display: flex;
-      gap: 10px;
-    }
-
-    .icon-btn {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      color: #fff;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      font-size: 1.1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
-      z-index: 20;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: #1e293b;
-      border: 2px solid #38bdf8;
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 380px;
-      width: 100%;
-      max-height: 75vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-    }
-
-    .modal-content h3 {
+    .title-badge-preview {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid #38bdf8;
       color: #38bdf8;
-      font-size: 1.15rem;
-      margin-bottom: 12px;
-      text-align: center;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 8px;
-    }
-
-    .story-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 8px;
-      padding: 15px;
-      text-align: left;
-      font-size: 0.85rem;
-      line-height: 1.7;
-      color: #e2e8f0;
-      margin-bottom: 15px;
-    }
-
-    .story-card span.highlight {
-      color: #facc15;
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-bottom: 8px;
       font-weight: bold;
     }
 
-    .history-scroll-area {
-      overflow-y: auto;
-      padding-right: 6px;
-      flex: 1;
-      text-align: left;
-      touch-action: pan-y;
-    }
+    .info-box { width: 100%; max-width: 380px; background: rgba(30, 41, 59, 0.9); border: 1.5px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px; margin-bottom: 10px; font-size: 0.78rem; text-align: left; line-height: 1.4; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); }
+    .info-box h4 { color: #facc15; margin-bottom: 6px; text-align: center; font-size: 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px; }
+    .info-item { display: flex; align-items: center; margin-bottom: 4px; color: #f1f5f9; }
+    .badge { display: inline-block; width: 22px; height: 22px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 22px; font-size: 0.7rem; margin-right: 8px; flex-shrink: 0; }
+    .badge.upgrade { background: #eab308; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
+    input[type="text"] { width: 85%; max-width: 260px; padding: 10px; border: 2px solid #3b82f6; border-radius: 8px; background: #1e293b; color: #fff; font-size: 0.95rem; text-align: center; outline: none; margin-bottom: 8px; }
+    .warning-text { color: #f87171; font-size: 0.78rem; margin-bottom: 8px; min-height: 1.1em; }
+
+    button.btn { padding: 8px 18px; font-size: 0.9rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); transition: transform 0.1s; margin: 3px; }
+    button.btn:active { transform: scale(0.95); }
+    .btn-shop { background: linear-gradient(135deg, #eab308, #ca8a04) !important; color: #000 !important; }
+    .btn-title { background: linear-gradient(135deg, #a855f7, #7e22ce) !important; }
+
+    .top-controls { position: absolute; top: 15px; right: 15px; z-index: 15; display: flex; gap: 10px; }
+    .icon-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 36px; height: 36px; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 18px; max-width: 380px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+    .modal-content h3 { color: #38bdf8; font-size: 1.15rem; margin-bottom: 12px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+
+    .title-item { display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+    .title-item.active { border-color: #facc15; background: rgba(250, 204, 21, 0.1); }
+    .title-info h5 { font-size: 0.85rem; color: #38bdf8; }
+    .title-info p { margin: 2px 0 0; font-size: 0.72rem; color: #94a3b8; }
+
+    .shop-item { display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+    .shop-info h5 { font-size: 0.85rem; color: #facc15; }
+    .shop-info p { margin: 2px 0 0; font-size: 0.72rem; color: #94a3b8; }
+
+    .history-scroll-area { overflow-y: auto; max-height: 52vh; padding-right: 8px; flex: 1; text-align: left; touch-action: pan-y; }
     .history-scroll-area::-webkit-scrollbar { width: 6px; }
     .history-scroll-area::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); border-radius: 3px; }
     .history-scroll-area::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 3px; }
 
-    .version-block {
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed #334155;
-    }
+    .version-block { margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px dashed #334155; }
+    .version-block:last-child { border-bottom: none; margin-bottom: 0; }
+    .version-title { font-size: 0.88rem; font-weight: bold; color: #facc15; margin-bottom: 4px; }
+    .version-block ul { list-style: none; font-size: 0.78rem; color: #cbd5e1; line-height: 1.5; }
+    .version-block li { margin-bottom: 3px; position: relative; padding-left: 12px; }
+    .version-block li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    .version-block:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-
-    .version-title {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #facc15;
-      margin-bottom: 6px;
-    }
-
-    .history-scroll-area ul {
-      list-style: none;
-      font-size: 0.82rem;
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-
-    .history-scroll-area li {
-      margin-bottom: 6px;
-      position: relative;
-      padding-left: 14px;
-    }
-
-    .history-scroll-area li::before {
-      content: "•";
-      color: #38bdf8;
-      position: absolute;
-      left: 0;
-      font-weight: bold;
-    }
-
-    .credits {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-      color: #64748b;
-      letter-spacing: 1px;
-    }
-
-    .ranking-container {
-      width: 100%;
-      max-width: 380px;
-      margin-bottom: 12px;
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: 8px;
-      padding: 8px;
-    }
-
-    .ranking-container h3 {
-      font-size: 0.85rem;
-      color: #f87171;
-      margin-bottom: 6px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.68rem;
-    }
-
-    th, td {
-      padding: 4px 2px;
-      border-bottom: 1px solid #334155;
-      text-align: center;
-    }
-
+    .ranking-container { width: 100%; max-width: 380px; margin-bottom: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 8px; }
+    .ranking-container h3 { font-size: 0.82rem; color: #f87171; margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.65rem; }
+    th, td { padding: 3px 2px; border-bottom: 1px solid #334155; text-align: center; }
     th { color: #f87171; }
 
-    #controlArea {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 160px;
-      background: rgba(15, 23, 42, 0.92);
-      border-top: 2px solid rgba(56, 189, 248, 0.5);
-      backdrop-filter: blur(8px);
-      pointer-events: auto;
-      z-index: 5;
-    }
-
-    .arrow-btn {
-      position: absolute;
-      bottom: 45px;
-      width: 75px;
-      height: 75px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 2px solid rgba(56, 189, 248, 0.6);
-      border-radius: 50%;
-      color: #38bdf8;
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: auto;
-      touch-action: none;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-      transition: background 0.1s, transform 0.1s;
-      z-index: 7;
-    }
-
-    #btnLeft { left: 20px; }
-    #btnRight { right: 20px; }
-
-    .arrow-btn:active, .arrow-btn.pressed {
-      background: rgba(56, 189, 248, 0.4);
-      color: #fff;
-      transform: scale(0.92);
-    }
-
-    #joystickArea {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90px;
-      height: 90px;
-      background: rgba(30, 41, 59, 0.7);
-      border: 2px dashed rgba(56, 189, 248, 0.6);
-      border-radius: 50%;
-      touch-action: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 7;
-    }
-
-    #joystickKnob {
-      width: 40px;
-      height: 40px;
-      background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%);
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-      position: absolute;
-      pointer-events: none;
-      transition: transform 0.05s linear;
-    }
-
-    #joystickStatusNotice {
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      padding: 4px 10px;
-      background: rgba(2, 6, 23, 0.9);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: #facc15;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      z-index: 8;
-      pointer-events: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 160px; background: rgba(15, 23, 42, 0.92); border-top: 2px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; }
+    .arrow-btn { position: absolute; bottom: 45px; width: 75px; height: 75px; background: rgba(30, 41, 59, 0.8); border: 2px solid rgba(56, 189, 248, 0.6); border-radius: 50%; color: #38bdf8; font-size: 1.8rem; font-weight: bold; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #btnLeft { left: 20px; } #btnRight { right: 20px; }
+    .arrow-btn:active, .arrow-btn.pressed { background: rgba(56, 189, 248, 0.4); color: #fff; transform: scale(0.92); }
+    #joystickArea { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90px; height: 90px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #joystickKnob { width: 40px; height: 40px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
+    #joystickStatusNotice { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 90%; padding: 4px 10px; background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; text-align: center; font-size: 0.75rem; color: #facc15; font-weight: 600; z-index: 8; }
   </style>
 </head>
 <body>
@@ -445,7 +99,6 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- 인게임 우측 상단 조작 버튼 (일시정지/사운드) -->
     <div id="topControls" class="top-controls hidden">
       <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
       <button class="icon-btn" id="pauseBtn" onclick="togglePause()">⏸️</button>
@@ -455,28 +108,29 @@
     <div id="startScreen" class="screen">
       <h1>은하 수호대<br><span style="font-size:1.1rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
       
-      <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📢 업데이트 히스토리 보기</button>
+      <div class="coin-display">🪙 보유 코인: <span id="mainCoinCount">0</span> C</div>
+      <div class="title-badge-preview">장착 칭호: <span id="currentTitleText">🌱 신입 파일럿</span></div>
 
-      <div class="info-box">
-        <h4>🎁 아이템 드롭 확률 정보</h4>
-        <div class="info-item"><span class="badge upgrade">2X</span><span><b>탄환 수 증가 (5%)</b>: 발사 탄환 수 +1</span></div>
-        <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기 (4%)</b>: 소형 2연발 방사 탄환</span></div>
-        <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기 (7%)</b>: 관통 빔</span></div>
-        <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기 (7%)</b>: 다단히트 회전탄</span></div>
-        <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복 (보스 처치 10%)</b>: 목숨 +1 회복</span></div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;">
+        <button class="btn btn-shop" onclick="toggleModal('shopModal', true)">🔬 연구소</button>
+        <button class="btn btn-title" onclick="toggleModal('titleModal', true)">🏆 칭호</button>
+        <button class="btn" style="background:#475569;" onclick="toggleModal('updateModal', true)">📜 히스토리</button>
+      </div>
+
+      <div class="info-box" style="margin-top: 8px;">
+        <h4>🎁 아이템 드롭 정보</h4>
+        <div class="info-item"><span class="badge coin">C</span><span><b>우주 코인</b>: 일반몹 15% / 보스 100% 드롭</span></div>
+        <div class="info-item"><span class="badge upgrade">2X</span><span><b>탄환 수 증가</b>: 발사 탄환 수 +1</span></div>
+        <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기</b>: 2연발 방사 탄환</span></div>
+        <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기</b>: 관통 빔</span></div>
+        <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴</b>: 회전탄</span></div>
       </div>
 
       <div class="ranking-container">
         <h3>🏆 LEADERBOARD (TOP 5)</h3>
         <table>
           <thead>
-            <tr>
-              <th>순위</th>
-              <th>날짜</th>
-              <th>닉네임</th>
-              <th>보스킬</th>
-              <th>점수</th>
-            </tr>
+            <tr><th>순위</th><th>날짜</th><th>칭호/닉네임</th><th>보스킬</th><th>점수</th></tr>
           </thead>
           <tbody id="mainRankingBody">
             <tr><td colspan="5">로딩 중...</td></tr>
@@ -489,6 +143,55 @@
       <button class="btn" onclick="openStoryScreen()">게임 시작</button>
       
       <div class="credits">[만든이 : YYR]</div>
+    </div>
+
+    <!-- 칭호 시스템 모달 -->
+    <div id="titleModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>🏆 파일럿 칭호 관리</h3>
+        <div class="history-scroll-area" id="titleListArea">
+          <!-- 스크립트에서 동적 생성 -->
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('titleModal', false)">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 연구소 (상점) 모달 -->
+    <div id="shopModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>🔬 기체 연구소 (영구 강화)</h3>
+        <p style="text-align: center; color: #facc15; font-size: 0.9rem; margin-bottom: 10px;">보유 코인: <span id="shopCoinCount">0</span> C</p>
+        
+        <div class="shop-item">
+          <div class="shop-info">
+            <h5>🛡️ 최대 체력 증가</h5>
+            <p>기본 목숨을 1 증가시킵니다. (Lv.<span id="lvHp">0</span>/3)</p>
+          </div>
+          <button class="btn btn-shop" style="padding:4px 10px; font-size:0.75rem;" id="btnBuyHp" onclick="buyUpgrade('hp')">100C</button>
+        </div>
+
+        <div class="shop-item">
+          <div class="shop-info">
+            <h5>⚡ 기체 속도 증가</h5>
+            <p>비행 속도가 10% 빨라집니다. (Lv.<span id="lvSpeed">0</span>/3)</p>
+          </div>
+          <button class="btn btn-shop" style="padding:4px 10px; font-size:0.75rem;" id="btnBuySpeed" onclick="buyUpgrade('speed')">80C</button>
+        </div>
+
+        <div class="shop-item">
+          <div class="shop-info">
+            <h5>🍀 아이템 드롭률 상승</h5>
+            <p>아이템 출현 확률이 늘어납니다. (Lv.<span id="lvDrop">0</span>/3)</p>
+          </div>
+          <button class="btn btn-shop" style="padding:4px 10px; font-size:0.75rem;" id="btnBuyDrop" onclick="buyUpgrade('drop')">120C</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('shopModal', false)">닫기</button>
+        </div>
+      </div>
     </div>
 
     <!-- 배경 스토리 모달 -->
@@ -510,21 +213,26 @@
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>📜 업데이트 히스토리</h3>
-        
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.5.0 (연출 강화 버전)</div>
+            <div class="version-title">v5.0.0 (칭호 시스템 & 시각화 대폭 강화)</div>
             <ul>
-              <li><b>비주얼 연출 추가</b>: 우주 패럴랙스 별 배경 스크롤 & 화면 흔들림 효과 추가.</li>
-              <li><b>데미지 팝업</b>: 적 피격 시 타격 데미지 텍스트 팝업 연출.</li>
-              <li><b>편의 기능</b>: 인게임 일시정지(Pause) 및 음소거(Mute) 기능 추가.</li>
-              <li><b>랭킹 기능 강화</b>: 리더보드 날짜 정보 추가 표시.</li>
+              <li><b>칭호 시스템</b>: 도전과제 달성 시 전용 칭호 해금 및 리더보드에 칭호 함께 표기.</li>
+              <li><b>기체 기울임 애니메이션</b>: 이동 방향에 맞춘 기체 회전 뱅킹 모션 연출.</li>
+              <li><b>보스 경고 연출</b>: 출현 시 화면 붉은 번쩍임 및 `⚠️ WARNING` 연출.</li>
+              <li><b>무기 레벨별 시각화</b>: 탄환 스펙 상승 시 색상 변화 및 잔상 효과 적용.</li>
+            </ul>
+          </div>
+          <div class="version-block">
+            <div class="version-title">v4.1.0 (컨트롤 동기화 & 가시성 개선)</div>
+            <ul>
+              <li><b>조작 속도 동기화</b>: 좌/우 방향키 이동 속도를 조이스틱 속도 비율과 완벽 통일.</li>
+              <li><b>네온 적 탄환</b>: 이중 발광 네온 핑크 아우라 및 크기 확대로 피하기 쉽게 시시성 개선.</li>
             </ul>
           </div>
         </div>
-
-        <div style="text-align: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid #334155;">
-          <button class="btn" style="padding: 6px 20px; font-size: 0.9rem;" onclick="toggleModal('updateModal', false)">닫기</button>
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('updateModal', false)">닫기</button>
         </div>
       </div>
     </div>
@@ -550,13 +258,7 @@
         <h3>🏆 LEADERBOARD (TOP 5)</h3>
         <table>
           <thead>
-            <tr>
-              <th>순위</th>
-              <th>날짜</th>
-              <th>닉네임</th>
-              <th>보스킬</th>
-              <th>점수</th>
-            </tr>
+            <tr><th>순위</th><th>날짜</th><th>칭호/닉네임</th><th>보스킬</th><th>점수</th></tr>
           </thead>
           <tbody id="rankingBody">
             <tr><td colspan="5">로딩 중...</td></tr>
@@ -568,13 +270,11 @@
       <button class="btn" style="background: linear-gradient(135deg, #475569, #334155);" onclick="goToMainScreen()">메인 화면으로</button>
     </div>
 
-    <!-- 독립 조작 컨트롤 패널 영역 -->
+    <!-- 컨트롤 영역 -->
     <div id="controlArea" class="hidden">
       <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1</div>
       <div id="btnLeft" class="arrow-btn">◀</div>
-      <div id="joystickArea">
-        <div id="joystickKnob"></div>
-      </div>
+      <div id="joystickArea"><div id="joystickKnob"></div></div>
       <div id="btnRight" class="arrow-btn">▶</div>
     </div>
   </div>
@@ -584,14 +284,102 @@
     var soundMuted = false;
     var isPaused = false;
 
+    // 코인, 강화, 칭호 데이터
+    var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
+    var totalMonsterKills = parseInt(localStorage.getItem("yoon_kills") || "0");
+    var totalBossKills = parseInt(localStorage.getItem("yoon_boss_kills") || "0");
+    var highScore = parseInt(localStorage.getItem("yoon_highscore") || "0");
+    
+    var upgrades = JSON.parse(localStorage.getItem("yoon_upgrades") || '{"hp":0, "speed":0, "drop":0}');
+    var equippedTitle = localStorage.getItem("yoon_title") || "🌱 신입 파일럿";
+
+    // 칭호 조건 목록
+    var titleMasterList = [
+      { id: "t1", name: "🌱 신입 파일럿", desc: "기본 지급 칭호", check: () => true },
+      { id: "t2", name: "🪙 거상", desc: "누적 코인 300C 달성", check: () => userCoins >= 300 },
+      { id: "t3", name: "👾 몬스터 도살자", desc: "누적 몬스터 200마리 처치", check: () => totalMonsterKills >= 200 },
+      { id: "t4", name: "⚔️ 보스 킬러", desc: "누적 보스 5회 처치", check: () => totalBossKills >= 5 },
+      { id: "t5", name: "👑 은하 수호자", desc: "최고 점수 5,000점 이상 달성", check: () => highScore >= 5000 }
+    ];
+
+    function saveUserData() {
+      localStorage.setItem("yoon_coins", userCoins.toString());
+      localStorage.setItem("yoon_kills", totalMonsterKills.toString());
+      localStorage.setItem("yoon_boss_kills", totalBossKills.toString());
+      localStorage.setItem("yoon_highscore", highScore.toString());
+      localStorage.setItem("yoon_upgrades", JSON.stringify(upgrades));
+      localStorage.setItem("yoon_title", equippedTitle);
+      updateShopUI();
+      renderTitleModal();
+    }
+
+    function renderTitleModal() {
+      var area = document.getElementById("titleListArea");
+      area.innerHTML = "";
+      titleMasterList.forEach(t => {
+        var unlocked = t.check();
+        var isActive = (equippedTitle === t.name);
+        var div = document.createElement("div");
+        div.className = "title-item " + (isActive ? "active" : "");
+        div.innerHTML = `
+          <div class="title-info">
+            <h5>${t.name} ${isActive ? " (장착 중)" : ""}</h5>
+            <p>${t.desc}</p>
+          </div>
+          <button class="btn" style="padding:4px 10px; font-size:0.75rem;" ${!unlocked || isActive ? "disabled" : ""} onclick="equipTitle('${t.name}')">
+            ${isActive ? "장착됨" : (unlocked ? "장착" : "잠김")}
+          </button>
+        `;
+        area.appendChild(div);
+      });
+      document.getElementById("currentTitleText").textContent = equippedTitle;
+    }
+
+    function equipTitle(titleName) {
+      equippedTitle = titleName;
+      saveUserData();
+    }
+
+    function updateShopUI() {
+      document.getElementById("mainCoinCount").textContent = userCoins;
+      document.getElementById("shopCoinCount").textContent = userCoins;
+      
+      document.getElementById("lvHp").textContent = upgrades.hp;
+      document.getElementById("lvSpeed").textContent = upgrades.speed;
+      document.getElementById("lvDrop").textContent = upgrades.drop;
+
+      var hpCost = [100, 200, 400][upgrades.hp] || "MAX";
+      var speedCost = [80, 160, 320][upgrades.speed] || "MAX";
+      var dropCost = [120, 240, 480][upgrades.drop] || "MAX";
+
+      document.getElementById("btnBuyHp").textContent = typeof hpCost === 'number' ? hpCost + "C" : "MAX";
+      document.getElementById("btnBuySpeed").textContent = typeof speedCost === 'number' ? speedCost + "C" : "MAX";
+      document.getElementById("btnBuyDrop").textContent = typeof dropCost === 'number' ? dropCost + "C" : "MAX";
+    }
+
+    function buyUpgrade(type) {
+      var costs = { hp: [100, 200, 400], speed: [80, 160, 320], drop: [120, 240, 480] };
+      var currentLv = upgrades[type];
+      if (currentLv >= 3) return alert("이미 최고 레벨입니다!");
+
+      var cost = costs[type][currentLv];
+      if (userCoins < cost) return alert("코인이 부족합니다!");
+
+      userCoins -= cost;
+      upgrades[type]++;
+      saveUserData();
+      playSound('item');
+    }
+
     function loadScript(src, callback) {
       var s = document.createElement('script');
-      s.src = src;
-      s.onload = callback;
+      s.src = src; s.onload = callback;
       document.head.appendChild(s);
     }
 
     window.addEventListener('DOMContentLoaded', function() {
+      updateShopUI();
+      renderTitleModal();
       loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js", function() {
         loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js", function() {
           var firebaseConfig = {
@@ -603,9 +391,7 @@
             appId: "1:524266726245:web:46ce8be41498337e09b78c",
             measurementId: "G-G3W3P6XYE0"
           };
-          if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-          }
+          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
           db = firebase.firestore();
           updateLeaderboardUI();
         });
@@ -616,61 +402,38 @@
       if (!db) return;
       db.collection("rankings").add({
         nickname: nickname,
+        title: equippedTitle,
         score: score,
         monsterKills: monsterKills || 0,
         bossKills: bossKills || 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(function() {
-        updateLeaderboardUI();
-      })
-      .catch(function(error) {
-        console.error("서버 점수 저장 실패:", error);
-      });
+      }).then(() => updateLeaderboardUI());
     }
 
     function formatDate(timestamp) {
       if (!timestamp) return "-";
       var date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-      var month = (date.getMonth() + 1).toString().padStart(2, '0');
-      var day = date.getDate().toString().padStart(2, '0');
-      return month + "/" + day;
+      return (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate().toString().padStart(2, '0');
     }
 
     function updateLeaderboardUI() {
       if (!db) return;
-      db.collection("rankings")
-        .orderBy("score", "desc")
-        .limit(5)
-        .get()
-        .then(function(querySnapshot) {
-          var rankings = [];
-          querySnapshot.forEach(function(doc) {
-            rankings.push(doc.data());
-          });
-
-          var htmlContent = "";
-          if (rankings.length === 0) {
-            htmlContent = "<tr><td colspan='5'>등록된 기록이 없습니다.</td></tr>";
-          } else {
-            for (var i = 0; i < rankings.length; i++) {
-              var r = rankings[i];
-              htmlContent += "<tr>" +
-                "<td>" + (i + 1) + "</td>" +
-                "<td>" + formatDate(r.createdAt) + "</td>" +
-                "<td>" + (r.nickname || "익명") + "</td>" +
-                "<td>" + (r.bossKills || 0) + "</td>" +
-                "<td>" + (r.score || 0) + "</td>" +
-                "</tr>";
-            }
-          }
-
-          document.getElementById("rankingBody").innerHTML = htmlContent;
-          document.getElementById("mainRankingBody").innerHTML = htmlContent;
-        })
-        .catch(function(error) {
-          console.error("랭킹 로딩 실패:", error);
+      db.collection("rankings").orderBy("score", "desc").limit(5).get().then(function(querySnapshot) {
+        var rankings = [];
+        querySnapshot.forEach(doc => rankings.push(doc.data()));
+        var htmlContent = rankings.length === 0 ? "<tr><td colspan='5'>기록 없음</td></tr>" : "";
+        rankings.forEach((r, i) => {
+          htmlContent += `<tr>
+            <td>${i+1}</td>
+            <td>${formatDate(r.createdAt)}</td>
+            <td><span style="font-size:0.6rem; color:#38bdf8;">[${r.title||'파일럿'}]</span><br><b>${r.nickname||"익명"}</b></td>
+            <td>${r.bossKills||0}</td>
+            <td>${r.score||0}</td>
+          </tr>`;
         });
+        document.getElementById("rankingBody").innerHTML = htmlContent;
+        document.getElementById("mainRankingBody").innerHTML = htmlContent;
+      });
     }
 
     document.addEventListener("touchmove", function(e) {
@@ -678,17 +441,10 @@
       e.preventDefault();
     }, { passive: false });
 
-    // Web Audio 사운드 엔진
-    var audioCtx = null;
-    var bgmInterval = null;
-
+    var audioCtx = null, bgmInterval = null;
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function toggleSound() {
@@ -701,15 +457,9 @@
     function togglePause() {
       if (isGameOver) return;
       isPaused = !isPaused;
-      var pauseModal = document.getElementById("pauseModal");
-      if (isPaused) {
-        pauseModal.classList.remove("hidden");
-        stopBGM();
-      } else {
-        pauseModal.classList.add("hidden");
-        if (!soundMuted) startBGM();
-        gameLoop();
-      }
+      document.getElementById("pauseModal").classList.toggle("hidden", !isPaused);
+      if (isPaused) stopBGM();
+      else { if (!soundMuted) startBGM(); gameLoop(); }
     }
 
     function quitGame() {
@@ -720,729 +470,192 @@
 
     function playSound(type) {
       if (!audioCtx || soundMuted) return;
-
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
+      var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
       var now = audioCtx.currentTime;
 
-      if (type === 'normal') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.08);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'laser') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'shotgun') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(250, now);
-        osc.frequency.exponentialRampToValueAtTime(60, now + 0.1);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'saw') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.linearRampToValueAtTime(500, now + 0.08);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.08);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'explosion') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.2);
-        osc.start(now);
-        osc.stop(now + 0.2);
-      } else if (type === 'item') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.06);
-        osc.frequency.setValueAtTime(783.99, now + 0.12);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.2);
-        osc.start(now);
-        osc.stop(now + 0.2);
-      } else if (type === 'hit') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.15);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (type === 'gameover') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.6);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.6);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      }
+      if (type === 'normal') { osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.08); gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0, now + 0.08); osc.start(now); osc.stop(now + 0.08); }
+      else if (type === 'laser') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(200, now + 0.1); gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.1); osc.start(now); osc.stop(now + 0.1); }
+      else if (type === 'item') { osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.06); osc.frequency.setValueAtTime(783.99, now + 0.12); gain.gain.setValueAtTime(0.12, now); gain.gain.linearRampToValueAtTime(0, now + 0.2); osc.start(now); osc.stop(now + 0.2); }
+      else if (type === 'hit') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(80, now + 0.15); gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.15); osc.start(now); osc.stop(now + 0.15); }
+      else if (type === 'explosion') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(30, now + 0.2); gain.gain.setValueAtTime(0.18, now); gain.gain.linearRampToValueAtTime(0, now + 0.2); osc.start(now); osc.stop(now + 0.2); }
+      else if (type === 'warning') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now); osc.frequency.linearRampToValueAtTime(300, now + 0.3); gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.3); osc.start(now); osc.stop(now + 0.3); }
+      else if (type === 'gameover') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(80, now + 0.6); gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.6); osc.start(now); osc.stop(now + 0.6); }
     }
 
     function startBGM() {
-      if (bgmInterval || soundMuted) return;
-      if (!audioCtx) return;
-
-      var notes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
-      var step = 0;
-
-      bgmInterval = setInterval(function() {
+      if (bgmInterval || soundMuted || !audioCtx) return;
+      var notes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83], step = 0;
+      bgmInterval = setInterval(() => {
         if (!audioCtx || isGameOver || soundMuted || isPaused) return;
-        var now = audioCtx.currentTime;
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(notes[step % notes.length], now);
-
-        gain.gain.setValueAtTime(0.03, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.18);
-        step++;
+        var now = audioCtx.currentTime, osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(notes[step % notes.length], now);
+        gain.gain.setValueAtTime(0.03, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.18); step++;
       }, 240);
     }
 
-    function stopBGM() {
-      if (bgmInterval) {
-        clearInterval(bgmInterval);
-        bgmInterval = null;
-      }
-    }
+    function stopBGM() { if (bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; } }
 
-    var canvas = document.getElementById("gameCanvas");
-    var ctx = canvas.getContext("2d");
-
-    var startScreen = document.getElementById("startScreen");
-    var rankScreen = document.getElementById("rankScreen");
-    var controlArea = document.getElementById("controlArea");
-    var topControls = document.getElementById("topControls");
-    var updateModal = document.getElementById("updateModal");
-    var storyModal = document.getElementById("storyModal");
-    var storyPilotName = document.getElementById("storyPilotName");
-    var nicknameInput = document.getElementById("nicknameInput");
-    var nicknameWarning = document.getElementById("nicknameWarning");
-    var finalScoreText = document.getElementById("finalScoreText");
-    var joystickStatusNotice = document.getElementById("joystickStatusNotice");
-
-    // 패럴랙스 우주 배경 별 정보
+    var canvas = document.getElementById("gameCanvas"), ctx = canvas.getContext("2d");
     var stars = [];
     function initStars() {
       stars = [];
-      for (var i = 0; i < 50; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: Math.random() * 2 + 0.5,
-          speed: Math.random() * 1.5 + 0.5,
-          alpha: Math.random() * 0.8 + 0.2
-        });
-      }
+      for (var i = 0; i < 50; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2 + 0.5, speed: Math.random() * 1.5 + 0.5, alpha: Math.random() * 0.8 + 0.2 });
     }
-
     function updateAndDrawStars() {
       ctx.fillStyle = "#ffffff";
-      for (var i = 0; i < stars.length; i++) {
-        var s = stars[i];
-        s.y += s.speed;
-        if (s.y > canvas.height) {
-          s.y = 0;
-          s.x = Math.random() * canvas.width;
-        }
-        ctx.save();
-        ctx.globalAlpha = s.alpha;
-        ctx.fillRect(s.x, s.y, s.size, s.size);
-        ctx.restore();
-      }
+      stars.forEach(s => {
+        s.y += s.speed; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+        ctx.save(); ctx.globalAlpha = s.alpha; ctx.fillRect(s.x, s.y, s.size, s.size); ctx.restore();
+      });
     }
 
     function resizeCanvas() {
-      var container = canvas.parentElement;
-      canvas.width = container.clientWidth;
-      canvas.height = container.clientHeight;
-      if (player) {
-        player.y = canvas.height - player.height - 180;
-      }
+      canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
+      if (player) player.y = canvas.height - player.height - 180;
       initStars();
     }
 
-    var playerNickname = "";
-    var score = 0;
-    var stage = 1;
-    var isGameOver = false;
-    var gameAnimationId;
-    var gameTime = 0;
-    var killCount = 0;
-    var bossKillCount = 0;
-    var nextBossKillTarget = 20; 
-    var bulletCount = 1;
+    var playerNickname = "", score = 0, stage = 1, isGameOver = false, gameAnimationId, gameTime = 0, killCount = 0, bossKillCount = 0, nextBossKillTarget = 20, bulletCount = 1;
+    var shakeTimer = 0, warningTimer = 0, damageTexts = [], currentWeapon = "normal";
+    var weaponNames = { "normal": "기본 탄환", "laser": "레이저 (L)", "saw": "톱니바퀴 (S)", "shotgun": "샷건 (G)" };
 
-    // 연출 변수: 화면 흔들림 & 데미지 텍스트
-    var shakeTimer = 0;
-    var damageTexts = [];
+    function updateStatusDisplay() { document.getElementById("joystickStatusNotice").textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount; }
 
-    var currentWeapon = "normal";
+    var boss = null, bossBaseHp = 45, bossSpawnCount = 0, enemyBullets = [], particles = [];
+    var player = { x: 0, y: 0, width: 28, height: 28, speed: 4.8, lives: 3, invincibleTimer: 0, tiltAngle: 0 };
+    var bullets = [], monsters = [], items = [], keys = {}, lastShootTime = 0, shootInterval = 100;
+    var touchLeftPressed = false, touchRightPressed = false, joystickAxisX = 0, joystickAxisY = 0;
 
-    var weaponNames = {
-      "normal": "기본 탄환",
-      "laser": "레이저 (L)",
-      "saw": "톱니바퀴 (S)",
-      "shotgun": "샷건 (G)"
-    };
+    resizeCanvas(); window.addEventListener('resize', resizeCanvas);
 
-    function updateStatusDisplay() {
-      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount;
-    }
-
-    var boss = null;
-    var bossBaseHp = 45;    
-    var bossSpawnCount = 0;  
-    var enemyBullets = [];
-    var particles = [];
-
-    var player = { 
-      x: 0, 
-      y: 0, 
-      width: 28, 
-      height: 28, 
-      speed: 4.8, 
-      lives: 3, 
-      invincibleTimer: 0 
-    };
-
-    var bullets = [];
-    var monsters = [];
-    var items = [];
-    var keys = {};
-
-    var lastShootTime = 0;
-    var shootInterval = 100;
-
-    var touchLeftPressed = false;
-    var touchRightPressed = false;
-    
-    var joystickAxisX = 0; 
-    var joystickAxisY = 0; 
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    function toggleModal(id, show) {
-      var target = document.getElementById(id);
-      if (show) target.classList.remove("hidden");
-      else target.classList.add("hidden");
-    }
+    function toggleModal(id, show) { document.getElementById(id).classList.toggle("hidden", !show); }
 
     function openStoryScreen() {
       initAudio();
-      var inputVal = nicknameInput.value.trim();
-      if (!inputVal) {
-        nicknameWarning.textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!";
-        nicknameInput.focus();
-        return;
-      }
-      nicknameWarning.textContent = "";
+      var inputVal = document.getElementById("nicknameInput").value.trim();
+      if (!inputVal) return document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력하세요!";
       playerNickname = inputVal;
-      storyPilotName.textContent = playerNickname;
-      storyModal.classList.remove("hidden");
+      document.getElementById("storyPilotName").textContent = playerNickname;
+      document.getElementById("storyModal").classList.remove("hidden");
     }
 
-    function triggerScreenShake(duration) {
-      shakeTimer = duration || 10;
-    }
-
-    function addDamageText(x, y, damage, color) {
-      damageTexts.push({
-        x: x,
-        y: y,
-        text: damage,
-        color: color || "#facc15",
-        alpha: 1,
-        vy: -1
-      });
-    }
-
+    function triggerScreenShake(duration) { shakeTimer = duration || 10; }
+    function addDamageText(x, y, damage, color) { damageTexts.push({ x: x, y: y, text: damage, color: color || "#facc15", alpha: 1, vy: -1 }); }
     function createExplosion(x, y, color, count) {
-      color = color || "#f97316";
-      count = count || 12;
+      color = color || "#f97316"; count = count || 12;
       for (var i = 0; i < count; i++) {
-        var angle = Math.random() * Math.PI * 2;
-        var speed = Math.random() * 3 + 1;
-        particles.push({
-          x: x,
-          y: y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          radius: Math.random() * 3 + 1,
-          color: color,
-          alpha: 1,
-          decay: Math.random() * 0.03 + 0.02
-        });
+        var angle = Math.random() * Math.PI * 2, speed = Math.random() * 3 + 1;
+        particles.push({ x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, radius: Math.random() * 3 + 1, color: color, alpha: 1, decay: Math.random() * 0.03 + 0.02 });
       }
     }
 
-    var btnLeft = document.getElementById("btnLeft");
-    var btnRight = document.getElementById("btnRight");
-    var joystickArea = document.getElementById("joystickArea");
-    var joystickKnob = document.getElementById("joystickKnob");
-
-    btnLeft.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      initAudio();
-      touchLeftPressed = true;
-      btnLeft.classList.add("pressed");
-    });
-    btnLeft.addEventListener("touchend", function(e) {
-      e.preventDefault();
-      touchLeftPressed = false;
-      btnLeft.classList.remove("pressed");
-    });
-
-    btnRight.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      initAudio();
-      touchRightPressed = true;
-      btnRight.classList.add("pressed");
-    });
-    btnRight.addEventListener("touchend", function(e) {
-      e.preventDefault();
-      touchRightPressed = false;
-      btnRight.classList.remove("pressed");
-    });
-
-    btnLeft.addEventListener("mousedown", function() { touchLeftPressed = true; btnLeft.classList.add("pressed"); });
-    btnLeft.addEventListener("mouseup", function() { touchLeftPressed = false; btnLeft.classList.remove("pressed"); });
-    btnRight.addEventListener("mousedown", function() { touchRightPressed = true; btnRight.classList.add("pressed"); });
-    btnRight.addEventListener("mouseup", function() { touchRightPressed = false; btnRight.classList.remove("pressed"); });
+    var btnLeft = document.getElementById("btnLeft"), btnRight = document.getElementById("btnRight"), joystickArea = document.getElementById("joystickArea"), joystickKnob = document.getElementById("joystickKnob");
+    btnLeft.addEventListener("touchstart", (e) => { e.preventDefault(); initAudio(); touchLeftPressed = true; btnLeft.classList.add("pressed"); });
+    btnLeft.addEventListener("touchend", (e) => { e.preventDefault(); touchLeftPressed = false; btnLeft.classList.remove("pressed"); });
+    btnRight.addEventListener("touchstart", (e) => { e.preventDefault(); initAudio(); touchRightPressed = true; btnRight.classList.add("pressed"); });
+    btnRight.addEventListener("touchend", (e) => { e.preventDefault(); touchRightPressed = false; btnRight.classList.remove("pressed"); });
 
     var joystickTouchId = null;
-
     function handleJoystickMove(clientX, clientY) {
-      var rect = joystickArea.getBoundingClientRect();
-      var centerX = rect.left + rect.width / 2;
-      var centerY = rect.top + rect.height / 2;
-      var maxRadius = rect.width / 2;
-
-      var deltaX = clientX - centerX;
-      var deltaY = clientY - centerY;
-      
+      var rect = joystickArea.getBoundingClientRect(), maxRadius = rect.width / 2;
+      var deltaX = clientX - (rect.left + maxRadius), deltaY = clientY - (rect.top + maxRadius);
       var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-      if (distance > maxRadius) {
-        deltaX = (deltaX / distance) * maxRadius;
-        deltaY = (deltaY / distance) * maxRadius;
-      }
-
-      joystickKnob.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
-      
-      joystickAxisX = (deltaX / maxRadius) * 0.5;
-      joystickAxisY = (deltaY / maxRadius) * 0.5;
+      if (distance > maxRadius) { deltaX = (deltaX / distance) * maxRadius; deltaY = (deltaY / distance) * maxRadius; }
+      joystickKnob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      joystickAxisX = (deltaX / maxRadius) * 0.5; joystickAxisY = (deltaY / maxRadius) * 0.5;
     }
 
-    function resetJoystick() {
-      joystickKnob.style.transform = "translate(0px, 0px)";
-      joystickAxisX = 0;
-      joystickAxisY = 0;
-      joystickTouchId = null;
-    }
+    function resetJoystick() { joystickKnob.style.transform = "translate(0px, 0px)"; joystickAxisX = 0; joystickAxisY = 0; joystickTouchId = null; }
 
-    joystickArea.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      initAudio();
-      if (joystickTouchId === null && e.changedTouches.length > 0) {
-        var touch = e.changedTouches[0];
-        joystickTouchId = touch.identifier;
-        handleJoystickMove(touch.clientX, touch.clientY);
-      }
-    });
+    joystickArea.addEventListener("touchstart", (e) => { e.preventDefault(); initAudio(); if (joystickTouchId === null && e.changedTouches.length > 0) { joystickTouchId = e.changedTouches[0].identifier; handleJoystickMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY); } });
+    joystickArea.addEventListener("touchmove", (e) => { e.preventDefault(); for (var i = 0; i < e.touches.length; i++) { if (e.touches[i].identifier === joystickTouchId) { handleJoystickMove(e.touches[i].clientX, e.touches[i].clientY); break; } } });
+    joystickArea.addEventListener("touchend", resetJoystick);
 
-    joystickArea.addEventListener("touchmove", function(e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].identifier === joystickTouchId) {
-          handleJoystickMove(e.touches[i].clientX, e.touches[i].clientY);
-          break;
-        }
-      }
-    });
-
-    joystickArea.addEventListener("touchend", function(e) {
-      e.preventDefault();
-      for (var i = 0; i < e.changedTouches.length; i++) {
-        if (e.changedTouches[i].identifier === joystickTouchId) {
-          resetJoystick();
-          break;
-        }
-      }
-    });
-
-    joystickArea.addEventListener("touchcancel", resetJoystick);
-
-    var isMouseDownJoystick = false;
-    joystickArea.addEventListener("mousedown", function(e) {
-      initAudio();
-      isMouseDownJoystick = true;
-      handleJoystickMove(e.clientX, e.clientY);
-    });
-    window.addEventListener("mousemove", function(e) {
-      if (isMouseDownJoystick) {
-        handleJoystickMove(e.clientX, e.clientY);
-      }
-    });
-    window.addEventListener("mouseup", function() {
-      if (isMouseDownJoystick) {
-        isMouseDownJoystick = false;
-        resetJoystick();
-      }
-    });
-
-    document.addEventListener("keydown", function(e) {
-      initAudio();
-      keys[e.code] = true;
-    });
-    document.addEventListener("keyup", function(e) {
-      keys[e.code] = false;
-    });
+    document.addEventListener("keydown", (e) => { initAudio(); keys[e.code] = true; });
+    document.addEventListener("keyup", (e) => { keys[e.code] = false; });
 
     function shoot() {
       playSound(currentWeapon);
-
       var level = Math.min(bulletCount, 6);
-      var bulletOffsets = {
-        1: [0],
-        2: [-10, 10],
-        3: [-16, 0, 16],
-        4: [-24, -8, 8, 24],
-        5: [-32, -16, 0, 16, 32],
-        6: [-40, -24, -8, 8, 24, 40]
-      };
-
-      var offsets = bulletOffsets[level];
-
-      offsets.forEach(function(offset) {
-        var startX = player.x + player.width / 2 + offset;
-        var startY = player.y;
-
-        if (currentWeapon === "laser") {
-          bullets.push({ 
-            x: startX - 2, y: startY, width: 4, height: 30, 
-            speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set()
-          });
-        } else if (currentWeapon === "saw") {
-          bullets.push({ 
-            x: startX - 10, y: startY, width: 20, height: 20, 
-            speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set()
-          });
-        } else if (currentWeapon === "shotgun") {
-          [-0.15, 0.15].forEach(function(ang) {
-            bullets.push({ 
-              x: startX - 2.5, y: startY, width: 5, height: 5, 
-              type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7 
-            });
-          });
-        } else {
-          bullets.push({ 
-            x: startX - 3, y: startY, width: 6, height: 14, 
-            type: "normal", vx: 0, vy: -8.5 
-          });
-        }
+      var bulletOffsets = { 1: [0], 2: [-10, 10], 3: [-16, 0, 16], 4: [-24, -8, 8, 24], 5: [-32, -16, 0, 16, 32], 6: [-40, -24, -8, 8, 24, 40] };
+      bulletOffsets[level].forEach(offset => {
+        var startX = player.x + player.width / 2 + offset, startY = player.y;
+        if (currentWeapon === "laser") bullets.push({ x: startX - 2, y: startY, width: 4, height: 30, speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set() });
+        else if (currentWeapon === "saw") bullets.push({ x: startX - 10, y: startY, width: 20, height: 20, speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set() });
+        else if (currentWeapon === "shotgun") { [-0.15, 0.15].forEach(ang => bullets.push({ x: startX - 2.5, y: startY, width: 5, height: 5, type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7 })); }
+        else bullets.push({ x: startX - 3, y: startY, width: 6, height: 14, type: "normal", vx: 0, vy: -8.5 });
       });
     }
 
+    // 기체 뱅킹(기울임) 애니메이션 적용 그리기
     function drawPlayer(ctx, x, y, width, height) {
-      var cx = x + width / 2;
+      ctx.save();
+      ctx.translate(x + width / 2, y + height / 2);
+      ctx.rotate(player.tiltAngle);
+
+      var cx = 0, cy = 0;
+      var hw = width / 2, hh = height / 2;
 
       if (player.invincibleTimer > 0) {
-        ctx.save();
-        ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(cx, y + height / 2, width + 4, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-
-        if (Math.floor(gameTime / 4) % 2 === 0) return;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${0.4 + Math.sin(gameTime * 0.3) * 0.3})`; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(cx, cy, width + 4, 0, Math.PI * 2); ctx.stroke();
+        if (Math.floor(gameTime / 4) % 2 === 0) { ctx.restore(); return; }
       }
 
       ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444";
-      ctx.beginPath();
-      ctx.moveTo(cx - 4, y + height - 2);
-      ctx.lineTo(cx, y + height + 8 + (Math.random() * 3));
-      ctx.lineTo(cx + 4, y + height - 2);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#1d4ed8";
-      ctx.beginPath();
-      ctx.moveTo(cx, y + 2);
-      ctx.lineTo(x + width, y + height - 3);
-      ctx.lineTo(x + width - 4, y + height);
-      ctx.lineTo(cx, y + height - 6);
-      ctx.lineTo(x + 4, y + height);
-      ctx.lineTo(x, y + height - 3);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#3b82f6";
-      ctx.beginPath();
-      ctx.moveTo(cx, y);
-      ctx.lineTo(cx + 6, y + 11);
-      ctx.lineTo(cx + 4, y + height - 3);
-      ctx.lineTo(cx - 4, y + height - 3);
-      ctx.lineTo(cx - 6, y + 11);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#f43f5e";
-      ctx.beginPath();
-      ctx.ellipse(cx, y + 11, 2.5, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(x, y + height - 5, 2, 3);
-      ctx.fillRect(x + width - 2, y + height - 5, 2, 3);
+      ctx.beginPath(); ctx.moveTo(cx - 4, hh - 2); ctx.lineTo(cx, hh + 8 + (Math.random() * 3)); ctx.lineTo(cx + 4, hh - 2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.moveTo(cx, -hh + 2); ctx.lineTo(hw, hh - 3); ctx.lineTo(hw - 4, hh); ctx.lineTo(cx, hh - 6); ctx.lineTo(-hw + 4, hh); ctx.lineTo(-hw, hh - 3); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#3b82f6"; ctx.beginPath(); ctx.moveTo(cx, -hh); ctx.lineTo(cx + 6, -hh + 11); ctx.lineTo(cx + 4, hh - 3); ctx.lineTo(cx - 4, hh - 3); ctx.lineTo(cx - 6, -hh + 11); ctx.closePath(); ctx.fill();
+      
+      ctx.restore();
     }
 
-    function drawPixelMonster(ctx, x, y, width, height, color, shape) {
-      ctx.fillStyle = color;
-      var unit = width / 8;
-      for (var r = 0; r < shape.length; r++) {
-        for (var c = 0; c < shape[r].length; c++) {
-          if (shape[r][c] === 1) ctx.fillRect(x + c * unit, y + r * unit, unit, unit);
-        }
-      }
-    }
-
-    function drawNormalMonster(ctx, x, y, width, height) {
-      var shape = [
-        [0,0,1,0,0,1,0,0],
-        [0,1,1,1,1,1,1,0],
-        [1,1,0,1,1,0,1,1],
-        [1,1,1,1,1,1,1,1],
-        [1,0,1,1,1,1,0,1],
-        [1,0,1,0,0,1,0,1],
-        [0,0,0,1,1,0,0,0]
-      ];
-      drawPixelMonster(ctx, x, y, width, height, "#a855f7", shape);
-    }
-
-    function drawFastMonster(ctx, x, y, width, height) {
-      var shape = [
-        [0,0,0,1,1,0,0,0],
-        [0,0,1,1,1,1,0,0],
-        [0,1,1,1,1,1,1,0],
-        [1,1,0,1,1,0,1,1],
-        [1,1,1,1,1,1,1,1],
-        [0,1,0,1,1,0,1,0],
-        [1,0,1,0,0,1,0,1]
-      ];
-      drawPixelMonster(ctx, x, y, width, height, "#ef4444", shape);
-    }
-
-    function drawShooterMonster(ctx, x, y, width, height) {
-      var shape = [
-        [1,1,1,1,1,1,1,1],
-        [1,0,1,1,1,1,0,1],
-        [1,1,1,1,1,1,1,1],
-        [0,1,1,0,0,1,1,0],
-        [0,0,1,1,1,1,0,0],
-        [0,0,0,1,1,0,0,0]
-      ];
-      drawPixelMonster(ctx, x, y, width, height, "#22c55e", shape);
-    }
-
-    function drawZigzagMonster(ctx, x, y, width, height) {
-      var shape = [
-        [0,1,0,0,0,0,1,0],
-        [1,1,1,0,0,1,1,1],
-        [1,0,1,1,1,1,0,1],
-        [0,1,1,1,1,1,1,0],
-        [0,0,1,0,0,1,0,0],
-        [0,1,0,0,0,0,1,0]
-      ];
-      drawPixelMonster(ctx, x, y, width, height, "#f97316", shape);
+    function drawMonster(ctx, m) {
+      ctx.fillStyle = m.type === "fast" ? "#ef4444" : (m.type === "shooter" ? "#22c55e" : (m.type === "zigzag" ? "#f97316" : "#a855f7"));
+      ctx.fillRect(m.x, m.y, m.width, m.height);
     }
 
     function drawBoss(ctx, boss) {
-      ctx.save();
-      var cx = boss.x + boss.width / 2;
-      var cy = boss.y + boss.height / 2;
-
-      if (boss.designType === 0) {
-        ctx.fillStyle = "#dc2626";
-        ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-        
-        ctx.fillStyle = "#38bdf8";
-        ctx.fillRect(boss.x + 10, boss.y + 10, boss.width - 20, 8);
-        
-        ctx.fillStyle = "#fef08a";
-        ctx.fillRect(boss.x + 12, boss.y + 25, 15, 15);
-        ctx.fillRect(boss.x + boss.width - 27, boss.y + 25, 15, 15);
-      } else if (boss.designType === 1) {
-        ctx.fillStyle = "#9333ea";
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, boss.width / 2, boss.height / 2, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(cx, cy, 16, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#ef4444";
-        ctx.beginPath();
-        ctx.arc(cx + Math.sin(gameTime * 0.05) * 4, cy, 8, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (boss.designType === 2) {
-        ctx.fillStyle = "#0284c7";
-        ctx.fillRect(boss.x + 15, boss.y, boss.width - 30, boss.height);
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(gameTime * 0.03);
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 4;
-        ctx.strokeRect(-boss.width / 2, -10, boss.width, 20);
-        ctx.restore();
-      } else {
-        ctx.fillStyle = "#d97706";
-        ctx.beginPath();
-        ctx.moveTo(cx, boss.y + boss.height);
-        ctx.lineTo(boss.x + boss.width, boss.y);
-        ctx.lineTo(boss.x, boss.y);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = "#facc15";
-        ctx.beginPath();
-        ctx.arc(cx, boss.y + 20, 10, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-
-      var barWidth = canvas.width * 0.6;
-      var barHeight = 12;
-      var barX = (canvas.width - barWidth) / 2;
-      var barY = 15;
-      var hpRatio = Math.max(0, boss.hp / boss.maxHp);
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-      ctx.fillRect(barX, barY, barWidth, barHeight);
-      ctx.fillStyle = "#ef4444";
-      ctx.fillRect(barX, barY, barWidth * hpRatio, barHeight);
-      ctx.strokeStyle = "#ffffff";
-      ctx.strokeRect(barX, barY, barWidth, barHeight);
+      ctx.fillStyle = "#dc2626"; ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+      var barWidth = canvas.width * 0.6, barX = (canvas.width - barWidth) / 2;
+      ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillRect(barX, 15, barWidth, 12);
+      ctx.fillStyle = "#ef4444"; ctx.fillRect(barX, 15, barWidth * Math.max(0, boss.hp / boss.maxHp), 12);
     }
 
     function drawItem(ctx, item) {
-      var colorMap = {
-        "laser": "#22c55e",
-        "saw": "#c084fc",
-        "shotgun": "#f97316",
-        "upgrade": "#eab308",
-        "heart": "#ec4899"
-      };
-      
-      ctx.fillStyle = colorMap[item.type] || "#eab308";
-      ctx.beginPath();
-      ctx.arc(item.x + item.width / 2, item.y + item.height / 2, item.width / 2, 0, Math.PI * 2);
-      ctx.fill();
-      
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 10px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "2X", "heart": "H" };
-      ctx.fillText(textMap[item.type] || "2X", item.x + item.width / 2, item.y + item.height / 2);
+      ctx.fillStyle = item.type === "coin" ? "#facc15" : (item.type === "heart" ? "#ec4899" : "#eab308");
+      ctx.beginPath(); ctx.arc(item.x + 10, item.y + 10, 10, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#000"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(item.type === "coin" ? "C" : (item.type === "heart" ? "H" : "2X"), item.x + 10, item.y + 10);
     }
 
-    function drawBullet(ctx, b) {
-      if (b.type === "laser") {
-        ctx.fillStyle = "#4ade80";
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = "#22c55e";
-        ctx.fillRect(b.x, b.y, b.width, b.height);
-        ctx.shadowBlur = 0;
-      } else if (b.type === "saw") {
-        ctx.save();
-        ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
-        ctx.rotate(b.angle || 0);
-        ctx.fillStyle = "#a855f7";
-        ctx.fillRect(-8, -8, 16, 16);
-        ctx.fillStyle = "#e9d5ff";
-        ctx.fillRect(-4, -4, 8, 8);
-        ctx.restore();
-      } else if (b.type === "shotgun") {
-        ctx.fillStyle = "#fb923c";
-        ctx.beginPath();
-        ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width / 2, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.fillStyle = "#facc15";
-        ctx.fillRect(b.x, b.y, b.width, b.height);
-      }
+    function drawEnemyBullet(ctx, eb) {
+      ctx.save();
+      var cx = eb.x + eb.width / 2, cy = eb.y + eb.height / 2, radius = Math.max(eb.width, eb.height) / 2 + 1;
+      ctx.shadowBlur = 10; ctx.shadowColor = "#ff0055";
+      ctx.fillStyle = "#ff0055"; ctx.beginPath(); ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#ffeedd"; ctx.beginPath(); ctx.arc(cx, cy, radius - 1, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
     }
 
     function startGame() {
-      storyModal.classList.add("hidden");
-      startScreen.classList.add("hidden");
-      rankScreen.classList.add("hidden");
-      controlArea.classList.remove("hidden");
-      topControls.classList.remove("hidden");
+      document.getElementById("storyModal").classList.add("hidden");
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("rankScreen").classList.add("hidden");
+      document.getElementById("controlArea").classList.remove("hidden");
+      document.getElementById("topControls").classList.remove("hidden");
 
-      resizeCanvas();
-      isPaused = false;
-      if (!soundMuted) startBGM();
+      resizeCanvas(); isPaused = false; if (!soundMuted) startBGM();
+      
+      player.speed = 4.8 * (1 + upgrades.speed * 0.1);
+      player.lives = 3 + upgrades.hp;
 
       player.x = canvas.width / 2 - player.width / 2;
-      player.y = canvas.height - player.height - 180;
-      player.lives = 3;
-      player.invincibleTimer = 0;
-
-      score = 0;
-      stage = 1;
-      killCount = 0;
-      bossKillCount = 0;
-      nextBossKillTarget = 20; 
-      bulletCount = 1;
-      gameTime = 0;
-      bossSpawnCount = 0;
-      currentWeapon = "normal";
-      
-      updateStatusDisplay();
-      isGameOver = false;
-
-      resetJoystick();
-
-      boss = null;
-      bullets = [];
-      monsters = [];
-      items = [];
-      enemyBullets = [];
-      particles = [];
-      damageTexts = [];
+      score = 0; stage = 1; killCount = 0; bossKillCount = 0; nextBossKillTarget = 20; bulletCount = 1; gameTime = 0; bossSpawnCount = 0; currentWeapon = "normal";
+      updateStatusDisplay(); isGameOver = false; resetJoystick();
+      boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
 
       if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
       gameLoop();
@@ -1450,520 +663,172 @@
 
     function goToMainScreen() {
       stopBGM();
-      rankScreen.classList.add("hidden");
-      controlArea.classList.add("hidden");
-      topControls.classList.add("hidden");
-      startScreen.classList.remove("hidden");
-      updateLeaderboardUI();
+      document.getElementById("rankScreen").classList.add("hidden");
+      document.getElementById("controlArea").classList.add("hidden");
+      document.getElementById("topControls").classList.add("hidden");
+      document.getElementById("startScreen").classList.remove("hidden");
+      updateShopUI(); updateLeaderboardUI();
     }
 
     function spawnMonster() {
-      var rand = Math.random();
-      var width = 32;
-      var height = 32;
-      var x = Math.random() * (canvas.width - width);
-      
-      var type = "normal";
-      var speed = 0.85; 
-      var hp = 1;
+      var rand = Math.random(), type = "normal", speed = 0.85, hp = 1;
+      if (rand < 0.3) { type = "fast"; speed = 1.6; }
+      else if (rand < 0.55) { type = "shooter"; speed = 0.55; hp = 2; }
+      else if (rand < 0.75) { type = "zigzag"; speed = 0.95; }
 
-      if (rand < 0.3) {
-        type = "fast";
-        speed = 1.6;
-        hp = 1;
-      } else if (rand < 0.55) {
-        type = "shooter";
-        speed = 0.55;
-        hp = 2;
-      } else if (rand < 0.75) {
-        type = "zigzag";
-        speed = 0.95;
-        hp = 1;
-      }
-
-      monsters.push({
-        id: Math.random().toString(36).substr(2, 9),
-        x: x,
-        startX: x,
-        y: -height,
-        width: width,
-        height: height,
-        speed: speed,
-        type: type,
-        hp: hp,
-        lastShoot: 0
-      });
+      monsters.push({ id: Math.random().toString(36).substr(2, 9), x: Math.random() * (canvas.width - 32), startX: Math.random() * (canvas.width - 32), y: -32, width: 32, height: 32, speed: speed, type: type, hp: hp, lastShoot: 0 });
     }
 
     function spawnBoss() {
       bossSpawnCount++;
+      warningTimer = 60; // 1초간 경고 연출
+      playSound('warning');
       var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.3, bossSpawnCount - 1));
-      
-      boss = {
-        x: canvas.width / 2 - 40,
-        y: 40,
-        width: 80,
-        height: 60,
-        speedX: 1.2,
-        hp: calculatedHp,
-        maxHp: calculatedHp,
-        lastShoot: 0,
-        patternTimer: 0,
-        designType: Math.floor(Math.random() * 4)
-      };
+      boss = { x: canvas.width / 2 - 40, y: 40, width: 80, height: 60, speedX: 1.2, hp: calculatedHp, maxHp: calculatedHp, lastShoot: 0, patternTimer: 0 };
     }
 
     function spawnItem(x, y, forcedType) {
-      if (forcedType) {
-        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: forcedType });
-      } else {
-        var randWeapon = Math.random();
-        var weaponType = "laser";
-        if (randWeapon < 0.22) weaponType = "shotgun";
-        else if (randWeapon < 0.60) weaponType = "saw";
-        else weaponType = "laser";
-
-        items.push({ x: x, y: y, width: 22, height: 22, speed: 1.2, type: weaponType });
-      }
+      items.push({ x: x, y: y, width: 20, height: 20, speed: 1.2, type: forcedType || (Math.random() < 0.5 ? "upgrade" : "laser") });
     }
 
-    function checkCollision(r1, r2) {
-      return (
-        r1.x < r2.x + r2.width &&
-        r1.x + r1.width > r2.x &&
-        r1.y < r2.y + r2.height &&
-        r1.y + r1.height > r2.y
-      );
-    }
+    function checkCollision(r1, r2) { return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y; }
 
     function handlePlayerHit() {
       if (player.invincibleTimer > 0) return;
-
-      player.lives--;
-      playSound('hit');
-      triggerScreenShake(15);
-      createExplosion(player.x + player.width / 2, player.y + player.height / 2, "#ef4444", 15);
-
-      if (player.lives <= 0) {
-        gameOver();
-      } else {
-        player.invincibleTimer = 90;
-      }
-    }
-
-    function fireBossPattern(boss) {
-      var originX = boss.x + boss.width / 2;
-      var originY = boss.y + boss.height;
-
-      // 보스 HP가 50% 이하일 때 회전 탄막 패턴 적용
-      if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
-        var baseAngle = (gameTime * 0.1);
-        for (var i = 0; i < 6; i++) {
-          var angle = baseAngle + (Math.PI / 3) * i;
-          enemyBullets.push({
-            x: originX - 4,
-            y: originY - 10,
-            width: 8,
-            height: 8,
-            vx: Math.cos(angle) * 2.2,
-            vy: Math.sin(angle) * 2.2
-          });
-        }
-      } else if (boss.patternTimer % 2 === 0) {
-        var angles = [-0.25, 0, 0.25];
-        angles.forEach(function(angle) {
-          enemyBullets.push({
-            x: originX - 4,
-            y: originY,
-            width: 8,
-            height: 8,
-            vx: Math.sin(angle) * 2.5,
-            vy: Math.cos(angle) * 2.5
-          });
-        });
-      } else {
-        var dx = (player.x + player.width / 2) - originX;
-        var dy = (player.y + player.height / 2) - originY;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        var speed = 2.8;
-
-        enemyBullets.push({
-          x: originX - 5,
-          y: originY,
-          width: 10,
-          height: 10,
-          vx: (dx / dist) * speed,
-          vy: (dy / dist) * speed
-        });
-      }
-
-      boss.patternTimer++;
-    }
-
-    function explodeBoss(boss) {
-      playSound('explosion');
-      triggerScreenShake(20);
-      var originX = boss.x + boss.width / 2;
-      var originY = boss.y + boss.height / 2;
-      createExplosion(originX, originY, "#ef4444", 30);
-
-      var count = 10 + (stage - 1) * 2; 
-
-      for (var i = 0; i < count; i++) {
-        var angle = (Math.PI * 2 / count) * i;
-        var speed = 2.5;
-        enemyBullets.push({
-          x: originX - 4,
-          y: originY - 4,
-          width: 8,
-          height: 8,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed
-        });
-      }
+      player.lives--; playSound('hit'); triggerScreenShake(15);
+      createExplosion(player.x + 14, player.y + 14, "#ef4444", 15);
+      if (player.lives <= 0) gameOver(); else player.invincibleTimer = 90;
     }
 
     function update() {
       if (isGameOver || isPaused) return;
+      gameTime++; if (player.invincibleTimer > 0) player.invincibleTimer--;
 
-      gameTime++;
+      var now = Date.now(); if (now - lastShootTime > shootInterval) { shoot(); lastShootTime = now; }
+      if (gameTime % Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1))) === 0) spawnMonster();
+      if (!boss && killCount >= nextBossKillTarget) { spawnBoss(); nextBossKillTarget += 20; }
 
-      if (player.invincibleTimer > 0) {
-        player.invincibleTimer--;
-      }
+      var moveX = 0, moveY = 0;
+      if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 0.5;
+      if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 0.5;
+      if (keys["ArrowUp"] || keys["KeyW"]) moveY -= 0.5;
+      if (keys["ArrowDown"] || keys["KeyS"]) moveY += 0.5;
 
-      var now = Date.now();
-      if (now - lastShootTime > shootInterval) {
-        shoot();
-        lastShootTime = now;
-      }
-
-      var currentSpawnInterval = Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1)));
-      if (gameTime % currentSpawnInterval === 0) {
-        spawnMonster();
-      }
-
-      if (!boss && killCount >= nextBossKillTarget) {
-        spawnBoss();
-        nextBossKillTarget += 20;
-      }
-
-      var moveX = 0;
-      var moveY = 0;
-
-      if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 1;
-      if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 1;
-      if (keys["ArrowUp"] || keys["KeyW"]) moveY -= 1;
-      if (keys["ArrowDown"] || keys["KeyS"]) moveY += 1;
-
-      if (joystickAxisX !== 0) moveX += joystickAxisX;
+      if (joystickAxisX !== 0) moveX += joystickAxisX; 
       if (joystickAxisY !== 0) moveY += joystickAxisY;
 
-      player.x += moveX * player.speed;
-      player.y += moveY * player.speed;
+      // 이동 방향에 맞춰 기체 기울임 회전 각도 계산
+      var targetAngle = moveX * 0.35;
+      player.tiltAngle += (targetAngle - player.tiltAngle) * 0.2;
 
-      player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-      
-      var maxPlayerY = canvas.height - player.height - 160;
-      player.y = Math.max(0, Math.min(maxPlayerY, player.y));
+      player.x = Math.max(0, Math.min(canvas.width - player.width, player.x + moveX * player.speed));
+      player.y = Math.max(0, Math.min(canvas.height - player.height - 160, player.y + moveY * player.speed));
 
-      for (var i = bullets.length - 1; i >= 0; i--) {
-        var b = bullets[i];
-        b.x += b.vx || 0;
-        b.y += b.vy !== undefined ? b.vy : -b.speed;
+      bullets.forEach((b, bi) => {
+        b.y += b.vy || -b.speed;
+        if (b.y < -30) bullets.splice(bi, 1);
+      });
 
-        if (b.type === "saw") {
-          b.angle = (b.angle || 0) + 0.2;
+      enemyBullets.forEach((eb, ebi) => {
+        eb.x += eb.vx; eb.y += eb.vy;
+        if (checkCollision(player, eb)) {
+          handlePlayerHit(); enemyBullets.splice(ebi, 1);
+        } else if (eb.y > canvas.height + 20 || eb.y < -20 || eb.x < -20 || eb.x > canvas.width + 20) {
+          enemyBullets.splice(ebi, 1);
         }
-
-        if (b.y < -30 || b.y > canvas.height + 30 || b.x < -30 || b.x > canvas.width + 30) {
-          bullets.splice(i, 1);
-        }
-      }
-
-      for (var i = particles.length - 1; i >= 0; i--) {
-        var p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= p.decay;
-        if (p.alpha <= 0) {
-          particles.splice(i, 1);
-        }
-      }
-
-      for (var i = damageTexts.length - 1; i >= 0; i--) {
-        var dt = damageTexts[i];
-        dt.y += dt.vy;
-        dt.alpha -= 0.03;
-        if (dt.alpha <= 0) {
-          damageTexts.splice(i, 1);
-        }
-      }
+      });
 
       if (boss) {
-        boss.x += boss.speedX;
-        if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
-          boss.speedX *= -1;
-        }
-
-        var bossShootInterval = Math.max(45, 90 - (stage - 1) * 4);
-        if (gameTime - boss.lastShoot > bossShootInterval) {
-          fireBossPattern(boss);
-          boss.lastShoot = gameTime;
-        }
-
-        for (var j = bullets.length - 1; j >= 0; j--) {
-          var b = bullets[j];
+        boss.x += boss.speedX; if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.speedX *= -1;
+        bullets.forEach((b, bi) => {
           if (checkCollision(b, boss)) {
-            if (b.pierce) {
-              if (!b.hitEnemies.has('boss')) {
-                b.hitEnemies.add('boss');
-                boss.hp--;
-                addDamageText(b.x, b.y, "-1", "#38bdf8");
-                createExplosion(b.x, b.y, "#38bdf8", 4);
-              }
-            } else {
-              boss.hp--;
-              addDamageText(b.x, b.y, "-1", "#facc15");
-              createExplosion(b.x, b.y, "#facc15", 4);
-              bullets.splice(j, 1);
-            }
-
+            boss.hp--; addDamageText(b.x, b.y, "-1"); bullets.splice(bi, 1);
             if (boss.hp <= 0) {
-              score += 1000 * bossSpawnCount;
-              bossKillCount++;
-              explodeBoss(boss);
-
-              if (Math.random() < 0.10) {
-                spawnItem(boss.x + boss.width / 2, boss.y + boss.height / 2, "heart");
-              } else {
-                spawnItem(boss.x + boss.width / 2, boss.y + boss.height / 2);
-              }
-
-              boss = null;
-              stage++;
-              break;
+              score += 1000; bossKillCount++; totalBossKills++; createExplosion(boss.x + 40, boss.y + 30, "#ef4444", 30);
+              spawnItem(boss.x + 40, boss.y + 30, "coin"); boss = null; stage++; saveUserData();
             }
           }
-        }
-
-        if (boss && checkCollision(player, boss)) {
-          handlePlayerHit();
-        }
+        });
       }
 
-      for (var i = enemyBullets.length - 1; i >= 0; i--) {
-        var eb = enemyBullets[i];
-        eb.x += eb.vx;
-        eb.y += eb.vy;
-
-        if (checkCollision(player, eb)) {
-          handlePlayerHit();
-          enemyBullets.splice(i, 1);
-          continue;
-        }
-
-        if (eb.y > canvas.height + 20 || eb.y < -20 || eb.x < -20 || eb.x > canvas.width + 20) {
-          enemyBullets.splice(i, 1);
-        }
-      }
-
-      for (var i = items.length - 1; i >= 0; i--) {
-        items[i].y += items[i].speed;
-
-        if (checkCollision(player, items[i])) {
+      items.forEach((item, ii) => {
+        item.y += item.speed;
+        if (checkCollision(player, item)) {
           playSound('item');
-          var itemType = items[i].type;
-          
-          if (itemType === "upgrade") {
-            bulletCount = Math.min(6, bulletCount + 1);
-          } else if (itemType === "heart") {
-            player.lives = Math.min(5, player.lives + 1);
-          } else {
-            currentWeapon = itemType;
-          }
-
-          updateStatusDisplay();
-          score += 50;
-          createExplosion(items[i].x, items[i].y, "#ec4899", 10);
-          items.splice(i, 1);
-          continue;
+          if (item.type === "coin") { userCoins += 10; saveUserData(); addDamageText(player.x, player.y, "+10 C", "#facc15"); }
+          else if (item.type === "upgrade") bulletCount = Math.min(6, bulletCount + 1);
+          items.splice(ii, 1);
         }
-        if (items[i].y > canvas.height) items.splice(i, 1);
-      }
+      });
 
-      for (var i = monsters.length - 1; i >= 0; i--) {
-        var m = monsters[i];
+      monsters.forEach((m, mi) => {
         m.y += m.speed;
-
-        if (m.type === "zigzag") {
-          m.x = m.startX + Math.sin(m.y * 0.025) * 35;
-        }
-
-        var shooterInterval = Math.max(120, 180 - (stage - 1) * 5);
-        var bulletSpeed = 1.8 + (stage - 1) * 0.15;
-
-        if (m.type === "shooter") {
-          if (gameTime - m.lastShoot > shooterInterval) {
-            enemyBullets.push({
-              x: m.x + m.width / 2 - 3,
-              y: m.y + m.height,
-              width: 6,
-              height: 10,
-              vx: 0,
-              vy: bulletSpeed
-            });
-            m.lastShoot = gameTime;
-          }
-        }
-
-        if (checkCollision(player, m)) {
-          handlePlayerHit();
-        }
-
-        for (var j = bullets.length - 1; j >= 0; j--) {
-          var b = bullets[j];
+        bullets.forEach((b, bi) => {
           if (checkCollision(b, m)) {
-            if (b.pierce) {
-              if (!b.hitEnemies.has(m.id)) {
-                b.hitEnemies.add(m.id);
-                m.hp--;
-                addDamageText(b.x, b.y, "-1", "#38bdf8");
-              }
-            } else {
-              m.hp--;
-              addDamageText(b.x, b.y, "-1", "#facc15");
-              bullets.splice(j, 1);
-            }
-
+            m.hp--; bullets.splice(bi, 1);
             if (m.hp <= 0) {
-              playSound('explosion');
-              createExplosion(m.x + m.width / 2, m.y + m.height / 2, "#f97316", 10);
-              killCount++;
-              score += m.type === "fast" ? 150 : (m.type === "shooter" ? 200 : 100);
-
-              var randItem = Math.random();
-              if (randItem < 0.05) {
-                spawnItem(m.x, m.y, "upgrade");
-              } 
-              else if (randItem < 0.23) {
-                spawnItem(m.x, m.y);
-              }
-
-              monsters.splice(i, 1);
-              break;
+              killCount++; totalMonsterKills++; score += 100; createExplosion(m.x + 16, m.y + 16, "#f97316", 10);
+              var dropRate = 0.15 * (1 + upgrades.drop * 0.2);
+              if (Math.random() < dropRate) spawnItem(m.x, m.y, "coin");
+              monsters.splice(mi, 1); saveUserData();
             }
           }
-        }
-
-        if (m && m.y > canvas.height) monsters.splice(i, 1);
-      }
+        });
+        if (checkCollision(player, m)) handlePlayerHit();
+      });
     }
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // 화면 흔들림 연출 계산
       ctx.save();
-      if (shakeTimer > 0) {
-        var offsetX = (Math.random() - 0.5) * 8;
-        var offsetY = (Math.random() - 0.5) * 8;
-        ctx.translate(offsetX, offsetY);
-        shakeTimer--;
-      }
-
-      // 우주 배경 스크롤 그리기
+      if (shakeTimer > 0) { ctx.translate((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8); shakeTimer--; }
       updateAndDrawStars();
 
+      // 보스 출현 붉은 WARNING 연출
+      if (warningTimer > 0) {
+        warningTimer--;
+        ctx.fillStyle = `rgba(239, 68, 68, ${Math.sin(warningTimer * 0.2) * 0.25})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#f87171";
+        ctx.font = "bold 22px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("⚠️ WARNING: BOSS APPROACHING ⚠️", canvas.width / 2, canvas.height / 2);
+      }
+
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
+      
+      // 탄환 스펙 레벨에 따른 색상 시각화
+      var bulletColors = ["#facc15", "#38bdf8", "#a855f7", "#ec4899", "#22c55e", "#ffffff"];
+      var curColor = bulletColors[Math.min(bulletCount, 6) - 1];
+      bullets.forEach(b => { ctx.fillStyle = curColor; ctx.fillRect(b.x, b.y, b.width, b.height); });
+      
+      enemyBullets.forEach(eb => drawEnemyBullet(ctx, eb));
+      monsters.forEach(m => drawMonster(ctx, m));
+      items.forEach(item => drawItem(ctx, item));
+      if (boss) drawBoss(ctx, boss);
+      damageTexts.forEach(dt => { ctx.fillStyle = dt.color; ctx.font = "bold 12px sans-serif"; ctx.fillText(dt.text, dt.x, dt.y); });
+      ctx.restore();
 
-      for (var i = 0; i < bullets.length; i++) {
-        drawBullet(ctx, bullets[i]);
-      }
-
-      ctx.fillStyle = "#ff2222";
-      for (var i = 0; i < enemyBullets.length; i++) {
-        var eb = enemyBullets[i];
-        ctx.beginPath();
-        ctx.arc(eb.x + eb.width / 2, eb.y + eb.height / 2, eb.width / 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      for (var i = 0; i < items.length; i++) {
-        drawItem(ctx, items[i]);
-      }
-
-      for (var i = 0; i < monsters.length; i++) {
-        var m = monsters[i];
-        if (m.type === "fast") drawFastMonster(ctx, m.x, m.y, m.width, m.height);
-        else if (m.type === "shooter") drawShooterMonster(ctx, m.x, m.y, m.width, m.height);
-        else if (m.type === "zigzag") drawZigzagMonster(ctx, m.x, m.y, m.width, m.height);
-        else drawNormalMonster(ctx, m.x, m.y, m.width, m.height);
-      }
-
-      if (boss) {
-        drawBoss(ctx, boss);
-      }
-
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // 데미지 텍스트 팝업 연출
-      for (var i = 0; i < damageTexts.length; i++) {
-        var dt = damageTexts[i];
-        ctx.save();
-        ctx.globalAlpha = dt.alpha;
-        ctx.fillStyle = dt.color;
-        ctx.font = "bold 13px sans-serif";
-        ctx.fillText(dt.text, dt.x, dt.y);
-        ctx.restore();
-      }
-
-      ctx.restore(); // 화면 흔들림 복구
-
-      // 상단 HUD 텍스트
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 15px sans-serif";
-      ctx.textAlign = "left";
-      ctx.fillText("Stage: " + stage, 15, 25);
-      ctx.fillText("Score: " + score, 15, 45);
-      ctx.fillText("Kills: " + killCount + " | Boss: " + bossKillCount, 15, 65);
-
-      var heartsText = "LIFE: ";
-      for (var h = 0; h < player.lives; h++) {
-        heartsText += "❤️";
-      }
-      ctx.fillText(heartsText, 15, 85);
+      ctx.fillStyle = "#fff"; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText(`Stage: ${stage} | Score: ${score}`, 15, 25);
+      ctx.fillText(`Kills: ${killCount} | 🪙 코인: ${userCoins}`, 15, 45);
+      var hearts = "LIFE: "; for (var h = 0; h < player.lives; h++) hearts += "❤️";
+      ctx.fillText(hearts, 15, 65);
     }
 
     function gameLoop() {
-      if (!isPaused && !isGameOver) {
-        update();
-        draw();
-        gameAnimationId = requestAnimationFrame(gameLoop);
-      }
+      if (!isPaused && !isGameOver) { update(); draw(); gameAnimationId = requestAnimationFrame(gameLoop); }
     }
 
     function gameOver() {
-      isGameOver = true;
-      stopBGM();
-      playSound('gameover');
-      cancelAnimationFrame(gameAnimationId);
+      isGameOver = true; stopBGM(); playSound('gameover'); cancelAnimationFrame(gameAnimationId);
+      if (score > highScore) highScore = score;
+      saveUserData();
 
-      controlArea.classList.add("hidden");
-      topControls.classList.add("hidden");
-      rankScreen.classList.remove("hidden");
-
-      finalScoreText.textContent = "Pilot: " + playerNickname + " | Stage: " + stage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
-      
+      document.getElementById("controlArea").classList.add("hidden");
+      document.getElementById("topControls").classList.add("hidden");
+      document.getElementById("rankScreen").classList.remove("hidden");
+      document.getElementById("finalScoreText").textContent = `Pilot: [${equippedTitle}] ${playerNickname} | Score: ${score}`;
       saveScore(playerNickname, score, killCount, bossKillCount);
     }
   </script>
