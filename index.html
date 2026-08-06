@@ -125,6 +125,7 @@
     }
 
     .badge.upgrade { background: #eab308; }
+    .badge.damage { background: #ef4444; color: #fff; }
     .badge.laser { background: #22c55e; }
     .badge.saw { background: #c084fc; }
     .badge.shotgun { background: #f97316; }
@@ -459,6 +460,7 @@
 
       <div class="info-box">
         <h4>🎁 아이템 드롭 확률 정보</h4>
+        <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가 (3%)</b>: 탄환 데미지 +1</span></div>
         <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가 (5%)</b>: 발사 탄환 수 +1</span></div>
         <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기 (4%)</b>: 소형 2연발 방사 탄환</span></div>
         <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기 (7%)</b>: 관통 빔</span></div>
@@ -513,12 +515,11 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.6.0 (조작 및 밸런스 개선)</div>
+            <div class="version-title">v3.7.0 (데미지 및 조작 감도 조율)</div>
             <ul>
-              <li><b>조이스틱 좌우 컨트롤 동기화</b>: 조이스틱 이동 속도 및 감도를 대폭 개선.</li>
-              <li><b>적 탄환 가시성 강화</b>: 붉은 발광 효과와 중앙 코어 디자인 적용.</li>
-              <li><b>아이템 아이콘 직관화</b>: 탄환 증가 아이템 텍스트를 "+1"로 변경.</li>
-              <li><b>신규 엘리트 몬스터 추가</b>: 15킬마다 내구도가 높고 특수 공격을 하는 중급 몬스터 출현.</li>
+              <li><b>조이스틱 민감도 조절</b>: 섬세한 조작을 위해 이동 속도 및 이동감도를 다소 완화하여 둔화 조율.</li>
+              <li><b>탄환 밸런스 개선</b>: 일반 적 탄환 크기 축소, 중급/보스 몬스터 탄환은 묵직한 크기 유지.</li>
+              <li><b>데미지 업 시스템 도입</b>: 적 처치 시 3% 확률로 데미지 아이템(D) 드롭, 획득 시 데미지 +1 업!</li>
             </ul>
           </div>
         </div>
@@ -570,7 +571,7 @@
 
     <!-- 독립 조작 컨트롤 패널 영역 -->
     <div id="controlArea" class="hidden">
-      <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1</div>
+      <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1 | DMG: 1</div>
       <div id="btnLeft" class="arrow-btn">◀</div>
       <div id="joystickArea">
         <div id="joystickKnob"></div>
@@ -896,8 +897,9 @@
     var killCount = 0;
     var bossKillCount = 0;
     var nextBossKillTarget = 20; 
-    var nextEliteKillTarget = 15; // 중급 몬스터 스폰 카운터
+    var nextEliteKillTarget = 15;
     var bulletCount = 1;
+    var playerDamage = 1; // 4. 플레이어 탄환 데미지 속성 추가
 
     // 연출 변수: 화면 흔들림 & 데미지 텍스트
     var shakeTimer = 0;
@@ -913,7 +915,7 @@
     };
 
     function updateStatusDisplay() {
-      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount;
+      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount + " | DMG: " + playerDamage;
     }
 
     var boss = null;
@@ -927,7 +929,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 4.8, 
+      speed: 3.8, // 1. 이동 감도 및 컨트롤을 차분하게 느리게 조율
       lives: 3, 
       invincibleTimer: 0 
     };
@@ -1039,7 +1041,7 @@
 
     var joystickTouchId = null;
 
-    // 1. 조이스틱 민감도 및 축 입력 비율 수정 (기존 0.5배속 제한 해제하여 버튼/키보드 이동과 일치)
+    // 1. 조이스틱 세밀한 이동감도 반응축 완화 (0.55 비율 적용)
     function handleJoystickMove(clientX, clientY) {
       var rect = joystickArea.getBoundingClientRect();
       var centerX = rect.left + rect.width / 2;
@@ -1058,8 +1060,8 @@
 
       joystickKnob.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
       
-      joystickAxisX = (deltaX / maxRadius);
-      joystickAxisY = (deltaY / maxRadius);
+      joystickAxisX = (deltaX / maxRadius) * 0.55;
+      joystickAxisY = (deltaY / maxRadius) * 0.55;
     }
 
     function resetJoystick() {
@@ -1149,24 +1151,24 @@
         if (currentWeapon === "laser") {
           bullets.push({ 
             x: startX - 2, y: startY, width: 4, height: 30, 
-            speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set()
+            speed: 15, type: "laser", vx: 0, vy: -15, pierce: true, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "saw") {
           bullets.push({ 
             x: startX - 10, y: startY, width: 20, height: 20, 
-            speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set()
+            speed: 6.5, type: "saw", vx: 0, vy: -6.5, angle: 0, hitEnemies: new Set(), damage: playerDamage
           });
         } else if (currentWeapon === "shotgun") {
           [-0.15, 0.15].forEach(function(ang) {
             bullets.push({ 
               x: startX - 2.5, y: startY, width: 5, height: 5, 
-              type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7 
+              type: "shotgun", vx: Math.sin(ang) * 7, vy: -Math.cos(ang) * 7, damage: playerDamage 
             });
           });
         } else {
           bullets.push({ 
             x: startX - 3, y: startY, width: 6, height: 14, 
-            type: "normal", vx: 0, vy: -8.5 
+            type: "normal", vx: 0, vy: -8.5, damage: playerDamage 
           });
         }
       });
@@ -1286,7 +1288,6 @@
       drawPixelMonster(ctx, x, y, width, height, "#f97316", shape);
     }
 
-    // 4. 엘리트 중급 몬스터 비주얼 디자인
     function drawEliteMonster(ctx, m) {
       var shape = [
         [0,1,1,1,1,1,1,0],
@@ -1299,7 +1300,6 @@
       ];
       drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#0284c7", shape);
 
-      // 체력바 표시 (중급 몬스터)
       var hpRatio = m.hp / m.maxHp;
       ctx.fillStyle = "rgba(0,0,0,0.5)";
       ctx.fillRect(m.x, m.y - 8, m.width, 4);
@@ -1384,6 +1384,7 @@
         "saw": "#c084fc",
         "shotgun": "#f97316",
         "upgrade": "#eab308",
+        "damage": "#ef4444", // 4. 데미지 업 아이템 색상 추가
         "heart": "#ec4899"
       };
       
@@ -1397,8 +1398,7 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // 3. 탄환수 늘어나는 아이템 아이콘을 "+1"로 수정
-      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "heart": "H" };
+      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "damage": "D", "heart": "H" };
       ctx.fillText(textMap[item.type] || "+1", item.x + item.width / 2, item.y + item.height / 2);
     }
 
@@ -1429,26 +1429,33 @@
       }
     }
 
-    // 2. 적 총알 시시성 대폭 강화 (외곽선 Glow 및 시각적 대비)
+    // 2. 일반 적 탄환 크기 축소 및 3. 보스/중급 탄환 크기 분기 처리
     function drawEnemyBullet(ctx, eb) {
       ctx.save();
       var cx = eb.x + eb.width / 2;
       var cy = eb.y + eb.height / 2;
-      var radius = eb.width / 2 + 1;
+      var radius = eb.width / 2;
 
-      // 발광 외곽선
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = "#ef4444";
-      ctx.fillStyle = "#f87171";
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2);
-      ctx.fill();
+      if (eb.isHeavy) {
+        // 보스 및 중급 몬스터 탄환 연출 (기존의 큼직한 발광 탄환 유지)
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ef4444";
+        ctx.fillStyle = "#f87171";
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2);
+        ctx.fill();
 
-      // 코어 백색/노랑
-      ctx.fillStyle = "#ffffff";
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius - 1, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius - 1, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // 2. 일반 적 소형 탄환 (슬림한 보라/레드 조준탄)
+        ctx.fillStyle = "#ff2222";
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       ctx.restore();
     }
@@ -1476,6 +1483,7 @@
       nextBossKillTarget = 20; 
       nextEliteKillTarget = 15;
       bulletCount = 1;
+      playerDamage = 1;
       gameTime = 0;
       bossSpawnCount = 0;
       currentWeapon = "normal";
@@ -1545,7 +1553,6 @@
       });
     }
 
-    // 4. 15킬마다 나오는 중급 몬스터 스폰
     function spawnEliteMonster() {
       var width = 40;
       var height = 40;
@@ -1627,6 +1634,7 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
+      // 3. 보스 총알은 기존 크기 유지 (isHeavy: true)
       if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
         var baseAngle = (gameTime * 0.1);
         for (var i = 0; i < 6; i++) {
@@ -1637,7 +1645,8 @@
             width: 10,
             height: 10,
             vx: Math.cos(angle) * 2.2,
-            vy: Math.sin(angle) * 2.2
+            vy: Math.sin(angle) * 2.2,
+            isHeavy: true
           });
         }
       } else if (boss.patternTimer % 2 === 0) {
@@ -1649,7 +1658,8 @@
             width: 10,
             height: 10,
             vx: Math.sin(angle) * 2.5,
-            vy: Math.cos(angle) * 2.5
+            vy: Math.cos(angle) * 2.5,
+            isHeavy: true
           });
         });
       } else {
@@ -1664,7 +1674,8 @@
           width: 12,
           height: 12,
           vx: (dx / dist) * speed,
-          vy: (dy / dist) * speed
+          vy: (dy / dist) * speed,
+          isHeavy: true
         });
       }
 
@@ -1689,7 +1700,8 @@
           width: 10,
           height: 10,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed
+          vy: Math.sin(angle) * speed,
+          isHeavy: true
         });
       }
     }
@@ -1714,7 +1726,6 @@
         spawnMonster();
       }
 
-      // 4. 15킬 달성 트리거 시 중급 몬스터 출현
       if (killCount >= nextEliteKillTarget) {
         spawnEliteMonster();
         nextEliteKillTarget += 15;
@@ -1792,16 +1803,17 @@
         for (var j = bullets.length - 1; j >= 0; j--) {
           var b = bullets[j];
           if (checkCollision(b, boss)) {
+            var hitDmg = b.damage || 1;
             if (b.pierce) {
               if (!b.hitEnemies.has('boss')) {
                 b.hitEnemies.add('boss');
-                boss.hp--;
-                addDamageText(b.x, b.y, "-1", "#38bdf8");
+                boss.hp -= hitDmg;
+                addDamageText(b.x, b.y, "-" + hitDmg, "#38bdf8");
                 createExplosion(b.x, b.y, "#38bdf8", 4);
               }
             } else {
-              boss.hp--;
-              addDamageText(b.x, b.y, "-1", "#facc15");
+              boss.hp -= hitDmg;
+              addDamageText(b.x, b.y, "-" + hitDmg, "#facc15");
               createExplosion(b.x, b.y, "#facc15", 4);
               bullets.splice(j, 1);
             }
@@ -1854,6 +1866,8 @@
           
           if (itemType === "upgrade") {
             bulletCount = Math.min(6, bulletCount + 1);
+          } else if (itemType === "damage") {
+            playerDamage++; // 4. 데미지 아이템 획득 시 플레이어 데미지 +1 업
           } else if (itemType === "heart") {
             player.lives = Math.min(5, player.lives + 1);
           } else {
@@ -1880,21 +1894,23 @@
         var shooterInterval = Math.max(120, 180 - (stage - 1) * 5);
         var bulletSpeed = 1.8 + (stage - 1) * 0.15;
 
+        // 2. 일반 슈터 적 소형 탄환 발사 (6px)
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
             enemyBullets.push({
-              x: m.x + m.width / 2 - 5,
+              x: m.x + m.width / 2 - 3,
               y: m.y + m.height,
-              width: 10,
-              height: 10,
+              width: 6,
+              height: 6,
               vx: 0,
-              vy: bulletSpeed
+              vy: bulletSpeed,
+              isHeavy: false
             });
             m.lastShoot = gameTime;
           }
         }
 
-        // 중급 몬스터 공격 패턴 (조준 탄환)
+        // 3. 중급 몬스터 묵직한 조준 탄환 발사 (10px, isHeavy: true)
         if (m.type === "elite") {
           if (gameTime - m.lastShoot > 90) {
             var dx = (player.x + player.width / 2) - (m.x + m.width / 2);
@@ -1906,7 +1922,8 @@
               width: 10,
               height: 10,
               vx: (dx / dist) * 2.2,
-              vy: (dy / dist) * 2.2
+              vy: (dy / dist) * 2.2,
+              isHeavy: true
             });
             m.lastShoot = gameTime;
           }
@@ -1919,15 +1936,16 @@
         for (var j = bullets.length - 1; j >= 0; j--) {
           var b = bullets[j];
           if (checkCollision(b, m)) {
+            var hitDmg = b.damage || 1;
             if (b.pierce) {
               if (!b.hitEnemies.has(m.id)) {
                 b.hitEnemies.add(m.id);
-                m.hp--;
-                addDamageText(b.x, b.y, "-1", "#38bdf8");
+                m.hp -= hitDmg;
+                addDamageText(b.x, b.y, "-" + hitDmg, "#38bdf8");
               }
             } else {
-              m.hp--;
-              addDamageText(b.x, b.y, "-1", "#facc15");
+              m.hp -= hitDmg;
+              addDamageText(b.x, b.y, "-" + hitDmg, "#facc15");
               bullets.splice(j, 1);
             }
 
@@ -1943,10 +1961,13 @@
 
               score += monsterScore;
 
+              // 4. 몬스터 사망 시 3% 확률로 데미지 업 아이템 드롭
               var randItem = Math.random();
-              if (m.type === "elite") {
+              if (randItem < 0.03) {
+                spawnItem(m.x, m.y, "damage");
+              } else if (m.type === "elite") {
                 spawnItem(m.x, m.y, "upgrade");
-              } else if (randItem < 0.05) {
+              } else if (randItem < 0.08) {
                 spawnItem(m.x, m.y, "upgrade");
               } else if (randItem < 0.23) {
                 spawnItem(m.x, m.y);
@@ -1965,7 +1986,6 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 화면 흔들림 연출 계산
       ctx.save();
       if (shakeTimer > 0) {
         var offsetX = (Math.random() - 0.5) * 8;
@@ -1974,7 +1994,6 @@
         shakeTimer--;
       }
 
-      // 우주 배경 스크롤 그리기
       updateAndDrawStars();
 
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
@@ -2015,7 +2034,6 @@
         ctx.restore();
       }
 
-      // 데미지 텍스트 팝업 연출
       for (var i = 0; i < damageTexts.length; i++) {
         var dt = damageTexts[i];
         ctx.save();
@@ -2026,15 +2044,15 @@
         ctx.restore();
       }
 
-      ctx.restore(); // 화면 흔들림 복구
+      ctx.restore();
 
-      // 상단 HUD 텍스트
+      // 상단 HUD 텍스트 (데미지 항목 추가 표시)
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 15px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("Stage: " + stage, 15, 25);
       ctx.fillText("Score: " + score, 15, 45);
-      ctx.fillText("Kills: " + killCount + " | Boss: " + bossKillCount, 15, 65);
+      ctx.fillText("DMG: " + playerDamage + " | Kills: " + killCount, 15, 65);
 
       var heartsText = "LIFE: ";
       for (var h = 0; h < player.lives; h++) {
@@ -2061,7 +2079,7 @@
       topControls.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
-      finalScoreText.textContent = "Pilot: " + playerNickname + " | Stage: " + stage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
+      finalScoreText.textContent = "Pilot: " + playerNickname + " | DMG: " + playerDamage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
       
       saveScore(playerNickname, score, killCount, bossKillCount);
     }
