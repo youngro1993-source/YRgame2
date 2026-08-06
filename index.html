@@ -182,6 +182,29 @@
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
     }
 
+    .top-controls {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 15;
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #fff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
     .modal-overlay {
       position: absolute;
       top: 0;
@@ -313,7 +336,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
     }
 
     th, td {
@@ -422,6 +445,12 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
+    <!-- 인게임 우측 상단 조작 버튼 (일시정지/사운드) -->
+    <div id="topControls" class="top-controls hidden">
+      <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+      <button class="icon-btn" id="pauseBtn" onclick="togglePause()">⏸️</button>
+    </div>
+
     <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
       <h1>은하 수호대<br><span style="font-size:1.1rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
@@ -443,9 +472,9 @@
           <thead>
             <tr>
               <th>순위</th>
+              <th>날짜</th>
               <th>닉네임</th>
               <th>보스킬</th>
-              <th>몹킬</th>
               <th>점수</th>
             </tr>
           </thead>
@@ -484,16 +513,30 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.0.0 (최신 - Firebase 실시간 온라인 리더보드 연동)</div>
+            <div class="version-title">v3.5.0 (연출 강화 버전)</div>
             <ul>
-              <li><b>온라인 서비스 연동</b>: Firebase DB 연결로 전 세계 플레이어가 실시간 순위를 겨루는 리더보드 구축.</li>
-              <li><b>자동 기록 등록</b>: 최고 점수 달성 시 온라인 서버에 플레이 기록 자동 업데이트.</li>
+              <li><b>비주얼 연출 추가</b>: 우주 패럴랙스 별 배경 스크롤 & 화면 흔들림 효과 추가.</li>
+              <li><b>데미지 팝업</b>: 적 피격 시 타격 데미지 텍스트 팝업 연출.</li>
+              <li><b>편의 기능</b>: 인게임 일시정지(Pause) 및 음소거(Mute) 기능 추가.</li>
+              <li><b>랭킹 기능 강화</b>: 리더보드 날짜 정보 추가 표시.</li>
             </ul>
           </div>
         </div>
 
         <div style="text-align: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid #334155;">
           <button class="btn" style="padding: 6px 20px; font-size: 0.9rem;" onclick="toggleModal('updateModal', false)">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 일시정지 모달 -->
+    <div id="pauseModal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3>⏸️ PAUSED</h3>
+        <p style="margin-top: 15px; font-size: 1rem;">게임이 일시정지 되었습니다.</p>
+        <div style="margin-top: 20px;">
+          <button class="btn" onclick="togglePause()">계속 하기</button>
+          <button class="btn" style="background: linear-gradient(135deg, #475569, #334155);" onclick="quitGame()">게임 종료</button>
         </div>
       </div>
     </div>
@@ -509,9 +552,9 @@
           <thead>
             <tr>
               <th>순위</th>
+              <th>날짜</th>
               <th>닉네임</th>
               <th>보스킬</th>
-              <th>몹킬</th>
               <th>점수</th>
             </tr>
           </thead>
@@ -537,8 +580,10 @@
   </div>
 
   <script>
-    // GitHub 빌드 멈춤 방지: 비동기 스크립트 동적 로더
     var db = null;
+    var soundMuted = false;
+    var isPaused = false;
+
     function loadScript(src, callback) {
       var s = document.createElement('script');
       s.src = src;
@@ -546,7 +591,6 @@
       document.head.appendChild(s);
     }
 
-    // 클라이언트 브라우저 로딩 후 Firebase 인스턴스 초기화
     window.addEventListener('DOMContentLoaded', function() {
       loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js", function() {
         loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js", function() {
@@ -568,7 +612,6 @@
       });
     });
 
-    // === Firebase 점수 저장 함수 ===
     function saveScore(nickname, score, monsterKills, bossKills) {
       if (!db) return;
       db.collection("rankings").add({
@@ -586,7 +629,14 @@
       });
     }
 
-    // === Firebase 실시간 상위 랭킹 불러오기 ===
+    function formatDate(timestamp) {
+      if (!timestamp) return "-";
+      var date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      var month = (date.getMonth() + 1).toString().padStart(2, '0');
+      var day = date.getDate().toString().padStart(2, '0');
+      return month + "/" + day;
+    }
+
     function updateLeaderboardUI() {
       if (!db) return;
       db.collection("rankings")
@@ -607,9 +657,9 @@
               var r = rankings[i];
               htmlContent += "<tr>" +
                 "<td>" + (i + 1) + "</td>" +
+                "<td>" + formatDate(r.createdAt) + "</td>" +
                 "<td>" + (r.nickname || "익명") + "</td>" +
                 "<td>" + (r.bossKills || 0) + "</td>" +
-                "<td>" + (r.monsterKills || 0) + "</td>" +
                 "<td>" + (r.score || 0) + "</td>" +
                 "</tr>";
             }
@@ -641,8 +691,35 @@
       }
     }
 
+    function toggleSound() {
+      soundMuted = !soundMuted;
+      document.getElementById("soundBtn").textContent = soundMuted ? "🔇" : "🔊";
+      if (soundMuted) stopBGM();
+      else if (!isGameOver && !isPaused) startBGM();
+    }
+
+    function togglePause() {
+      if (isGameOver) return;
+      isPaused = !isPaused;
+      var pauseModal = document.getElementById("pauseModal");
+      if (isPaused) {
+        pauseModal.classList.remove("hidden");
+        stopBGM();
+      } else {
+        pauseModal.classList.add("hidden");
+        if (!soundMuted) startBGM();
+        gameLoop();
+      }
+    }
+
+    function quitGame() {
+      isPaused = false;
+      document.getElementById("pauseModal").classList.add("hidden");
+      gameOver();
+    }
+
     function playSound(type) {
-      if (!audioCtx) return;
+      if (!audioCtx || soundMuted) return;
 
       var osc = audioCtx.createOscillator();
       var gain = audioCtx.createGain();
@@ -720,14 +797,14 @@
     }
 
     function startBGM() {
-      if (bgmInterval) return;
+      if (bgmInterval || soundMuted) return;
       if (!audioCtx) return;
 
       var notes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
       var step = 0;
 
       bgmInterval = setInterval(function() {
-        if (!audioCtx || isGameOver) return;
+        if (!audioCtx || isGameOver || soundMuted || isPaused) return;
         var now = audioCtx.currentTime;
         var osc = audioCtx.createOscillator();
         var gain = audioCtx.createGain();
@@ -760,15 +837,45 @@
     var startScreen = document.getElementById("startScreen");
     var rankScreen = document.getElementById("rankScreen");
     var controlArea = document.getElementById("controlArea");
+    var topControls = document.getElementById("topControls");
     var updateModal = document.getElementById("updateModal");
     var storyModal = document.getElementById("storyModal");
     var storyPilotName = document.getElementById("storyPilotName");
     var nicknameInput = document.getElementById("nicknameInput");
     var nicknameWarning = document.getElementById("nicknameWarning");
     var finalScoreText = document.getElementById("finalScoreText");
-    var rankingBody = document.getElementById("rankingBody");
-    var mainRankingBody = document.getElementById("mainRankingBody");
     var joystickStatusNotice = document.getElementById("joystickStatusNotice");
+
+    // 패럴랙스 우주 배경 별 정보
+    var stars = [];
+    function initStars() {
+      stars = [];
+      for (var i = 0; i < 50; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 0.5,
+          speed: Math.random() * 1.5 + 0.5,
+          alpha: Math.random() * 0.8 + 0.2
+        });
+      }
+    }
+
+    function updateAndDrawStars() {
+      ctx.fillStyle = "#ffffff";
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        s.y += s.speed;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.fillRect(s.x, s.y, s.size, s.size);
+        ctx.restore();
+      }
+    }
 
     function resizeCanvas() {
       var container = canvas.parentElement;
@@ -777,6 +884,7 @@
       if (player) {
         player.y = canvas.height - player.height - 180;
       }
+      initStars();
     }
 
     var playerNickname = "";
@@ -789,6 +897,10 @@
     var bossKillCount = 0;
     var nextBossKillTarget = 20; 
     var bulletCount = 1;
+
+    // 연출 변수: 화면 흔들림 & 데미지 텍스트
+    var shakeTimer = 0;
+    var damageTexts = [];
 
     var currentWeapon = "normal";
 
@@ -854,6 +966,21 @@
       playerNickname = inputVal;
       storyPilotName.textContent = playerNickname;
       storyModal.classList.remove("hidden");
+    }
+
+    function triggerScreenShake(duration) {
+      shakeTimer = duration || 10;
+    }
+
+    function addDamageText(x, y, damage, color) {
+      damageTexts.push({
+        x: x,
+        y: y,
+        text: damage,
+        color: color || "#facc15",
+        alpha: 1,
+        vy: -1
+      });
     }
 
     function createExplosion(x, y, color, count) {
@@ -1283,9 +1410,11 @@
       startScreen.classList.add("hidden");
       rankScreen.classList.add("hidden");
       controlArea.classList.remove("hidden");
+      topControls.classList.remove("hidden");
 
       resizeCanvas();
-      startBGM();
+      isPaused = false;
+      if (!soundMuted) startBGM();
 
       player.x = canvas.width / 2 - player.width / 2;
       player.y = canvas.height - player.height - 180;
@@ -1313,6 +1442,7 @@
       items = [];
       enemyBullets = [];
       particles = [];
+      damageTexts = [];
 
       if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
       gameLoop();
@@ -1322,6 +1452,7 @@
       stopBGM();
       rankScreen.classList.add("hidden");
       controlArea.classList.add("hidden");
+      topControls.classList.add("hidden");
       startScreen.classList.remove("hidden");
       updateLeaderboardUI();
     }
@@ -1410,6 +1541,7 @@
 
       player.lives--;
       playSound('hit');
+      triggerScreenShake(15);
       createExplosion(player.x + player.width / 2, player.y + player.height / 2, "#ef4444", 15);
 
       if (player.lives <= 0) {
@@ -1423,7 +1555,21 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
-      if (boss.patternTimer % 2 === 0) {
+      // 보스 HP가 50% 이하일 때 회전 탄막 패턴 적용
+      if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
+        var baseAngle = (gameTime * 0.1);
+        for (var i = 0; i < 6; i++) {
+          var angle = baseAngle + (Math.PI / 3) * i;
+          enemyBullets.push({
+            x: originX - 4,
+            y: originY - 10,
+            width: 8,
+            height: 8,
+            vx: Math.cos(angle) * 2.2,
+            vy: Math.sin(angle) * 2.2
+          });
+        }
+      } else if (boss.patternTimer % 2 === 0) {
         var angles = [-0.25, 0, 0.25];
         angles.forEach(function(angle) {
           enemyBullets.push({
@@ -1456,6 +1602,7 @@
 
     function explodeBoss(boss) {
       playSound('explosion');
+      triggerScreenShake(20);
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height / 2;
       createExplosion(originX, originY, "#ef4444", 30);
@@ -1477,7 +1624,7 @@
     }
 
     function update() {
-      if (isGameOver) return;
+      if (isGameOver || isPaused) return;
 
       gameTime++;
 
@@ -1544,13 +1691,22 @@
         }
       }
 
+      for (var i = damageTexts.length - 1; i >= 0; i--) {
+        var dt = damageTexts[i];
+        dt.y += dt.vy;
+        dt.alpha -= 0.03;
+        if (dt.alpha <= 0) {
+          damageTexts.splice(i, 1);
+        }
+      }
+
       if (boss) {
         boss.x += boss.speedX;
         if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
           boss.speedX *= -1;
         }
 
-        var bossShootInterval = Math.max(55, 100 - (stage - 1) * 4);
+        var bossShootInterval = Math.max(45, 90 - (stage - 1) * 4);
         if (gameTime - boss.lastShoot > bossShootInterval) {
           fireBossPattern(boss);
           boss.lastShoot = gameTime;
@@ -1563,10 +1719,12 @@
               if (!b.hitEnemies.has('boss')) {
                 b.hitEnemies.add('boss');
                 boss.hp--;
+                addDamageText(b.x, b.y, "-1", "#38bdf8");
                 createExplosion(b.x, b.y, "#38bdf8", 4);
               }
             } else {
               boss.hp--;
+              addDamageText(b.x, b.y, "-1", "#facc15");
               createExplosion(b.x, b.y, "#facc15", 4);
               bullets.splice(j, 1);
             }
@@ -1670,9 +1828,11 @@
               if (!b.hitEnemies.has(m.id)) {
                 b.hitEnemies.add(m.id);
                 m.hp--;
+                addDamageText(b.x, b.y, "-1", "#38bdf8");
               }
             } else {
               m.hp--;
+              addDamageText(b.x, b.y, "-1", "#facc15");
               bullets.splice(j, 1);
             }
 
@@ -1702,6 +1862,18 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 화면 흔들림 연출 계산
+      ctx.save();
+      if (shakeTimer > 0) {
+        var offsetX = (Math.random() - 0.5) * 8;
+        var offsetY = (Math.random() - 0.5) * 8;
+        ctx.translate(offsetX, offsetY);
+        shakeTimer--;
+      }
+
+      // 우주 배경 스크롤 그리기
+      updateAndDrawStars();
 
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
 
@@ -1744,6 +1916,20 @@
         ctx.restore();
       }
 
+      // 데미지 텍스트 팝업 연출
+      for (var i = 0; i < damageTexts.length; i++) {
+        var dt = damageTexts[i];
+        ctx.save();
+        ctx.globalAlpha = dt.alpha;
+        ctx.fillStyle = dt.color;
+        ctx.font = "bold 13px sans-serif";
+        ctx.fillText(dt.text, dt.x, dt.y);
+        ctx.restore();
+      }
+
+      ctx.restore(); // 화면 흔들림 복구
+
+      // 상단 HUD 텍스트
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 15px sans-serif";
       ctx.textAlign = "left";
@@ -1759,9 +1945,9 @@
     }
 
     function gameLoop() {
-      update();
-      draw();
-      if (!isGameOver) {
+      if (!isPaused && !isGameOver) {
+        update();
+        draw();
         gameAnimationId = requestAnimationFrame(gameLoop);
       }
     }
@@ -1773,6 +1959,7 @@
       cancelAnimationFrame(gameAnimationId);
 
       controlArea.classList.add("hidden");
+      topControls.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
       finalScoreText.textContent = "Pilot: " + playerNickname + " | Stage: " + stage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
