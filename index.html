@@ -459,7 +459,7 @@
 
       <div class="info-box">
         <h4>🎁 아이템 드롭 확률 정보</h4>
-        <div class="info-item"><span class="badge upgrade">2X</span><span><b>탄환 수 증가 (5%)</b>: 발사 탄환 수 +1</span></div>
+        <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가 (5%)</b>: 발사 탄환 수 +1</span></div>
         <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기 (4%)</b>: 소형 2연발 방사 탄환</span></div>
         <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기 (7%)</b>: 관통 빔</span></div>
         <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기 (7%)</b>: 다단히트 회전탄</span></div>
@@ -513,12 +513,12 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.5.0 (연출 강화 버전)</div>
+            <div class="version-title">v3.6.0 (조작 및 밸런스 개선)</div>
             <ul>
-              <li><b>비주얼 연출 추가</b>: 우주 패럴랙스 별 배경 스크롤 & 화면 흔들림 효과 추가.</li>
-              <li><b>데미지 팝업</b>: 적 피격 시 타격 데미지 텍스트 팝업 연출.</li>
-              <li><b>편의 기능</b>: 인게임 일시정지(Pause) 및 음소거(Mute) 기능 추가.</li>
-              <li><b>랭킹 기능 강화</b>: 리더보드 날짜 정보 추가 표시.</li>
+              <li><b>조이스틱 좌우 컨트롤 동기화</b>: 조이스틱 이동 속도 및 감도를 대폭 개선.</li>
+              <li><b>적 탄환 가시성 강화</b>: 붉은 발광 효과와 중앙 코어 디자인 적용.</li>
+              <li><b>아이템 아이콘 직관화</b>: 탄환 증가 아이템 텍스트를 "+1"로 변경.</li>
+              <li><b>신규 엘리트 몬스터 추가</b>: 15킬마다 내구도가 높고 특수 공격을 하는 중급 몬스터 출현.</li>
             </ul>
           </div>
         </div>
@@ -896,6 +896,7 @@
     var killCount = 0;
     var bossKillCount = 0;
     var nextBossKillTarget = 20; 
+    var nextEliteKillTarget = 15; // 중급 몬스터 스폰 카운터
     var bulletCount = 1;
 
     // 연출 변수: 화면 흔들림 & 데미지 텍스트
@@ -1038,6 +1039,7 @@
 
     var joystickTouchId = null;
 
+    // 1. 조이스틱 민감도 및 축 입력 비율 수정 (기존 0.5배속 제한 해제하여 버튼/키보드 이동과 일치)
     function handleJoystickMove(clientX, clientY) {
       var rect = joystickArea.getBoundingClientRect();
       var centerX = rect.left + rect.width / 2;
@@ -1056,8 +1058,8 @@
 
       joystickKnob.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
       
-      joystickAxisX = (deltaX / maxRadius) * 0.5;
-      joystickAxisY = (deltaY / maxRadius) * 0.5;
+      joystickAxisX = (deltaX / maxRadius);
+      joystickAxisY = (deltaY / maxRadius);
     }
 
     function resetJoystick() {
@@ -1284,6 +1286,27 @@
       drawPixelMonster(ctx, x, y, width, height, "#f97316", shape);
     }
 
+    // 4. 엘리트 중급 몬스터 비주얼 디자인
+    function drawEliteMonster(ctx, m) {
+      var shape = [
+        [0,1,1,1,1,1,1,0],
+        [1,1,0,1,1,0,1,1],
+        [1,1,1,1,1,1,1,1],
+        [1,0,1,1,1,1,0,1],
+        [1,1,1,0,0,1,1,1],
+        [0,1,1,1,1,1,1,0],
+        [0,0,1,0,0,1,0,0]
+      ];
+      drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#0284c7", shape);
+
+      // 체력바 표시 (중급 몬스터)
+      var hpRatio = m.hp / m.maxHp;
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.fillRect(m.x, m.y - 8, m.width, 4);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(m.x, m.y - 8, m.width * hpRatio, 4);
+    }
+
     function drawBoss(ctx, boss) {
       ctx.save();
       var cx = boss.x + boss.width / 2;
@@ -1374,8 +1397,9 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "2X", "heart": "H" };
-      ctx.fillText(textMap[item.type] || "2X", item.x + item.width / 2, item.y + item.height / 2);
+      // 3. 탄환수 늘어나는 아이템 아이콘을 "+1"로 수정
+      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "heart": "H" };
+      ctx.fillText(textMap[item.type] || "+1", item.x + item.width / 2, item.y + item.height / 2);
     }
 
     function drawBullet(ctx, b) {
@@ -1405,6 +1429,30 @@
       }
     }
 
+    // 2. 적 총알 시시성 대폭 강화 (외곽선 Glow 및 시각적 대비)
+    function drawEnemyBullet(ctx, eb) {
+      ctx.save();
+      var cx = eb.x + eb.width / 2;
+      var cy = eb.y + eb.height / 2;
+      var radius = eb.width / 2 + 1;
+
+      // 발광 외곽선
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#ef4444";
+      ctx.fillStyle = "#f87171";
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 코어 백색/노랑
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius - 1, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
     function startGame() {
       storyModal.classList.add("hidden");
       startScreen.classList.add("hidden");
@@ -1426,6 +1474,7 @@
       killCount = 0;
       bossKillCount = 0;
       nextBossKillTarget = 20; 
+      nextEliteKillTarget = 15;
       bulletCount = 1;
       gameTime = 0;
       bossSpawnCount = 0;
@@ -1491,6 +1540,29 @@
         speed: speed,
         type: type,
         hp: hp,
+        maxHp: hp,
+        lastShoot: 0
+      });
+    }
+
+    // 4. 15킬마다 나오는 중급 몬스터 스폰
+    function spawnEliteMonster() {
+      var width = 40;
+      var height = 40;
+      var x = Math.random() * (canvas.width - width);
+      var hp = 6 + (stage - 1) * 2;
+
+      monsters.push({
+        id: Math.random().toString(36).substr(2, 9),
+        x: x,
+        startX: x,
+        y: -height,
+        width: width,
+        height: height,
+        speed: 0.45,
+        type: "elite",
+        hp: hp,
+        maxHp: hp,
         lastShoot: 0
       });
     }
@@ -1555,16 +1627,15 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
-      // 보스 HP가 50% 이하일 때 회전 탄막 패턴 적용
       if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
         var baseAngle = (gameTime * 0.1);
         for (var i = 0; i < 6; i++) {
           var angle = baseAngle + (Math.PI / 3) * i;
           enemyBullets.push({
-            x: originX - 4,
+            x: originX - 5,
             y: originY - 10,
-            width: 8,
-            height: 8,
+            width: 10,
+            height: 10,
             vx: Math.cos(angle) * 2.2,
             vy: Math.sin(angle) * 2.2
           });
@@ -1573,10 +1644,10 @@
         var angles = [-0.25, 0, 0.25];
         angles.forEach(function(angle) {
           enemyBullets.push({
-            x: originX - 4,
+            x: originX - 5,
             y: originY,
-            width: 8,
-            height: 8,
+            width: 10,
+            height: 10,
             vx: Math.sin(angle) * 2.5,
             vy: Math.cos(angle) * 2.5
           });
@@ -1588,10 +1659,10 @@
         var speed = 2.8;
 
         enemyBullets.push({
-          x: originX - 5,
+          x: originX - 6,
           y: originY,
-          width: 10,
-          height: 10,
+          width: 12,
+          height: 12,
           vx: (dx / dist) * speed,
           vy: (dy / dist) * speed
         });
@@ -1613,10 +1684,10 @@
         var angle = (Math.PI * 2 / count) * i;
         var speed = 2.5;
         enemyBullets.push({
-          x: originX - 4,
-          y: originY - 4,
-          width: 8,
-          height: 8,
+          x: originX - 5,
+          y: originY - 5,
+          width: 10,
+          height: 10,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed
         });
@@ -1641,6 +1712,12 @@
       var currentSpawnInterval = Math.max(18, Math.floor(60 / Math.pow(1.2, stage - 1)));
       if (gameTime % currentSpawnInterval === 0) {
         spawnMonster();
+      }
+
+      // 4. 15킬 달성 트리거 시 중급 몬스터 출현
+      if (killCount >= nextEliteKillTarget) {
+        spawnEliteMonster();
+        nextEliteKillTarget += 15;
       }
 
       if (!boss && killCount >= nextBossKillTarget) {
@@ -1806,12 +1883,30 @@
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
             enemyBullets.push({
-              x: m.x + m.width / 2 - 3,
+              x: m.x + m.width / 2 - 5,
               y: m.y + m.height,
-              width: 6,
+              width: 10,
               height: 10,
               vx: 0,
               vy: bulletSpeed
+            });
+            m.lastShoot = gameTime;
+          }
+        }
+
+        // 중급 몬스터 공격 패턴 (조준 탄환)
+        if (m.type === "elite") {
+          if (gameTime - m.lastShoot > 90) {
+            var dx = (player.x + player.width / 2) - (m.x + m.width / 2);
+            var dy = (player.y + player.height / 2) - (m.y + m.height);
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            enemyBullets.push({
+              x: m.x + m.width / 2 - 5,
+              y: m.y + m.height,
+              width: 10,
+              height: 10,
+              vx: (dx / dist) * 2.2,
+              vy: (dy / dist) * 2.2
             });
             m.lastShoot = gameTime;
           }
@@ -1838,15 +1933,22 @@
 
             if (m.hp <= 0) {
               playSound('explosion');
-              createExplosion(m.x + m.width / 2, m.y + m.height / 2, "#f97316", 10);
+              createExplosion(m.x + m.width / 2, m.y + m.height / 2, m.type === "elite" ? "#0284c7" : "#f97316", m.type === "elite" ? 20 : 10);
               killCount++;
-              score += m.type === "fast" ? 150 : (m.type === "shooter" ? 200 : 100);
+
+              var monsterScore = 100;
+              if (m.type === "fast") monsterScore = 150;
+              else if (m.type === "shooter") monsterScore = 200;
+              else if (m.type === "elite") monsterScore = 500;
+
+              score += monsterScore;
 
               var randItem = Math.random();
-              if (randItem < 0.05) {
+              if (m.type === "elite") {
                 spawnItem(m.x, m.y, "upgrade");
-              } 
-              else if (randItem < 0.23) {
+              } else if (randItem < 0.05) {
+                spawnItem(m.x, m.y, "upgrade");
+              } else if (randItem < 0.23) {
                 spawnItem(m.x, m.y);
               }
 
@@ -1881,12 +1983,8 @@
         drawBullet(ctx, bullets[i]);
       }
 
-      ctx.fillStyle = "#ff2222";
       for (var i = 0; i < enemyBullets.length; i++) {
-        var eb = enemyBullets[i];
-        ctx.beginPath();
-        ctx.arc(eb.x + eb.width / 2, eb.y + eb.height / 2, eb.width / 2, 0, Math.PI * 2);
-        ctx.fill();
+        drawEnemyBullet(ctx, enemyBullets[i]);
       }
 
       for (var i = 0; i < items.length; i++) {
@@ -1898,6 +1996,7 @@
         if (m.type === "fast") drawFastMonster(ctx, m.x, m.y, m.width, m.height);
         else if (m.type === "shooter") drawShooterMonster(ctx, m.x, m.y, m.width, m.height);
         else if (m.type === "zigzag") drawZigzagMonster(ctx, m.x, m.y, m.width, m.height);
+        else if (m.type === "elite") drawEliteMonster(ctx, m);
         else drawNormalMonster(ctx, m.x, m.y, m.width, m.height);
       }
 
