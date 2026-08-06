@@ -65,10 +65,30 @@
       display: none !important;
     }
 
+    /* 재화 표시 바 */
+    .top-status-bar {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .coin-badge {
+      background: rgba(250, 204, 21, 0.15);
+      border: 1px solid rgba(250, 204, 21, 0.5);
+      color: #facc15;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
     h1 {
       font-size: 1.8rem;
-      margin-top: 5px;
-      margin-bottom: 12px;
+      margin-top: 2px;
+      margin-bottom: 10px;
       color: #38bdf8;
       text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
       word-break: keep-all;
@@ -86,19 +106,19 @@
       background: rgba(30, 41, 59, 0.9);
       border: 1.5px solid rgba(56, 189, 248, 0.4);
       border-radius: 10px;
-      padding: 12px;
+      padding: 10px 12px;
       margin-bottom: 10px;
       font-size: 0.8rem;
       text-align: left;
-      line-height: 1.5;
+      line-height: 1.4;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
     .info-box h4 {
       color: #facc15;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-bottom: 4px;
     }
@@ -106,21 +126,21 @@
     .info-item {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       color: #f1f5f9;
     }
 
     .badge {
       display: inline-block;
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       color: #000;
       font-weight: bold;
       text-align: center;
-      line-height: 24px;
-      font-size: 0.75rem;
-      margin-right: 10px;
+      line-height: 22px;
+      font-size: 0.7rem;
+      margin-right: 8px;
       flex-shrink: 0;
     }
 
@@ -142,7 +162,7 @@
       font-size: 0.95rem;
       text-align: center;
       outline: none;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     input[type="text"]:focus {
@@ -153,13 +173,22 @@
     .warning-text {
       color: #f87171;
       font-size: 0.78rem;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       min-height: 1.1em;
     }
 
+    .btn-container {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+      max-width: 380px;
+    }
+
     button.btn {
-      padding: 10px 28px;
-      font-size: 1rem;
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 0.95rem;
       font-weight: bold;
       color: #fff;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -168,18 +197,22 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
       transition: transform 0.1s, background 0.2s;
-      margin: 4px;
     }
 
     button.btn:active {
       transform: scale(0.95);
     }
 
+    .btn-shop {
+      background: linear-gradient(135deg, #d97706, #b45309) !important;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4) !important;
+    }
+
     .btn-update {
       background: linear-gradient(135deg, #059669, #047857) !important;
-      font-size: 0.85rem !important;
-      padding: 8px 18px !important;
-      margin-bottom: 10px !important;
+      font-size: 0.8rem !important;
+      padding: 6px 14px !important;
+      margin-bottom: 8px !important;
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
     }
 
@@ -225,10 +258,10 @@
       background: #1e293b;
       border: 2px solid #38bdf8;
       border-radius: 12px;
-      padding: 20px;
+      padding: 18px;
       max-width: 380px;
       width: 100%;
-      max-height: 75vh;
+      max-height: 80vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
@@ -236,11 +269,46 @@
 
     .modal-content h3 {
       color: #38bdf8;
-      font-size: 1.15rem;
-      margin-bottom: 12px;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
       text-align: center;
       border-bottom: 1px solid #334155;
-      padding-bottom: 8px;
+      padding-bottom: 6px;
+    }
+
+    .shop-item-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .shop-item-icon { font-size: 1.8rem; }
+    .shop-item-info { flex: 1; }
+    .shop-item-title { font-size: 0.85rem; font-weight: bold; color: #facc15; }
+    .shop-item-desc { font-size: 0.72rem; color: #94a3b8; margin: 2px 0; }
+    .shop-item-status { font-size: 0.72rem; color: #38bdf8; }
+
+    .buy-btn {
+      background: #facc15;
+      color: #000;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .buy-btn:disabled {
+      background: #475569;
+      color: #94a3b8;
+      cursor: not-allowed;
     }
 
     .story-card {
@@ -255,10 +323,7 @@
       margin-bottom: 15px;
     }
 
-    .story-card span.highlight {
-      color: #facc15;
-      font-weight: bold;
-    }
+    .story-card span.highlight { color: #facc15; font-weight: bold; }
 
     .history-scroll-area {
       overflow-y: auto;
@@ -273,34 +338,25 @@
     .history-scroll-area::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 3px; }
 
     .version-block {
-      margin-bottom: 16px;
-      padding-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1px dashed #334155;
     }
 
-    .version-block:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-
-    .version-title {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #facc15;
-      margin-bottom: 6px;
-    }
+    .version-block:last-child { border-bottom: none; margin-bottom: 0; }
+    .version-title { font-size: 0.85rem; font-weight: bold; color: #facc15; margin-bottom: 4px; }
 
     .history-scroll-area ul {
       list-style: none;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: #cbd5e1;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .history-scroll-area li {
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       position: relative;
-      padding-left: 14px;
+      padding-left: 12px;
     }
 
     .history-scroll-area li::before {
@@ -312,9 +368,9 @@
     }
 
     .credits {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      font-size: 0.75rem;
       color: #64748b;
       letter-spacing: 1px;
     }
@@ -322,17 +378,22 @@
     .ranking-container {
       width: 100%;
       max-width: 380px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       background: rgba(15, 23, 42, 0.6);
       border-radius: 8px;
       padding: 8px;
     }
 
-    .ranking-container h3 {
-      font-size: 0.85rem;
-      color: #f87171;
-      margin-bottom: 6px;
+    .ranking-container h3 { font-size: 0.85rem; color: #f87171; margin-bottom: 6px; }
+
+    .ranking-scroll-box {
+      max-height: 135px;
+      overflow-y: auto;
+      touch-action: pan-y;
     }
+
+    .ranking-scroll-box::-webkit-scrollbar { width: 4px; }
+    .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
 
     table {
       width: 100%;
@@ -346,7 +407,7 @@
       text-align: center;
     }
 
-    th { color: #f87171; }
+    th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); }
 
     #controlArea {
       position: absolute;
@@ -446,7 +507,6 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- 인게임 우측 상단 조작 버튼 (일시정지/사운드) -->
     <div id="topControls" class="top-controls hidden">
       <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
       <button class="icon-btn" id="pauseBtn" onclick="togglePause()">⏸️</button>
@@ -454,9 +514,14 @@
 
     <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
+      <div class="top-status-bar">
+        <div style="font-size:0.8rem; color:#94a3b8;">은하 수호대 본부</div>
+        <div class="coin-badge">🪙 <span id="mainCoinDisplay">0</span></div>
+      </div>
+
       <h1>은하 수호대<br><span style="font-size:1.1rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
       
-      <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📢 업데이트 히스토리 보기</button>
+      <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📢 패치 노트 및 정보 보기</button>
 
       <div class="info-box">
         <h4>🎁 아이템 드롭 확률 정보</h4>
@@ -469,28 +534,74 @@
       </div>
 
       <div class="ranking-container">
-        <h3>🏆 LEADERBOARD (TOP 5)</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>순위</th>
-              <th>날짜</th>
-              <th>닉네임</th>
-              <th>보스킬</th>
-              <th>점수</th>
-            </tr>
-          </thead>
-          <tbody id="mainRankingBody">
-            <tr><td colspan="5">로딩 중...</td></tr>
-          </tbody>
-        </table>
+        <h3>🏆 LEADERBOARD (TOP 10)</h3>
+        <div class="ranking-scroll-box">
+          <table>
+            <thead>
+              <tr>
+                <th>순위</th>
+                <th>날짜</th>
+                <th>닉네임</th>
+                <th>보스킬</th>
+                <th>점수</th>
+              </tr>
+            </thead>
+            <tbody id="mainRankingBody">
+              <tr><td colspan="5">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <input type="text" id="nicknameInput" placeholder="닉네임 입력 (필수)" maxlength="8" />
       <div id="nicknameWarning" class="warning-text"></div>
-      <button class="btn" onclick="openStoryScreen()">게임 시작</button>
+      
+      <div class="btn-container">
+        <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
+        <button class="btn" onclick="openStoryScreen()">🚀 출격하기</button>
+      </div>
       
       <div class="credits">[만든이 : YYR]</div>
+    </div>
+
+    <!-- 상점 모달 -->
+    <div id="shopModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h3 style="margin: 0; border: none;">🛒 수호대 상점</h3>
+          <div class="coin-badge">🪙 <span id="shopCoinDisplay">0</span></div>
+        </div>
+
+        <!-- 고기 -->
+        <div class="shop-item-card">
+          <div class="shop-item-icon">🍖</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title">고기 (기본 데미지 +1)</div>
+            <div class="shop-item-desc">기본 공격력을 1 증가시킵니다.</div>
+            <div class="shop-item-status">현재 데미지: <span id="shopMeatDmg">1</span></div>
+          </div>
+          <button class="buy-btn" id="buyMeatBtn" onclick="buyShopItem('meat')">
+            <span id="meatCostText">200</span> 코인
+          </button>
+        </div>
+
+        <!-- 사과 -->
+        <div class="shop-item-card">
+          <div class="shop-item-icon">🍎</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title">사과 (연사 속도 증가)</div>
+            <div class="shop-item-desc">발사 간격을 줄여 연사 속도를 높입니다.</div>
+            <div class="shop-item-status">현재 간격: <span id="shopAppleSpeed">130</span>ms</div>
+          </div>
+          <button class="buy-btn" id="buyAppleBtn" onclick="buyShopItem('apple')">
+            <span id="appleCostText">200</span> 코인
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: auto; padding-top: 8px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('shopModal', false)">닫기</button>
+        </div>
+      </div>
     </div>
 
     <!-- 배경 스토리 모달 -->
@@ -503,29 +614,38 @@
           적들의 무자비한 공습을 뚫고, <span class="highlight">'YOON 행성'</span>의 평화를 되찾아주세요!
         </div>
         <div style="text-align: center;">
-          <button class="btn" onclick="startGame()">🚀 출격하기!</button>
+          <button class="btn" onclick="startGame()">🚀 전투 개시!</button>
         </div>
       </div>
     </div>
 
-    <!-- 업데이트 히스토리 모달 -->
+    <!-- 패치 노트 모달 -->
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h3>📜 업데이트 히스토리</h3>
+        <h3>📜 패치 노트</h3>
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v3.10.0 (보스 패턴 및 밸런스 개편)</div>
+            <div class="version-title">v4.0.0 (상점 & 기체 제어 & 랭킹 개편)</div>
             <ul>
-              <li><b>보스 앞뒤(상하) 왕복 패턴 추가</b>: 보스가 상하로 접근했다가 후퇴하며 더욱 위협적인 공격 전개.</li>
-              <li><b>보스 체력 1.8배 상향</b>: 보스 기본 체력이 대폭 강화되어 전략적 플레이 요구.</li>
-              <li><b>비행기 이동 속도 미세 하향</b>: 기체 조작 속도를 3.2로 낮추어 정밀한 회피 제어 지원.</li>
+              <li><b>비행기 기체 기울기 효과</b>: 좌우 이동 시 기체가 부드럽게 기울어지도록 개선.</li>
+              <li><b>상점 시스템 도입</b>: 고기(데미지 +1) 및 사과(연사력 향상) 구매 기능 추가 (구매 시 가격 20% 상승).</li>
+              <li><b>연사력 30% 감속 조율</b>: 기본 발사 속도를 30% 낮추어 무기 및 상점 업그레이드의 가치를 대폭 강화.</li>
+              <li><b>1000킬 보상 지급</b>: 몬스터 1000킬당 10코인 자동 획득 로직 탑재.</li>
+              <li><b>메인 랭킹 10위 확장</b>: TOP 10 스크롤 보드로 메인 UI 개선.</li>
+            </ul>
+          </div>
+          <div class="version-block">
+            <div class="version-title">v3.10.0 (보스 패턴 개편)</div>
+            <ul>
+              <li><b>보스 상하 왕복 패턴</b>: 보스 접근 및 후퇴 패턴 추가.</li>
+              <li><b>보스 체력 상향</b>: 보스 기본 HP 강화.</li>
             </ul>
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid #334155;">
-          <button class="btn" style="padding: 6px 20px; font-size: 0.9rem;" onclick="toggleModal('updateModal', false)">닫기</button>
+        <div style="text-align: center; margin-top: 10px; padding-top: 6px; border-top: 1px solid #334155;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('updateModal', false)">닫기</button>
         </div>
       </div>
     </div>
@@ -548,25 +668,29 @@
       <p id="finalScoreText">Score: 0</p>
       
       <div class="ranking-container">
-        <h3>🏆 LEADERBOARD (TOP 5)</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>순위</th>
-              <th>날짜</th>
-              <th>닉네임</th>
-              <th>보스킬</th>
-              <th>점수</th>
-            </tr>
-          </thead>
-          <tbody id="rankingBody">
-            <tr><td colspan="5">로딩 중...</td></tr>
-          </tbody>
-        </table>
+        <h3>🏆 LEADERBOARD (TOP 10)</h3>
+        <div class="ranking-scroll-box">
+          <table>
+            <thead>
+              <tr>
+                <th>순위</th>
+                <th>날짜</th>
+                <th>닉네임</th>
+                <th>보스킬</th>
+                <th>점수</th>
+              </tr>
+            </thead>
+            <tbody id="rankingBody">
+              <tr><td colspan="5">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <button class="btn" onclick="startGame()">다시 하기</button>
-      <button class="btn" style="background: linear-gradient(135deg, #475569, #334155);" onclick="goToMainScreen()">메인 화면으로</button>
+      <div class="btn-container">
+        <button class="btn" onclick="startGame()">다시 하기</button>
+        <button class="btn" style="background: linear-gradient(135deg, #475569, #334155);" onclick="goToMainScreen()">메인 화면으로</button>
+      </div>
     </div>
 
     <!-- 독립 조작 컨트롤 패널 영역 -->
@@ -586,6 +710,22 @@
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
+
+    // --- 상점 & 재화 데이터 ---
+    var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
+    var shopMeatCost = parseFloat(localStorage.getItem("yoon_meat_cost") || "200");
+    var shopMeatBonusDmg = parseInt(localStorage.getItem("yoon_meat_bonus") || "0");
+    
+    var shopAppleCost = parseFloat(localStorage.getItem("yoon_apple_cost") || "200");
+    var shopAppleCount = parseInt(localStorage.getItem("yoon_apple_count") || "0");
+
+    function saveShopData() {
+      localStorage.setItem("yoon_coins", userCoins);
+      localStorage.setItem("yoon_meat_cost", shopMeatCost);
+      localStorage.setItem("yoon_meat_bonus", shopMeatBonusDmg);
+      localStorage.setItem("yoon_apple_cost", shopAppleCost);
+      localStorage.setItem("yoon_apple_count", shopAppleCount);
+    }
 
     function loadScript(src, callback) {
       var s = document.createElement('script');
@@ -613,6 +753,7 @@
           updateLeaderboardUI();
         });
       });
+      updateShopUI();
     });
 
     function saveScore(nickname, score, monsterKills, bossKills) {
@@ -644,7 +785,7 @@
       if (!db) return;
       db.collection("rankings")
         .orderBy("score", "desc")
-        .limit(5)
+        .limit(10)
         .get()
         .then(function(querySnapshot) {
           var rankings = [];
@@ -681,7 +822,6 @@
       e.preventDefault();
     }, { passive: false });
 
-    // Web Audio 사운드 엔진
     var audioCtx = null;
     var bgmInterval = null;
 
@@ -869,6 +1009,7 @@
     var topControls = document.getElementById("topControls");
     var updateModal = document.getElementById("updateModal");
     var storyModal = document.getElementById("storyModal");
+    var shopModal = document.getElementById("shopModal");
     var storyPilotName = document.getElementById("storyPilotName");
     var nicknameInput = document.getElementById("nicknameInput");
     var nicknameWarning = document.getElementById("nicknameWarning");
@@ -949,7 +1090,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 81; // 2. 보스 체력 1.8배 상향 (45 * 1.8 = 81)
+    var bossBaseHp = 81; 
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -959,7 +1100,9 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 3.2, // 3. 비행기 이동 속도를 아주 조금 낮춤 (3.8 -> 3.2)
+      speed: 3.2, 
+      tilt: 0,        
+      maxTilt: 0.35,  
       lives: 3, 
       invincibleTimer: 0 
     };
@@ -970,7 +1113,7 @@
     var keys = {};
 
     var lastShootTime = 0;
-    var shootInterval = 100;
+    var shootInterval = 100 * 1.3;
 
     var touchLeftPressed = false;
     var touchRightPressed = false;
@@ -985,6 +1128,42 @@
       var target = document.getElementById(id);
       if (show) target.classList.remove("hidden");
       else target.classList.add("hidden");
+    }
+
+    function updateShopUI() {
+      document.getElementById('mainCoinDisplay').innerText = userCoins;
+      document.getElementById('shopCoinDisplay').innerText = userCoins;
+      
+      var currentBaseDmg = 1 + shopMeatBonusDmg;
+      var currentInterval = (100 * 1.3) * Math.pow(0.9, shopAppleCount);
+
+      document.getElementById('shopMeatDmg').innerText = currentBaseDmg;
+      document.getElementById('meatCostText').innerText = Math.floor(shopMeatCost);
+      document.getElementById('buyMeatBtn').disabled = userCoins < shopMeatCost;
+
+      document.getElementById('shopAppleSpeed').innerText = Math.round(currentInterval);
+      document.getElementById('appleCostText').innerText = Math.floor(shopAppleCost);
+      document.getElementById('buyAppleBtn').disabled = userCoins < shopAppleCost;
+    }
+
+    function openShopModal() {
+      initAudio();
+      updateShopUI();
+      toggleModal('shopModal', true);
+    }
+
+    function buyShopItem(type) {
+      if (type === 'meat' && userCoins >= shopMeatCost) {
+        userCoins -= Math.floor(shopMeatCost);
+        shopMeatBonusDmg += 1;
+        shopMeatCost *= 1.2;
+      } else if (type === 'apple' && userCoins >= shopAppleCost) {
+        userCoins -= Math.floor(shopAppleCost);
+        shopAppleCount += 1;
+        shopAppleCost *= 1.2;
+      }
+      saveShopData();
+      updateShopUI();
     }
 
     function openStoryScreen() {
@@ -1221,7 +1400,13 @@
     }
 
     function drawPlayer(ctx, x, y, width, height) {
+      ctx.save();
       var cx = x + width / 2;
+      var cy = y + height / 2;
+
+      ctx.translate(cx, cy);
+      ctx.rotate(player.tilt);
+      ctx.translate(-cx, -cy);
 
       if (player.invincibleTimer > 0) {
         ctx.save();
@@ -1232,7 +1417,10 @@
         ctx.stroke();
         ctx.restore();
 
-        if (Math.floor(gameTime / 4) % 2 === 0) return;
+        if (Math.floor(gameTime / 4) % 2 === 0) {
+          ctx.restore();
+          return;
+        }
       }
 
       ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444";
@@ -1272,6 +1460,8 @@
       ctx.fillStyle = "#38bdf8";
       ctx.fillRect(x, y + height - 5, 2, 3);
       ctx.fillRect(x + width - 2, y + height - 5, 2, 3);
+
+      ctx.restore();
     }
 
     function drawPixelMonster(ctx, x, y, width, height, color, shape) {
@@ -1526,6 +1716,11 @@
       player.y = canvas.height - player.height - 180;
       player.lives = 3;
       player.invincibleTimer = 0;
+      player.tilt = 0;
+
+      // [버그 수정 1] 상점 업그레이드 수치를 매 게임 시작 시 깨끗하게 초기화
+      playerDamage = 1 + shopMeatBonusDmg;
+      shootInterval = (100 * 1.3) * Math.pow(0.9, shopAppleCount);
 
       score = 0;
       stage = 1;
@@ -1534,7 +1729,6 @@
       nextBossKillTarget = 20; 
       nextEliteKillTarget = 15;
       bulletCount = 1;
-      playerDamage = 1;
       gameTime = 0;
       bossSpawnCount = 0;
       currentWeapon = "normal";
@@ -1563,6 +1757,7 @@
       controlArea.classList.add("hidden");
       topControls.classList.add("hidden");
       startScreen.classList.remove("hidden");
+      updateShopUI();
       updateLeaderboardUI();
     }
 
@@ -1635,11 +1830,11 @@
       boss = {
         x: canvas.width / 2 - 40,
         y: 40,
-        baseY: 40, // 상하 왕복 기준 Y 위치
+        baseY: 40,
         width: 80,
         height: 60,
         speedX: 1.2,
-        speedY: 0.8, // 상하 이동 속도
+        speedY: 0.8,
         hp: calculatedHp,
         maxHp: calculatedHp,
         lastShoot: 0,
@@ -1806,6 +2001,14 @@
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
 
+      if (moveX < 0) {
+        player.tilt = Math.max(player.tilt - 0.05, -player.maxTilt);
+      } else if (moveX > 0) {
+        player.tilt = Math.min(player.tilt + 0.05, player.maxTilt);
+      } else {
+        player.tilt *= 0.8;
+      }
+
       player.x += moveX * player.speed;
       player.y += moveY * player.speed;
 
@@ -1848,13 +2051,11 @@
       }
 
       if (boss) {
-        // 1. 보스 좌우 이동 및 앞(아래)뒤(위) 상하 왕복 이동 패턴 적용
         boss.x += boss.speedX;
         if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
           boss.speedX *= -1;
         }
 
-        // 사인파를 이용한 앞뒤(Y축 상하) 왕복 이동 구현
         boss.y = boss.baseY + Math.sin(gameTime * 0.04) * 45;
 
         var bossShootInterval = Math.max(45, 90 - (stage - 1) * 4);
@@ -2019,6 +2220,13 @@
               createExplosion(m.x + m.width / 2, m.y + m.height / 2, m.type === "elite" ? "#0284c7" : "#f97316", m.type === "elite" ? 20 : 10);
               killCount++;
 
+              // [버그 수정 2] killCount > 0 조건을 추가하여 정확히 1000킬 단위일 때만 코인 보상 지급
+              if (killCount > 0 && killCount % 1000 === 0) {
+                userCoins += 10;
+                saveShopData();
+                addDamageText(m.x, m.y, "+10 COINS!", true);
+              }
+
               var monsterScore = 100;
               if (m.type === "fast") monsterScore = 150;
               else if (m.type === "shooter") monsterScore = 200;
@@ -2131,7 +2339,7 @@
       ctx.textAlign = "left";
       ctx.fillText("Stage: " + stage, 15, 25);
       ctx.fillText("Score: " + score + " (Best: " + bestScore + ")", 15, 45);
-      ctx.fillText("DMG: " + playerDamage + " | Kills: " + killCount, 15, 65);
+      ctx.fillText("DMG: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
 
       var heartsText = "LIFE: ";
       for (var h = 0; h < player.lives; h++) {
@@ -2153,6 +2361,8 @@
       stopBGM();
       playSound('gameover');
       cancelAnimationFrame(gameAnimationId);
+
+      saveShopData();
 
       controlArea.classList.add("hidden");
       topControls.classList.add("hidden");
