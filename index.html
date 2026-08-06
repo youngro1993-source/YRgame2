@@ -4,10 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>은하 수호대: YOON 행성을 지켜라</title>
-  
-  <!-- Firebase SDK (가장 안정적인 CDN 호환 구문) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
   <style>
     * {
@@ -541,24 +537,40 @@
   </div>
 
   <script>
-    // === Firebase 설정 및 초기화 ===
-    var firebaseConfig = {
-      apiKey: "AIzaSyAJRx2UmQBrwxdGU0OaTLDix9xv7DgQLds",
-      authDomain: "yoon-space-game-2fbae.firebaseapp.com",
-      projectId: "yoon-space-game-2fbae",
-      storageBucket: "yoon-space-game-2fbae.firebasestorage.app",
-      messagingSenderId: "524266726245",
-      appId: "1:524266726245:web:46ce8be41498337e09b78c",
-      measurementId: "G-G3W3P6XYE0"
-    };
-
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    // GitHub 빌드 멈춤 방지: 비동기 스크립트 동적 로더
+    var db = null;
+    function loadScript(src, callback) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = callback;
+      document.head.appendChild(s);
     }
-    var db = firebase.firestore();
+
+    // 클라이언트 브라우저 로딩 후 Firebase 인스턴스 초기화
+    window.addEventListener('DOMContentLoaded', function() {
+      loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js", function() {
+        loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js", function() {
+          var firebaseConfig = {
+            apiKey: "AIzaSyAJRx2UmQBrwxdGU0OaTLDix9xv7DgQLds",
+            authDomain: "yoon-space-game-2fbae.firebaseapp.com",
+            projectId: "yoon-space-game-2fbae",
+            storageBucket: "yoon-space-game-2fbae.firebasestorage.app",
+            messagingSenderId: "524266726245",
+            appId: "1:524266726245:web:46ce8be41498337e09b78c",
+            measurementId: "G-G3W3P6XYE0"
+          };
+          if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+          }
+          db = firebase.firestore();
+          updateLeaderboardUI();
+        });
+      });
+    });
 
     // === Firebase 점수 저장 함수 ===
     function saveScore(nickname, score, monsterKills, bossKills) {
+      if (!db) return;
       db.collection("rankings").add({
         nickname: nickname,
         score: score,
@@ -576,6 +588,7 @@
 
     // === Firebase 실시간 상위 랭킹 불러오기 ===
     function updateLeaderboardUI() {
+      if (!db) return;
       db.collection("rankings")
         .orderBy("score", "desc")
         .limit(5)
@@ -1766,8 +1779,6 @@
       
       saveScore(playerNickname, score, killCount, bossKillCount);
     }
-
-    updateLeaderboardUI();
   </script>
 </body>
 </html>
