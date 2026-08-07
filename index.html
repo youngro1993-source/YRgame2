@@ -55,7 +55,8 @@
       background: rgba(2, 6, 23, 0.95);
       backdrop-filter: blur(8px);
       z-index: 10;
-      padding: 8px 14px;
+      /* 최상단 및 최하단 여백(padding) 추가 */
+      padding: 24px 16px 20px 16px;
       text-align: center;
       overflow: hidden;
     }
@@ -94,7 +95,7 @@
       line-height: 1.1;
     }
 
-    /* 타이틀 및 상점/출격 버튼 그룹 (Flex order를 이용해 최상단 강제 고정) */
+    /* 타이틀 및 상점/출격 버튼 그룹 (최상단 배치) */
     .title-button-group {
       order: 2;
       width: 100%;
@@ -105,8 +106,8 @@
 
     h1 {
       font-size: 1.15rem;
-      margin-top: 1px;
-      margin-bottom: 3px;
+      margin-top: 2px;
+      margin-bottom: 4px;
       color: #38bdf8;
       text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
       word-break: keep-all;
@@ -236,7 +237,7 @@
 
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); }
 
-    /* 하단 영역 (닉네임 입력, 패치 노트 버튼, 크레디트 - Flex order로 최하단 고정) */
+    /* 하단 영역 (닉네임 입력, 크레디트, 패치 노트 - 최하단 고정) */
     .bottom-action-group {
       order: 5;
       width: 100%;
@@ -271,26 +272,28 @@
       min-height: 0.8em;
     }
 
-    .btn-update {
-      background: transparent !important;
-      border: 1.2px solid #38bdf8 !important;
-      color: #38bdf8 !important;
-      font-size: 0.68rem !important;
-      padding: 3px 10px !important;
-      margin-bottom: 2px !important;
-      border-radius: 6px !important;
-      box-shadow: none !important;
-    }
-    .btn-update:active {
-      background: rgba(56, 189, 248, 0.15) !important;
-    }
-
     .credits {
       margin-top: 1px;
-      margin-bottom: 1px;
+      margin-bottom: 3px;
       font-size: 0.58rem;
       color: #64748b;
       letter-spacing: 1px;
+    }
+
+    /* 패치 노트 버튼: 테두리 제거 및 최하단 배치 완료 스타일 */
+    .btn-update {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      color: #38bdf8 !important;
+      font-size: 0.68rem !important;
+      padding: 2px 8px !important;
+      margin-bottom: 0 !important;
+      box-shadow: none !important;
+      text-decoration: underline;
+    }
+    .btn-update:active {
+      background: rgba(56, 189, 248, 0.1) !important;
     }
 
     .top-controls {
@@ -572,7 +575,7 @@
         </div>
       </div>
 
-      <!-- [강제 고정 1] 타이틀 바로 아래 상점/출격 버튼 -->
+      <!-- 타이틀 및 상점/출격 버튼 (최상단) -->
       <div class="title-button-group">
         <h1>은하 수호대<br><span style="font-size:0.82rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         <div class="btn-container">
@@ -612,12 +615,12 @@
         </div>
       </div>
 
-      <!-- [강제 고정 2] 닉네임 입력 및 맨 아래 패치 노트 버튼 / 크레디트 -->
+      <!-- 닉네임 입력, 크레디트, 패치 노트 버튼 (최하단) -->
       <div class="bottom-action-group">
         <input type="text" id="nicknameInput" placeholder="닉네임 입력 (필수)" maxlength="8" />
         <div id="nicknameWarning" class="warning-text"></div>
-        <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📜 패치 노트 및 정보 보기</button>
         <div class="credits">[만든이 : YYR]</div>
+        <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역</button>
       </div>
     </div>
 
@@ -677,14 +680,14 @@
     <!-- 패치 노트 모달 -->
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h3>📜 패치 노트</h3>
+        <h3>📜 패치 내역</h3>
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v4.9.0 (Flex Order 레이아웃 강제 고정)</div>
+            <div class="version-title">v5.0.0 (여백 및 패치 내역 디자인 수정)</div>
             <ul>
-              <li><b>UI 구조 개편 완료</b>: CSS Flex `order` 속성을 적용하여 코드 순서와 무관하게 타이틀 바로 아래 상점/출격 버튼, 최하단 패치 노트 배치를 완벽하게 고정함.</li>
-              <li><b>상점 가격 안정화</b>: 고기 및 사과 160코인 할인 적용 유지.</li>
+              <li><b>레이아웃 정돈</b>: 메인 화면 상·하단에 적절한 여백을 추가하여 답답함을 해소함.</li>
+              <li><b>패치 내역 디자인 변경</b>: 패치 내역 버튼의 테두리를 제거하고 최하단으로 깔끔하게 이동 배치함.</li>
             </ul>
           </div>
         </div>
