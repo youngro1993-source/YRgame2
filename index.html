@@ -29,7 +29,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      max-width: 500px;
+      max-width: none; /* 최대 너비 제한 해제하여 전체화면 채우기 */
       margin: 0 auto;
       background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
       touch-action: none;
@@ -52,10 +52,10 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      background: rgba(2, 6, 23, 0.92);
+      background: rgba(2, 6, 23, 0.94);
       backdrop-filter: blur(8px);
       z-index: 10;
-      padding: 20px 15px;
+      padding: 20px 20px;
       text-align: center;
       overflow-y: auto;
       touch-action: pan-y;
@@ -65,10 +65,10 @@
       display: none !important;
     }
 
-    /* 재화 표시 바 */
+    /* 재화 표시 바 (전체화면 대응 너비 확장) */
     .top-status-bar {
       width: 100%;
-      max-width: 380px;
+      max-width: 440px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -86,12 +86,13 @@
       display: inline-block;
     }
 
-    .coin-info-text {
+    .coin-info-box {
       font-size: 0.65rem;
       color: #facc15;
       margin-top: 4px;
-      opacity: 0.8;
+      opacity: 0.9;
       text-align: right;
+      line-height: 1.3;
     }
 
     h1 {
@@ -111,7 +112,7 @@
 
     .info-box {
       width: 100%;
-      max-width: 380px;
+      max-width: 440px;
       background: rgba(30, 41, 59, 0.9);
       border: 1.5px solid rgba(56, 189, 248, 0.4);
       border-radius: 10px;
@@ -159,10 +160,11 @@
     .badge.saw { background: #c084fc; }
     .badge.shotgun { background: #f97316; }
     .badge.heart { background: #ec4899; color: #fff; }
+    .badge.coin { background: #facc15; color: #000; }
 
     input[type="text"] {
       width: 85%;
-      max-width: 260px;
+      max-width: 280px;
       padding: 10px;
       border: 2px solid #3b82f6;
       border-radius: 8px;
@@ -191,7 +193,7 @@
       gap: 8px;
       justify-content: center;
       width: 100%;
-      max-width: 380px;
+      max-width: 440px;
     }
 
     button.btn {
@@ -268,7 +270,7 @@
       border: 2px solid #38bdf8;
       border-radius: 12px;
       padding: 18px;
-      max-width: 380px;
+      max-width: 400px;
       width: 100%;
       max-height: 80vh;
       display: flex;
@@ -416,10 +418,10 @@
       letter-spacing: 1px;
     }
 
-    /* 랭킹 컨테이너 (1~5위 기본 노출, 스크롤시 6~10위) */
+    /* 랭킹 컨테이너 */
     .ranking-container {
       width: 100%;
-      max-width: 380px;
+      max-width: 440px;
       margin-bottom: 10px;
       background: rgba(15, 23, 42, 0.6);
       border-radius: 8px;
@@ -433,7 +435,7 @@
     }
 
     .ranking-scroll-box {
-      max-height: 135px; /* 5개 행 높이 기본 노출 */
+      max-height: 135px;
       overflow-y: auto;
       touch-action: pan-y;
     }
@@ -565,8 +567,10 @@
         <div style="font-size:0.8rem; color:#94a3b8; margin-top: 4px;">은하 수호대 본부</div>
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div class="coin-badge">🪙 <span id="mainCoinDisplay">0</span></div>
-          <div class="coin-info-text">(100킬당 10코인)</div>
-          <div class="coin-info-text" style="color: #93c5fd; margin-top: 2px;">누적 킬: <span id="mainTotalKills">0</span></div>
+          <div class="coin-info-box">
+            • 100킬당 코인 10개 획득<br>
+            • 보스 처치 시 50% 코인 1개 드랍
+          </div>
         </div>
       </div>
 
@@ -581,10 +585,11 @@
         <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기 (4%)</b>: 소형 2연발 방사 탄환</span></div>
         <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기 (7%)</b>: 관통 빔</span></div>
         <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기 (7%)</b>: 다단히트 회전탄</span></div>
+        <div class="info-item"><span class="badge coin">🪙</span><span><b>코인 드랍 (보스 50%)</b>: 상점 재화 1개 획득</span></div>
         <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복 (보스 처치 10%)</b>: 목숨 +1 회복</span></div>
       </div>
 
-      <!-- 랭킹 (1~5위 노출, 스크롤 시 6~10위) -->
+      <!-- 랭킹 -->
       <div class="ranking-container">
         <h3>🏆 LEADERBOARD (TOP 10)</h3>
         <div class="ranking-scroll-box">
@@ -678,20 +683,11 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v4.0.0 (상점 & 기체 제어 & 랭킹 개편)</div>
+            <div class="version-title">v4.1.0 (세로 풀스크린 고정 & 꽉 찬 화면)</div>
             <ul>
-              <li><b>비행기 기체 기울기 효과</b>: 좌우 이동 시 기체가 부드럽게 기울어지도록 개선.</li>
-              <li><b>상점 시스템 도입</b>: 고기(데미지 +1) 및 사과(연사력 향상) 구매 기능 추가 (구매 시 가격 20% 상승).</li>
-              <li><b>연사력 30% 감속 조율</b>: 기본 발사 속도를 30% 낮추어 무기 및 상점 업그레이드의 가치를 대폭 강화.</li>
-              <li><b>1000킬 보상 지급</b>: 몬스터 1000킬당 10코인 자동 획득 로직 탑재.</li>
-              <li><b>메인 랭킹 10위 확장</b>: TOP 10 스크롤 보드로 메인 UI 개선.</li>
-            </ul>
-          </div>
-          <div class="version-block">
-            <div class="version-title">v3.10.0 (보스 패턴 개편)</div>
-            <ul>
-              <li><b>보스 상하 왕복 패턴</b>: 보스 접근 및 후퇴 패턴 추가.</li>
-              <li><b>보스 체력 상향</b>: 보스 기본 HP 강화.</li>
+              <li><b>전체화면 풀스크린 대응</b>: 좌우 여백 없이 모바일 기기 화면에 꽉 차도록 레이아웃 및 캔버스 확장.</li>
+              <li><b>보스 코인 드랍</b>: 보스 처치 시 50% 확률로 코인(🪙) 드랍 시스템 추가.</li>
+              <li><b>메인 화면 가독성 개선</b>: 누적 킬 표기 제거 및 코인 획득 규칙 직관적 정리.</li>
             </ul>
           </div>
         </div>
@@ -719,7 +715,6 @@
       <h1>GAME OVER</h1>
       <p id="finalScoreText" style="margin-bottom: 6px;">Score: 0</p>
       
-      <!-- 게임 종료 시 노출되는 결과 안내 텍스트 -->
       <p id="sessionResultText" style="color: #facc15; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem;">이번 게임: 0킬 / 0코인 획득</p>
       
       <div class="ranking-container">
@@ -766,21 +761,17 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    // --- 상점 & 재화 데이터 (로컬 스토리지 보존) ---
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
-    var userTotalKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var shopMeatCost = parseFloat(localStorage.getItem("yoon_meat_cost") || "200");
     var shopMeatBonusDmg = parseInt(localStorage.getItem("yoon_meat_bonus") || "0");
     
     var shopAppleCost = parseFloat(localStorage.getItem("yoon_apple_cost") || "200");
     var shopAppleCount = parseInt(localStorage.getItem("yoon_apple_count") || "0");
     
-    // 이번 게임 세션에서 획득한 코인
     var sessionCoinsEarned = 0;
 
     function saveShopData() {
       localStorage.setItem("yoon_coins", userCoins);
-      localStorage.setItem("yoon_total_kills", userTotalKills);
       localStorage.setItem("yoon_meat_cost", shopMeatCost);
       localStorage.setItem("yoon_meat_bonus", shopMeatBonusDmg);
       localStorage.setItem("yoon_apple_cost", shopAppleCost);
@@ -841,7 +832,6 @@
       return month + "/" + day;
     }
 
-    // 랭킹 UI 업데이트 (최대 10위 불러오기 - 스크롤 지원)
     function updateLeaderboardUI() {
       if (!db) return;
       db.collection("rankings")
@@ -883,7 +873,6 @@
       e.preventDefault();
     }, { passive: false });
 
-    // Web Audio 사운드 엔진
     var audioCtx = null;
     var bgmInterval = null;
 
@@ -1079,18 +1068,17 @@
     var sessionResultText = document.getElementById("sessionResultText");
     var joystickStatusNotice = document.getElementById("joystickStatusNotice");
 
-    // 저장된 닉네임이 있다면 인풋 창에 미리 채워넣기
     nicknameInput.value = localStorage.getItem("yoon_nickname") || "";
 
     var stars = [];
     function initStars() {
       stars = [];
-      for (var i = 0; i < 50; i++) {
+      for (var i = 0; i < 60; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 2 + 0.5,
-          speed: (Math.random() * 1.5 + 0.5) * 0.85, // 배경별 흐름도 살짝 낮춤
+          speed: (Math.random() * 1.5 + 0.5) * 0.85,
           alpha: Math.random() * 0.8 + 0.2
         });
       }
@@ -1166,7 +1154,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 2.7,     // [속도 조절] 비행기 이동 속도를 기존 3.2에서 2.7로 완화
+      speed: 2.7,     
       tilt: 0,        
       maxTilt: 0.35,  
       lives: 3, 
@@ -1199,7 +1187,6 @@
     function updateShopUI() {
       document.getElementById('mainCoinDisplay').innerText = userCoins;
       document.getElementById('shopCoinDisplay').innerText = userCoins;
-      document.getElementById('mainTotalKills').innerText = userTotalKills;
       
       var currentBaseDmg = 1 + shopMeatBonusDmg;
       var currentInterval = (100 * 1.3) * Math.pow(0.9, shopAppleCount);
@@ -1698,6 +1685,7 @@
         "shotgun": "#f97316",
         "upgrade": "#eab308",
         "damage": "#ef4444",
+        "coin": "#facc15",
         "heart": "#ec4899"
       };
       
@@ -1706,12 +1694,12 @@
       ctx.arc(item.x + item.width / 2, item.y + item.height / 2, item.width / 2, 0, Math.PI * 2);
       ctx.fill();
       
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = (item.type === "coin") ? "#000000" : "#ffffff";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "damage": "D", "heart": "H" };
+      var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "damage": "D", "coin": "🪙", "heart": "H" };
       ctx.fillText(textMap[item.type] || "+1", item.x + item.width / 2, item.y + item.height / 2);
     }
 
@@ -1839,20 +1827,20 @@
       var x = Math.random() * (canvas.width - width);
       
       var type = "normal";
-      var speed = 0.7; // [속도 조절] 일반 몬스터 낙하 속도 완화 (0.85 -> 0.7)
+      var speed = 0.7; 
       var hp = 1;
 
       if (rand < 0.3) {
         type = "fast";
-        speed = 1.35; // [속도 조절] 빠른 몬스터 속도 완화 (1.6 -> 1.35)
+        speed = 1.35; 
         hp = 1;
       } else if (rand < 0.55) {
         type = "shooter";
-        speed = 0.45; // [속도 조절] 슈터 속도 완화 (0.55 -> 0.45)
+        speed = 0.45; 
         hp = 2;
       } else if (rand < 0.75) {
         type = "zigzag";
-        speed = 0.8;  // [속도 조절] 지그재그 속도 완화 (0.95 -> 0.8)
+        speed = 0.8;  
         hp = 1;
       }
 
@@ -1885,7 +1873,7 @@
         y: -height,
         width: width,
         height: height,
-        speed: 0.38, // [속도 조절] 엘리트 낙하 속도 완화
+        speed: 0.38, 
         type: "elite",
         hp: hp,
         maxHp: hp,
@@ -1904,7 +1892,7 @@
         baseY: 40,
         width: 80,
         height: 60,
-        speedX: 1.0, // [속도 조절] 보스 좌우 이동 속도 완화 (1.2 -> 1.0)
+        speedX: 1.0, 
         speedY: 0.7,
         hp: calculatedHp,
         maxHp: calculatedHp,
@@ -1965,7 +1953,7 @@
             y: originY - 10,
             width: 10,
             height: 10,
-            vx: Math.cos(angle) * 1.8, // [속도 조절] 보스 탄환 속도 완화
+            vx: Math.cos(angle) * 1.8, 
             vy: Math.sin(angle) * 1.8,
             isHeavy: true
           });
@@ -1987,7 +1975,7 @@
         var dx = (player.x + player.width / 2) - originX;
         var dy = (player.y + player.height / 2) - originY;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var speed = 2.3; // [속도 조절]
+        var speed = 2.3; 
 
         enemyBullets.push({
           x: originX - 6,
@@ -2014,7 +2002,7 @@
 
       for (var i = 0; i < count; i++) {
         var angle = (Math.PI * 2 / count) * i;
-        var speed = 2.1; // [속도 조절]
+        var speed = 2.1; 
         enemyBullets.push({
           x: originX - 5,
           y: originY - 5,
@@ -2046,7 +2034,7 @@
         lastShootTime = now;
       }
 
-      var currentSpawnInterval = Math.max(22, Math.floor(70 / Math.pow(1.2, stage - 1))); // [속도 조절] 스폰 간격도 살짝 여유롭게
+      var currentSpawnInterval = Math.max(22, Math.floor(70 / Math.pow(1.2, stage - 1))); 
       if (gameTime % currentSpawnInterval === 0) {
         spawnMonster();
       }
@@ -2160,10 +2148,14 @@
               bossKillCount++;
               explodeBoss(boss);
 
+              var dropX = boss.x + boss.width / 2;
+              var dropY = boss.y + boss.height / 2;
+
               if (Math.random() < 0.10) {
-                spawnItem(boss.x + boss.width / 2, boss.y + boss.height / 2, "heart");
-              } else {
-                spawnItem(boss.x + boss.width / 2, boss.y + boss.height / 2);
+                spawnItem(dropX, dropY, "heart");
+              }
+              if (Math.random() < 0.50) {
+                spawnItem(dropX, dropY, "coin");
               }
 
               boss = null;
@@ -2205,6 +2197,11 @@
             bulletCount = Math.min(6, bulletCount + 1);
           } else if (itemType === "damage") {
             playerDamage++;
+          } else if (itemType === "coin") {
+            userCoins += 1;
+            sessionCoinsEarned += 1;
+            saveShopData();
+            addDamageText(items[i].x, items[i].y, "+1 COIN!", true);
           } else if (itemType === "heart") {
             player.lives = Math.min(5, player.lives + 1);
           } else {
@@ -2229,7 +2226,7 @@
         }
 
         var shooterInterval = Math.max(140, 200 - (stage - 1) * 5);
-        var bulletSpeed = 1.5 + (stage - 1) * 0.12; // [속도 조절] 적 탄환 발사 속도 완화
+        var bulletSpeed = 1.5 + (stage - 1) * 0.12; 
 
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
@@ -2432,9 +2429,6 @@
       stopBGM();
       playSound('gameover');
       cancelAnimationFrame(gameAnimationId);
-
-      userTotalKills += killCount;
-      saveShopData();
 
       controlArea.classList.add("hidden");
       topControls.classList.add("hidden");
