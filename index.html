@@ -714,7 +714,7 @@
           <div class="info-grid">
             <div class="info-item"><span class="badge coin">🪙</span><span><b>100킬당 코인</b>: 10개 획득</span></div>
             <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가</b>: 탄환 DMG +1</span></div>
-            <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가</b>: 발사 수 +1</span></div>
+            <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가</b>: 중급 2% 드롭</span></div>
             <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기</b>: 2연발 방사탄</span></div>
             <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기</b>: 관통 빔</span></div>
             <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기</b>: 다단히트 회전탄</span></div>
@@ -752,7 +752,7 @@
           <div id="nicknameWarning" class="warning-text"></div>
         </div>
 
-        <!-- 내 비행기 현재상태 (위치 변경) -->
+        <!-- 내 비행기 현재상태 -->
         <div class="pilot-status-title">✈️ 내 비행기 현재상태</div>
         <div class="pilot-status-card">
           <div class="pilot-status-left">
@@ -775,7 +775,7 @@
       <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.3.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.4.0 업데이트)</button>
       </div>
 
     </div>
@@ -824,7 +824,6 @@
           </button>
         </div>
 
-        <!-- 추가된 사탕 아이템 -->
         <div class="shop-item-card">
           <div class="shop-item-icon">🍬</div>
           <div class="shop-item-info">
@@ -906,20 +905,26 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v6.4.0 (보스 & 중급몬스터 대규모 밸런스 패치)</div>
+            <ul>
+              <li><b>보스 체력 7배 상향</b>: 보스의 생명력이 기존 대비 7배로 대폭 강화되어 강력한 위용을 뽐냅니다.</li>
+              <li><b>보스 돌격 패턴 강화</b>: 이제 보스가 전투 중 화면 한가운데까지 깊숙이 돌격해 들어옵니다!</li>
+              <li><b>중급(슈터) 몬스터 체력 5배 상향</b>: 슈터 몬스터의 내구도가 5배로 단단해졌습니다.</li>
+              <li><b>+1 아이템 드롭 변경</b>: 탄환 수 증가(+1) 아이템이 오직 슈터(중급) 몬스터 처치 시에만 2% 확률로 드롭됩니다.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
             <div class="version-title">v6.3.0 (미션 무한 반복, 사탕 추가, 밸런스 패치)</div>
             <ul>
-              <li><b>반복 미션 시스템</b>: 미션 달성 시 목표량과 코인 보상이 2배씩 늘어나며 계속해서 달성할 수 있습니다! (보상 코인량 추가 표기)</li>
-              <li><b>신규 아이템 '사탕'</b>: 상점에서 사탕을 구매하여 기체의 이동 속도를 높이세요! (컨트롤러 기본 민감도 밸런싱)</li>
-              <li><b>무기 획득 밸런싱</b>: 무기 변경 아이템 드롭률이 기존의 절반으로 감소했습니다. (현재 무기를 더 길게 활용하세요)</li>
-              <li><b>UI 최적화</b>: 내 비행기 상태창 메인 출격 버튼 위로 이동, 이전 패치내역 스크롤 보기 추가, 플레이어 미사일 반투명화.</li>
+              <li>반복 미션 시스템 및 신규 아이템 '사탕' 추가, 무기 드롭률 절반 감소.</li>
             </ul>
           </div>
 
           <div class="version-block">
             <div class="version-title">v6.2.0 (초기 미션 시스템, 팝업 추가)</div>
             <ul>
-              <li><b>미션 시스템 도입</b>: 누적 킬, 보스 처치, 상점 이용 미션 달성 기능 추가.</li>
-              <li><b>업데이트 알림 팝업</b>: '다시 보지 않음' 기능이 적용된 공지 시스템 구축.</li>
+              <li>미션 시스템 도입 및 업데이트 알림 팝업 구축.</li>
             </ul>
           </div>
           
@@ -1006,7 +1011,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.3.0";
+    var currentVersionKey = "v6.4.0";
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -1024,7 +1029,6 @@
     var shopCandyCost = parseFloat(localStorage.getItem("yoon_candy_cost") || "160");
     var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
 
-    // 누적 통계 및 무한 미션 데이터
     var totalMonsterKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
@@ -1466,7 +1470,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 81; 
+    var bossBaseHp = 81 * 7; // 보스 체력 7배 상향 반영
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -1476,7 +1480,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 2.0, // 기본 민감도 완화를 위해 초기 이속 2.55 -> 2.0 으로 변경
+      speed: 2.0, 
       tilt: 0,        
       maxTilt: 0.35,  
       lives: 3, 
@@ -1540,7 +1544,6 @@
     function updateMissionUI() {
       document.getElementById('missionCoinDisplay').innerText = userCoins;
 
-      // 1. 킬 미션
       document.getElementById('mTargetKillText').innerText = missionTargetKill;
       document.getElementById('mTargetKillSub').innerText = missionTargetKill;
       document.getElementById('mRewardKillText').innerText = missionRewardKill;
@@ -1555,7 +1558,6 @@
         claimKillBtn.disabled = true;
       }
 
-      // 2. 보스 미션
       document.getElementById('mTargetBossText').innerText = missionTargetBoss;
       document.getElementById('mTargetBossSub').innerText = missionTargetBoss;
       document.getElementById('mRewardBossText').innerText = missionRewardBoss;
@@ -1570,7 +1572,6 @@
         claimBossBtn.disabled = true;
       }
 
-      // 3. 상점 미션
       document.getElementById('mTargetShopText').innerText = missionTargetShop;
       document.getElementById('mTargetShopSub').innerText = missionTargetShop;
       document.getElementById('mRewardShopText').innerText = missionRewardShop;
@@ -2130,7 +2131,6 @@
 
     function drawBullet(ctx, b) {
       ctx.save();
-      // 내 미사일 약간 투명하게 변경
       ctx.globalAlpha = 0.65;
 
       if (b.type === "laser") {
@@ -2182,7 +2182,6 @@
       player.invincibleTimer = 0;
       player.tilt = 0;
       
-      // 사탕 아이템 반영 (이속 증가)
       player.speed = 2.0 + (shopCandyCount * 0.2); 
 
       playerDamage = 1 + shopMeatBonusDmg;
@@ -2247,7 +2246,7 @@
       } else if (rand < 0.45) {
         type = "shooter";
         speed = 0.42; 
-        hp = 2;
+        hp = 10; // 슈터(중급) 몬스터 체력 5배 상향 반영 (기본 2 * 5 = 10)
       } else if (rand < 0.65) {
         type = "zigzag";
         speed = 0.75;  
@@ -2312,7 +2311,10 @@
         maxHp: calculatedHp,
         lastShoot: 0,
         patternTimer: 0,
-        designType: Math.floor(Math.random() * 4)
+        designType: Math.floor(Math.random() * 4),
+        isCharging: false,
+        chargeTimer: 0,
+        targetY: 40
       };
     }
 
@@ -2529,7 +2531,21 @@
           boss.speedX *= -1;
         }
 
-        boss.y = boss.baseY + Math.sin(gameTime * 0.04) * 45;
+        // 보스가 화면 가운데까지 돌격하는 로직 추가
+        boss.chargeTimer++;
+        if (boss.chargeTimer > 250) {
+          boss.isCharging = true;
+          boss.targetY = canvas.height / 2 - 50; // 화면 가운데 근처로 돌격
+          if (boss.chargeTimer > 350) {
+            boss.isCharging = false;
+            boss.targetY = boss.baseY;
+            if (boss.chargeTimer > 500) boss.chargeTimer = 0;
+          }
+        } else {
+          boss.targetY = boss.baseY + Math.sin(gameTime * 0.04) * 45;
+        }
+
+        boss.y += (boss.targetY - boss.y) * 0.05;
 
         var bossShootInterval = Math.max(50, 100 - (stage - 1) * 4);
         if (gameTime - boss.lastShoot > bossShootInterval) {
@@ -2734,10 +2750,9 @@
                 spawnItem(m.x, m.y, "damage");
               } else if (m.type === "elite") {
                 spawnItem(m.x, m.y, "upgrade");
-              } else if (randItem < 0.08) {
+              } else if (m.type === "shooter" && randItem < 0.05) { // 2% 확률로 +1 아이템은 중급(슈터)몬스터에만 드롭
                 spawnItem(m.x, m.y, "upgrade");
               } else if (randItem < 0.155) { 
-                // 기존 0.23에서 0.155로 수정 (무기 획득률 절반 감소)
                 spawnItem(m.x, m.y);
               }
 
