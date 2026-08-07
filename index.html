@@ -102,6 +102,18 @@
       cursor: pointer;
     }
 
+    .pilot-status-title {
+      width: 100%;
+      max-width: 440px;
+      text-align: left;
+      font-size: 0.65rem;
+      font-weight: bold;
+      color: #38bdf8;
+      padding-left: 4px;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
     .pilot-status-card {
       width: 100%;
       max-width: 440px;
@@ -112,7 +124,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
     }
 
@@ -126,6 +138,8 @@
       color: #facc15;
       font-weight: bold;
       text-align: right;
+      white-space: nowrap;
+      margin-left: 5px;
     }
 
     h1 {
@@ -483,9 +497,10 @@
     }
 
     .mission-item-info { flex: 1; }
-    .mission-item-title { font-size: 0.8rem; font-weight: bold; color: #34d399; }
+    .mission-item-title { font-size: 0.75rem; font-weight: bold; color: #34d399; }
     .mission-item-desc { font-size: 0.68rem; color: #94a3b8; margin: 1px 0; }
     .mission-item-status { font-size: 0.68rem; color: #facc15; }
+    .highlight-reward { color: #facc15; font-weight: bold; }
 
     .claim-btn {
       background: #34d399;
@@ -527,7 +542,7 @@
       flex: 1;
       text-align: left;
       touch-action: pan-y;
-      max-height: 250px;
+      max-height: 300px;
     }
 
     .history-scroll-area::-webkit-scrollbar { width: 6px; }
@@ -535,8 +550,8 @@
     .history-scroll-area::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 3px; }
 
     .version-block {
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1px dashed #334155;
     }
 
@@ -549,7 +564,7 @@
       font-size: 0.82rem;
       font-weight: bold;
       color: #facc15;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .history-scroll-area ul {
@@ -560,7 +575,7 @@
     }
 
     .history-scroll-area li {
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       position: relative;
       padding-left: 12px;
     }
@@ -694,16 +709,6 @@
       <!-- [2] 중앙 영역 -->
       <div class="layout-section layout-middle">
         
-        <!-- 현재 내 비행기 상태창 -->
-        <div class="pilot-status-card">
-          <div class="pilot-status-left">
-            ✈️ DMG <span id="mainDmgDisplay">1</span> | 연사 <span id="mainSpeedDisplay">135</span>ms | 체력 <span id="mainLifeDisplay">3</span>개
-          </div>
-          <div class="pilot-status-right">
-            🪙 <span id="mainCoinDisplay">0</span> 코인
-          </div>
-        </div>
-
         <div class="info-box">
           <h4>🎁 아이템 드롭 & 재화 정보</h4>
           <div class="info-grid">
@@ -747,8 +752,19 @@
           <div id="nicknameWarning" class="warning-text"></div>
         </div>
 
+        <!-- 내 비행기 현재상태 (위치 변경) -->
+        <div class="pilot-status-title">✈️ 내 비행기 현재상태</div>
+        <div class="pilot-status-card">
+          <div class="pilot-status-left">
+            데미지 <span id="mainDmgDisplay">1</span> | 연사 <span id="mainSpeedDisplay">135</span>ms | 체력 <span id="mainLifeDisplay">3</span> | 속도 <span id="mainSpdDisplay">2.0</span>
+          </div>
+          <div class="pilot-status-right">
+            🪙 <span id="mainCoinDisplay">0</span>
+          </div>
+        </div>
+
         <!-- 상점, 미션, 출격하기 버튼 -->
-        <div class="btn-container" style="margin-top: 2px; margin-bottom: 2px;">
+        <div class="btn-container" style="margin-top: 6px; margin-bottom: 2px;">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
           <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
           <button class="btn btn-pulse" onclick="openStoryScreen()">🚀 출격하기</button>
@@ -759,7 +775,7 @@
       <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.2.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.3.0 업데이트)</button>
       </div>
 
     </div>
@@ -808,6 +824,19 @@
           </button>
         </div>
 
+        <!-- 추가된 사탕 아이템 -->
+        <div class="shop-item-card">
+          <div class="shop-item-icon">🍬</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title">사탕 (기체 이동 속도 증가)</div>
+            <div class="shop-item-desc">비행기의 상하좌우 이동 속도를 높입니다.</div>
+            <div class="shop-item-status">현재 이동 속도: <span id="shopCandySpeed">2.0</span></div>
+          </div>
+          <button class="buy-btn" id="buyCandyBtn" onclick="buyShopItem('candy')">
+            <span id="candyCostText">160</span> 코인
+          </button>
+        </div>
+
         <div style="text-align: center; margin-top: auto; padding-top: 6px;">
           <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('shopModal', false)">닫기</button>
         </div>
@@ -818,33 +847,33 @@
     <div id="missionModal" class="modal-overlay hidden">
       <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <h3 style="margin: 0; border: none;">📋 파일럿 미션</h3>
+          <h3 style="margin: 0; border: none;">📋 무한 반복 미션</h3>
           <div class="coin-badge">🪙 <span id="missionCoinDisplay">0</span></div>
         </div>
 
         <div class="mission-item-card">
           <div class="mission-item-info">
-            <div class="mission-item-title">적 몬스터 사냥꾼 (누적 100마리)</div>
-            <div class="mission-item-desc">전투에서 누적 100마리의 적을 처치하세요.</div>
-            <div class="mission-item-status">진행도: <span id="missionKillProgress">0</span> / 100</div>
+            <div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>마리)</div>
+            <div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인 (달성 시 2배 증가)</div>
+            <div class="mission-item-status">진행도: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div>
           </div>
           <button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button>
         </div>
 
         <div class="mission-item-card">
           <div class="mission-item-info">
-            <div class="mission-item-title">보스 슬레이어 (누적 보스 3마리)</div>
-            <div class="mission-item-desc">강력한 보스 적을 누적 3마리 처치하세요.</div>
-            <div class="mission-item-status">진행도: <span id="missionBossProgress">0</span> / 3</div>
+            <div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>마리)</div>
+            <div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인 (달성 시 2배 증가)</div>
+            <div class="mission-item-status">진행도: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div>
           </div>
           <button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button>
         </div>
 
         <div class="mission-item-card">
           <div class="mission-item-info">
-            <div class="mission-item-title">상점 첫 고객 (상점 1회 구매)</div>
-            <div class="mission-item-desc">상점에서 아무 아이템이나 1회 구매하세요.</div>
-            <div class="mission-item-status">진행도: <span id="missionShopProgress">0</span> / 1</div>
+            <div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div>
+            <div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인 (달성 시 2배 증가)</div>
+            <div class="mission-item-status">진행도: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div>
           </div>
           <button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button>
         </div>
@@ -873,14 +902,31 @@
     <!-- 패치 노트 모달 -->
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h3>📜 패치 내역 (v6.2.0)</h3>
+        <h3>📜 패치 내역</h3>
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v6.2.0 (미션 시스템 및 업데이트 팝업 추가)</div>
+            <div class="version-title">v6.3.0 (미션 무한 반복, 사탕 추가, 밸런스 패치)</div>
             <ul>
-              <li><b>미션 시스템 도입</b>: 누적 킬, 보스 처치, 상점 이용 등의 미션을 달성하고 풍성한 코인 보상을 받으세요!</li>
-              <li><b>업데이트 알림 팝업</b>: 새로운 업데이트 내용이 있을 때 자동 알림 및 '다시 보지 않음' 기능이 추가되었습니다.</li>
+              <li><b>반복 미션 시스템</b>: 미션 달성 시 목표량과 코인 보상이 2배씩 늘어나며 계속해서 달성할 수 있습니다! (보상 코인량 추가 표기)</li>
+              <li><b>신규 아이템 '사탕'</b>: 상점에서 사탕을 구매하여 기체의 이동 속도를 높이세요! (컨트롤러 기본 민감도 밸런싱)</li>
+              <li><b>무기 획득 밸런싱</b>: 무기 변경 아이템 드롭률이 기존의 절반으로 감소했습니다. (현재 무기를 더 길게 활용하세요)</li>
+              <li><b>UI 최적화</b>: 내 비행기 상태창 메인 출격 버튼 위로 이동, 이전 패치내역 스크롤 보기 추가, 플레이어 미사일 반투명화.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
+            <div class="version-title">v6.2.0 (초기 미션 시스템, 팝업 추가)</div>
+            <ul>
+              <li><b>미션 시스템 도입</b>: 누적 킬, 보스 처치, 상점 이용 미션 달성 기능 추가.</li>
+              <li><b>업데이트 알림 팝업</b>: '다시 보지 않음' 기능이 적용된 공지 시스템 구축.</li>
+            </ul>
+          </div>
+          
+          <div class="version-block">
+            <div class="version-title">v6.1.0 (랭킹표, 닉네임 화면 재배치)</div>
+            <ul>
+              <li>컴포넌트 레이아웃 최적화 및 닉네임 입력란 직관적 정렬 적용.</li>
             </ul>
           </div>
         </div>
@@ -944,7 +990,7 @@
 
     <!-- 독립 조작 컨트롤 패널 영역 -->
     <div id="controlArea" class="hidden">
-      <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1 | DMG: 1</div>
+      <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1 | 데미지: 1</div>
       <div id="btnLeft" class="arrow-btn">◀</div>
       <div id="joystickArea">
         <div id="joystickKnob"></div>
@@ -960,7 +1006,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.2.0";
+    var currentVersionKey = "v6.3.0";
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -975,14 +1021,22 @@
     var shopHeartCost = parseFloat(localStorage.getItem("yoon_heart_cost") || "160");
     var shopHeartBonusLife = parseInt(localStorage.getItem("yoon_heart_bonus") || "0");
 
-    // 누적 통계 및 미션 데이터
+    var shopCandyCost = parseFloat(localStorage.getItem("yoon_candy_cost") || "160");
+    var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
+
+    // 누적 통계 및 무한 미션 데이터
     var totalMonsterKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
 
-    var missionClaimedKill = localStorage.getItem("yoon_mission_claimed_kill") === "true";
-    var missionClaimedBoss = localStorage.getItem("yoon_mission_claimed_boss") === "true";
-    var missionClaimedShop = localStorage.getItem("yoon_mission_claimed_shop") === "true";
+    var missionTargetKill = parseInt(localStorage.getItem("yoon_m_target_kill") || "100");
+    var missionRewardKill = parseInt(localStorage.getItem("yoon_m_reward_kill") || "50");
+
+    var missionTargetBoss = parseInt(localStorage.getItem("yoon_m_target_boss") || "3");
+    var missionRewardBoss = parseInt(localStorage.getItem("yoon_m_reward_boss") || "100");
+
+    var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
+    var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
     
     var sessionCoinsEarned = 0;
 
@@ -994,12 +1048,19 @@
       localStorage.setItem("yoon_apple_count", shopAppleCount);
       localStorage.setItem("yoon_heart_cost", shopHeartCost);
       localStorage.setItem("yoon_heart_bonus", shopHeartBonusLife);
+      localStorage.setItem("yoon_candy_cost", shopCandyCost);
+      localStorage.setItem("yoon_candy_count", shopCandyCount);
+
       localStorage.setItem("yoon_total_kills", totalMonsterKills);
       localStorage.setItem("yoon_total_boss_kills", totalBossKills);
       localStorage.setItem("yoon_shop_purchase_count", shopPurchaseCount);
-      localStorage.setItem("yoon_mission_claimed_kill", missionClaimedKill);
-      localStorage.setItem("yoon_mission_claimed_boss", missionClaimedBoss);
-      localStorage.setItem("yoon_mission_claimed_shop", missionClaimedShop);
+      
+      localStorage.setItem("yoon_m_target_kill", missionTargetKill);
+      localStorage.setItem("yoon_m_reward_kill", missionRewardKill);
+      localStorage.setItem("yoon_m_target_boss", missionTargetBoss);
+      localStorage.setItem("yoon_m_reward_boss", missionRewardBoss);
+      localStorage.setItem("yoon_m_target_shop", missionTargetShop);
+      localStorage.setItem("yoon_m_reward_shop", missionRewardShop);
     }
 
     function loadScript(src, callback) {
@@ -1037,7 +1098,6 @@
       updateShopUI();
       updateMissionUI();
 
-      // 업데이트 팝업 체크 확인
       var dismissedVersion = localStorage.getItem("yoon_dismissed_update_version");
       if (dismissedVersion !== currentVersionKey) {
         toggleModal('updateModal', true);
@@ -1402,7 +1462,7 @@
     };
 
     function updateStatusDisplay() {
-      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount + " | DMG: " + playerDamage;
+      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount + " | 데미지: " + playerDamage;
     }
 
     var boss = null;
@@ -1416,7 +1476,7 @@
       y: 0, 
       width: 28, 
       height: 28, 
-      speed: 2.55,     
+      speed: 2.0, // 기본 민감도 완화를 위해 초기 이속 2.55 -> 2.0 으로 변경
       tilt: 0,        
       maxTilt: 0.35,  
       lives: 3, 
@@ -1450,11 +1510,13 @@
       var currentBaseDmg = 1 + shopMeatBonusDmg;
       var currentInterval = Math.round((100 * 1.35) * Math.pow(0.9, shopAppleCount));
       var currentTotalLife = 3 + shopHeartBonusLife;
+      var currentSpeed = (2.0 + shopCandyCount * 0.2).toFixed(1);
 
       document.getElementById('mainCoinDisplay').innerText = userCoins;
       document.getElementById('mainDmgDisplay').innerText = currentBaseDmg;
       document.getElementById('mainSpeedDisplay').innerText = currentInterval;
       document.getElementById('mainLifeDisplay').innerText = currentTotalLife;
+      document.getElementById('mainSpdDisplay').innerText = currentSpeed;
 
       document.getElementById('shopCoinDisplay').innerText = userCoins;
       
@@ -1469,19 +1531,23 @@
       document.getElementById('shopHeartLife').innerText = currentTotalLife;
       document.getElementById('heartCostText').innerText = Math.floor(shopHeartCost);
       document.getElementById('buyHeartBtn').disabled = userCoins < shopHeartCost;
+
+      document.getElementById('shopCandySpeed').innerText = currentSpeed;
+      document.getElementById('candyCostText').innerText = Math.floor(shopCandyCost);
+      document.getElementById('buyCandyBtn').disabled = userCoins < shopCandyCost;
     }
 
     function updateMissionUI() {
       document.getElementById('missionCoinDisplay').innerText = userCoins;
 
-      // 1. 킬 미션 (목표: 100)
-      var currentKillVal = Math.min(100, totalMonsterKills);
+      // 1. 킬 미션
+      document.getElementById('mTargetKillText').innerText = missionTargetKill;
+      document.getElementById('mTargetKillSub').innerText = missionTargetKill;
+      document.getElementById('mRewardKillText').innerText = missionRewardKill;
+      var currentKillVal = Math.min(missionTargetKill, totalMonsterKills);
       document.getElementById('missionKillProgress').innerText = currentKillVal;
       var claimKillBtn = document.getElementById('claimKillBtn');
-      if (missionClaimedKill) {
-        claimKillBtn.innerText = "완료됨";
-        claimKillBtn.disabled = true;
-      } else if (totalMonsterKills >= 100) {
+      if (totalMonsterKills >= missionTargetKill) {
         claimKillBtn.innerText = "보상 받기";
         claimKillBtn.disabled = false;
       } else {
@@ -1489,14 +1555,14 @@
         claimKillBtn.disabled = true;
       }
 
-      // 2. 보스 미션 (목표: 3)
-      var currentBossVal = Math.min(3, totalBossKills);
+      // 2. 보스 미션
+      document.getElementById('mTargetBossText').innerText = missionTargetBoss;
+      document.getElementById('mTargetBossSub').innerText = missionTargetBoss;
+      document.getElementById('mRewardBossText').innerText = missionRewardBoss;
+      var currentBossVal = Math.min(missionTargetBoss, totalBossKills);
       document.getElementById('missionBossProgress').innerText = currentBossVal;
       var claimBossBtn = document.getElementById('claimBossBtn');
-      if (missionClaimedBoss) {
-        claimBossBtn.innerText = "완료됨";
-        claimBossBtn.disabled = true;
-      } else if (totalBossKills >= 3) {
+      if (totalBossKills >= missionTargetBoss) {
         claimBossBtn.innerText = "보상 받기";
         claimBossBtn.disabled = false;
       } else {
@@ -1504,14 +1570,14 @@
         claimBossBtn.disabled = true;
       }
 
-      // 3. 상점 미션 (목표: 1)
-      var currentShopVal = Math.min(1, shopPurchaseCount);
+      // 3. 상점 미션
+      document.getElementById('mTargetShopText').innerText = missionTargetShop;
+      document.getElementById('mTargetShopSub').innerText = missionTargetShop;
+      document.getElementById('mRewardShopText').innerText = missionRewardShop;
+      var currentShopVal = Math.min(missionTargetShop, shopPurchaseCount);
       document.getElementById('missionShopProgress').innerText = currentShopVal;
       var claimShopBtn = document.getElementById('claimShopBtn');
-      if (missionClaimedShop) {
-        claimShopBtn.innerText = "완료됨";
-        claimShopBtn.disabled = true;
-      } else if (shopPurchaseCount >= 1) {
+      if (shopPurchaseCount >= missionTargetShop) {
         claimShopBtn.innerText = "보상 받기";
         claimShopBtn.disabled = false;
       } else {
@@ -1534,15 +1600,18 @@
 
     function claimMission(type) {
       playSound('item');
-      if (type === 'kill' && !missionClaimedKill && totalMonsterKills >= 100) {
-        missionClaimedKill = true;
-        userCoins += 50;
-      } else if (type === 'boss' && !missionClaimedBoss && totalBossKills >= 3) {
-        missionClaimedBoss = true;
-        userCoins += 100;
-      } else if (type === 'shop' && !missionClaimedShop && shopPurchaseCount >= 1) {
-        missionClaimedShop = true;
-        userCoins += 30;
+      if (type === 'kill' && totalMonsterKills >= missionTargetKill) {
+        userCoins += missionRewardKill;
+        missionTargetKill *= 2;
+        missionRewardKill *= 2;
+      } else if (type === 'boss' && totalBossKills >= missionTargetBoss) {
+        userCoins += missionRewardBoss;
+        missionTargetBoss *= 2;
+        missionRewardBoss *= 2;
+      } else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) {
+        userCoins += missionRewardShop;
+        missionTargetShop *= 2;
+        missionRewardShop *= 2;
       }
       saveShopData();
       updateShopUI();
@@ -1564,6 +1633,11 @@
         userCoins -= Math.floor(shopHeartCost);
         shopHeartBonusLife += 1;
         shopHeartCost *= 1.2;
+        shopPurchaseCount++;
+      } else if (type === 'candy' && userCoins >= shopCandyCost) {
+        userCoins -= Math.floor(shopCandyCost);
+        shopCandyCount += 1;
+        shopCandyCost *= 1.2;
         shopPurchaseCount++;
       }
       saveShopData();
@@ -2055,6 +2129,10 @@
     }
 
     function drawBullet(ctx, b) {
+      ctx.save();
+      // 내 미사일 약간 투명하게 변경
+      ctx.globalAlpha = 0.65;
+
       if (b.type === "laser") {
         ctx.fillStyle = "#4ade80";
         ctx.fillRect(b.x, b.y, b.width, b.height);
@@ -2076,6 +2154,7 @@
         ctx.fillStyle = "#facc15";
         ctx.fillRect(b.x, b.y, b.width, b.height);
       }
+      ctx.restore();
     }
 
     function drawEnemyBullet(ctx, eb) {
@@ -2102,6 +2181,9 @@
       player.lives = 3 + shopHeartBonusLife;
       player.invincibleTimer = 0;
       player.tilt = 0;
+      
+      // 사탕 아이템 반영 (이속 증가)
+      player.speed = 2.0 + (shopCandyCount * 0.2); 
 
       playerDamage = 1 + shopMeatBonusDmg;
       shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
@@ -2171,7 +2253,6 @@
         speed = 0.75;  
         hp = 1;
       } else if (rand < 0.72) {
-        // [신규] 황금 코인 몬스터 (잡으면 코인 다량 드랍)
         type = "coin_monster";
         speed = 1.5;
         hp = 1;
@@ -2479,7 +2560,7 @@
             if (boss.hp <= 0) {
               score += 1000 * bossSpawnCount;
               bossKillCount++;
-              totalBossKills++; // 누적 보스 킬 반영
+              totalBossKills++; 
               explodeBoss(boss);
 
               var dropX = boss.x + boss.width / 2;
@@ -2622,7 +2703,7 @@
               playSound('explosion');
               createExplosion(m.x + m.width / 2, m.y + m.height / 2, m.type === "elite" ? "#0284c7" : "#f97316", m.type === "elite" ? 20 : 10);
               killCount++;
-              totalMonsterKills++; // 누적 몬스터 킬 반영
+              totalMonsterKills++; 
 
               if (killCount > 0 && killCount % 100 === 0) {
                 userCoins += 10;
@@ -2637,7 +2718,7 @@
               else if (m.type === "elite") monsterScore = 500;
               else if (m.type === "coin_monster") {
                 monsterScore = 300;
-                userCoins += 5; // 황금 몬스터 처치 시 즉시 코인 5개 추가 드랍!
+                userCoins += 5; 
                 sessionCoinsEarned += 5;
                 addDamageText(m.x, m.y, "+5 COINS!", true);
               }
@@ -2655,7 +2736,8 @@
                 spawnItem(m.x, m.y, "upgrade");
               } else if (randItem < 0.08) {
                 spawnItem(m.x, m.y, "upgrade");
-              } else if (randItem < 0.23) {
+              } else if (randItem < 0.155) { 
+                // 기존 0.23에서 0.155로 수정 (무기 획득률 절반 감소)
                 spawnItem(m.x, m.y);
               }
 
@@ -2703,7 +2785,6 @@
         else if (m.type === "zigzag") drawZigzagMonster(ctx, m.x, m.y, m.width, m.height);
         else if (m.type === "elite") drawEliteMonster(ctx, m);
         else if (m.type === "coin_monster") {
-          // 황금 몬스터 그리기 (노란색 픽셀 형태)
           drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#facc15", [
             [0,1,1,1,1,1,1,0],
             [1,1,1,1,1,1,1,1],
@@ -2757,7 +2838,7 @@
       ctx.textAlign = "left";
       ctx.fillText("Stage: " + stage, 15, 25);
       ctx.fillText("Score: " + score + " (Best: " + bestScore + ")", 15, 45);
-      ctx.fillText("DMG: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
+      ctx.fillText("데미지: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
 
       var heartsText = "LIFE: ";
       for (var h = 0; h < player.lives; h++) {
@@ -2784,7 +2865,7 @@
       topControls.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
-      finalScoreText.textContent = "Pilot: " + playerNickname + " | DMG: " + playerDamage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
+      finalScoreText.textContent = "Pilot: " + playerNickname + " | 데미지: " + playerDamage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
       
       sessionResultText.textContent = "이번 게임: " + killCount + "킬 / " + sessionCoinsEarned + "코인 획득!";
       
