@@ -163,6 +163,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .moon-artwork:active {
+      transform: scale(0.9);
     }
 
     .moon-artwork::before {
@@ -703,7 +709,8 @@
 
         <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         
-        <div class="moon-artwork"></div>
+        <!-- 달 클릭 이벤트 적용 영역 -->
+        <div class="moon-artwork" onclick="handleMoonClick()"></div>
       </div>
 
       <!-- [2] 중앙 영역 -->
@@ -778,6 +785,17 @@
         <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.4.0 업데이트)</button>
       </div>
 
+    </div>
+
+    <!-- 달 클릭 이벤트 안내 모달 창 -->
+    <div id="eventModal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3>🌕 행성 관리자의 선물</h3>
+        <p id="eventMessageText" style="margin: 15px 0; font-size: 0.85rem; line-height: 1.5; color: #facc15; font-weight: bold;"></p>
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('eventModal', false)">확인</button>
+        </div>
+      </div>
     </div>
 
     <!-- 상점 모달 -->
@@ -1029,6 +1047,11 @@
     var shopCandyCost = parseFloat(localStorage.getItem("yoon_candy_cost") || "160");
     var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
 
+    // 달 클릭 이벤트를 위한 상태값 (일회성 지급 관리)
+    var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
+    var moonReward30Claimed = localStorage.getItem("yoon_moon_reward_30") === "true";
+    var moonReward300Claimed = localStorage.getItem("yoon_moon_reward_300") === "true";
+
     var totalMonsterKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
@@ -1055,6 +1078,10 @@
       localStorage.setItem("yoon_candy_cost", shopCandyCost);
       localStorage.setItem("yoon_candy_count", shopCandyCount);
 
+      localStorage.setItem("yoon_moon_clicks", moonClickCount);
+      localStorage.setItem("yoon_moon_reward_30", moonReward30Claimed);
+      localStorage.setItem("yoon_moon_reward_300", moonReward300Claimed);
+
       localStorage.setItem("yoon_total_kills", totalMonsterKills);
       localStorage.setItem("yoon_total_boss_kills", totalBossKills);
       localStorage.setItem("yoon_shop_purchase_count", shopPurchaseCount);
@@ -1065,6 +1092,30 @@
       localStorage.setItem("yoon_m_reward_boss", missionRewardBoss);
       localStorage.setItem("yoon_m_target_shop", missionTargetShop);
       localStorage.setItem("yoon_m_reward_shop", missionRewardShop);
+    }
+
+    // 메인 화면 달 클릭 이벤트 함수
+    function handleMoonClick() {
+      initAudio();
+      moonClickCount++;
+
+      if (moonClickCount === 30 && !moonReward30Claimed) {
+        moonReward30Claimed = true;
+        userCoins += 1000;
+        saveShopData();
+        updateShopUI();
+        playSound('item');
+        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다. -YOON행성 관리자-";
+        toggleModal("eventModal", true);
+      } else if (moonClickCount === 300 && !moonReward300Claimed) {
+        moonReward300Claimed = true;
+        userCoins += 1000;
+        saveShopData();
+        updateShopUI();
+        playSound('item');
+        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다. -YOON행성 관리자-";
+        toggleModal("eventModal", true);
+      }
     }
 
     function loadScript(src, callback) {
@@ -1470,7 +1521,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 81 * 7; // 보스 체력 7배 상향 반영
+    var bossBaseHp = 81 * 7; 
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -2246,7 +2297,7 @@
       } else if (rand < 0.45) {
         type = "shooter";
         speed = 0.42; 
-        hp = 10; // 슈터(중급) 몬스터 체력 5배 상향 반영 (기본 2 * 5 = 10)
+        hp = 10; 
       } else if (rand < 0.65) {
         type = "zigzag";
         speed = 0.75;  
@@ -2531,11 +2582,10 @@
           boss.speedX *= -1;
         }
 
-        // 보스가 화면 가운데까지 돌격하는 로직 추가
         boss.chargeTimer++;
         if (boss.chargeTimer > 250) {
           boss.isCharging = true;
-          boss.targetY = canvas.height / 2 - 50; // 화면 가운데 근처로 돌격
+          boss.targetY = canvas.height / 2 - 50; 
           if (boss.chargeTimer > 350) {
             boss.isCharging = false;
             boss.targetY = boss.baseY;
@@ -2750,7 +2800,7 @@
                 spawnItem(m.x, m.y, "damage");
               } else if (m.type === "elite") {
                 spawnItem(m.x, m.y, "upgrade");
-              } else if (m.type === "shooter" && randItem < 0.05) { // 2% 확률로 +1 아이템은 중급(슈터)몬스터에만 드롭
+              } else if (m.type === "shooter" && randItem < 0.02) { // +1 아이템 중급(슈터)몬스터 2% 드롭
                 spawnItem(m.x, m.y, "upgrade");
               } else if (randItem < 0.155) { 
                 spawnItem(m.x, m.y);
