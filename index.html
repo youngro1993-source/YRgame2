@@ -55,7 +55,7 @@
       background: rgba(2, 6, 23, 0.95);
       backdrop-filter: blur(8px);
       z-index: 10;
-      padding: 10px 16px;
+      padding: 8px 14px;
       text-align: center;
       overflow: hidden;
     }
@@ -71,138 +71,54 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 2px;
+      order: 1;
     }
 
     .coin-badge {
       background: rgba(250, 204, 21, 0.15);
       border: 1px solid rgba(250, 204, 21, 0.5);
       color: #facc15;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 20px;
       font-weight: bold;
-      font-size: 0.78rem;
+      font-size: 0.73rem;
       display: inline-block;
     }
 
     .coin-info-box {
-      font-size: 0.58rem;
+      font-size: 0.53rem;
       color: #facc15;
-      margin-top: 2px;
+      margin-top: 1px;
       opacity: 0.9;
       text-align: right;
-      line-height: 1.2;
+      line-height: 1.1;
+    }
+
+    /* 타이틀 및 상점/출격 버튼 그룹 (Flex order를 이용해 최상단 강제 고정) */
+    .title-button-group {
+      order: 2;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h1 {
-      font-size: 1.25rem;
-      margin-top: 2px;
-      margin-bottom: 4px;
+      font-size: 1.15rem;
+      margin-top: 1px;
+      margin-bottom: 3px;
       color: #38bdf8;
       text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
       word-break: keep-all;
     }
 
-    /* 패치 노트 버튼 (맨 아래 배치용 스타일) */
-    .btn-update {
-      background: transparent !important;
-      border: 1.2px solid #38bdf8 !important;
-      color: #38bdf8 !important;
-      font-size: 0.7rem !important;
-      padding: 3px 12px !important;
-      margin-top: 2px !important;
-      margin-bottom: 2px !important;
-      border-radius: 6px !important;
-      box-shadow: none !important;
-    }
-    .btn-update:active {
-      background: rgba(56, 189, 248, 0.15) !important;
-    }
-
-    .info-box {
-      width: 100%;
-      max-width: 440px;
-      background: rgba(30, 41, 59, 0.85);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      border-radius: 8px;
-      padding: 4px 8px;
-      margin-bottom: 4px;
-      font-size: 0.68rem;
-      text-align: left;
-      line-height: 1.2;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
-    }
-
-    .info-box h4 {
-      color: #facc15;
-      margin-bottom: 2px;
-      text-align: center;
-      font-size: 0.72rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 1px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 2px;
-      color: #f1f5f9;
-    }
-
-    .badge {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      color: #000;
-      font-weight: bold;
-      text-align: center;
-      line-height: 15px;
-      font-size: 0.55rem;
-      margin-right: 5px;
-      flex-shrink: 0;
-    }
-
-    .badge.upgrade { background: #eab308; }
-    .badge.damage { background: #ef4444; color: #fff; }
-    .badge.laser { background: #22c55e; }
-    .badge.saw { background: #c084fc; }
-    .badge.shotgun { background: #f97316; }
-    .badge.heart { background: #ec4899; color: #fff; }
-    .badge.coin { background: #facc15; color: #000; }
-
-    input[type="text"] {
-      width: 75%;
-      max-width: 200px;
-      padding: 5px;
-      border: 1.5px solid #3b82f6;
-      border-radius: 6px;
-      background: #1e293b;
-      color: #fff;
-      font-size: 0.8rem;
-      text-align: center;
-      outline: none;
-      margin-bottom: 2px;
-    }
-
-    input[type="text"]:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 6px rgba(96, 165, 250, 0.5);
-    }
-
-    .warning-text {
-      color: #f87171;
-      font-size: 0.65rem;
-      margin-bottom: 2px;
-      min-height: 0.8em;
-    }
-
     .btn-container {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
       width: 100%;
-      max-width: 440px;
-      margin-bottom: 4px;
+      max-width: 320px;
+      margin-bottom: 2px;
     }
 
     button.btn {
@@ -213,7 +129,7 @@
       color: #fff;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
       transition: transform 0.1s, background 0.2s;
@@ -226,6 +142,155 @@
     .btn-shop {
       background: linear-gradient(135deg, #d97706, #b45309) !important;
       box-shadow: 0 3px 8px rgba(217, 119, 6, 0.4) !important;
+    }
+
+    .info-box {
+      order: 3;
+      width: 100%;
+      max-width: 440px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 6px;
+      padding: 3px 8px;
+      margin-bottom: 2px;
+      font-size: 0.63rem;
+      text-align: left;
+      line-height: 1.2;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .info-box h4 {
+      color: #facc15;
+      margin-bottom: 1px;
+      text-align: center;
+      font-size: 0.68rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 1px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1px;
+      color: #f1f5f9;
+    }
+
+    .badge {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      color: #000;
+      font-weight: bold;
+      text-align: center;
+      line-height: 14px;
+      font-size: 0.52rem;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    .badge.upgrade { background: #eab308; }
+    .badge.damage { background: #ef4444; color: #fff; }
+    .badge.laser { background: #22c55e; }
+    .badge.saw { background: #c084fc; }
+    .badge.shotgun { background: #f97316; }
+    .badge.heart { background: #ec4899; color: #fff; }
+    .badge.coin { background: #facc15; color: #000; }
+
+    .ranking-container {
+      order: 4;
+      width: 100%;
+      max-width: 440px;
+      margin-bottom: 2px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 6px;
+      padding: 3px 6px;
+    }
+
+    .ranking-container h3 {
+      font-size: 0.68rem;
+      color: #f87171;
+      margin-bottom: 2px;
+    }
+
+    .ranking-scroll-box {
+      max-height: 75px;
+      overflow-y: auto;
+      touch-action: pan-y;
+    }
+
+    .ranking-scroll-box::-webkit-scrollbar { width: 4px; }
+    .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.58rem;
+    }
+
+    th, td {
+      padding: 1px 2px;
+      border-bottom: 1px solid #334155;
+      text-align: center;
+    }
+
+    th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); }
+
+    /* 하단 영역 (닉네임 입력, 패치 노트 버튼, 크레디트 - Flex order로 최하단 고정) */
+    .bottom-action-group {
+      order: 5;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 75%;
+      max-width: 200px;
+      padding: 4px;
+      border: 1.5px solid #3b82f6;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #fff;
+      font-size: 0.78rem;
+      text-align: center;
+      outline: none;
+      margin-bottom: 2px;
+    }
+
+    input[type="text"]:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 6px rgba(96, 165, 250, 0.5);
+    }
+
+    .warning-text {
+      color: #f87171;
+      font-size: 0.62rem;
+      margin-bottom: 2px;
+      min-height: 0.8em;
+    }
+
+    .btn-update {
+      background: transparent !important;
+      border: 1.2px solid #38bdf8 !important;
+      color: #38bdf8 !important;
+      font-size: 0.68rem !important;
+      padding: 3px 10px !important;
+      margin-bottom: 2px !important;
+      border-radius: 6px !important;
+      box-shadow: none !important;
+    }
+    .btn-update:active {
+      background: rgba(56, 189, 248, 0.15) !important;
+    }
+
+    .credits {
+      margin-top: 1px;
+      margin-bottom: 1px;
+      font-size: 0.58rem;
+      color: #64748b;
+      letter-spacing: 1px;
     }
 
     .top-controls {
@@ -300,30 +365,11 @@
       text-align: left;
     }
 
-    .shop-item-icon {
-      font-size: 1.8rem;
-    }
-
-    .shop-item-info {
-      flex: 1;
-    }
-
-    .shop-item-title {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #facc15;
-    }
-
-    .shop-item-desc {
-      font-size: 0.72rem;
-      color: #94a3b8;
-      margin: 2px 0;
-    }
-
-    .shop-item-status {
-      font-size: 0.72rem;
-      color: #38bdf8;
-    }
+    .shop-item-icon { font-size: 1.8rem; }
+    .shop-item-info { flex: 1; }
+    .shop-item-title { font-size: 0.85rem; font-weight: bold; color: #facc15; }
+    .shop-item-desc { font-size: 0.72rem; color: #94a3b8; margin: 2px 0; }
+    .shop-item-status { font-size: 0.72rem; color: #38bdf8; }
 
     .buy-btn {
       background: #facc15;
@@ -409,52 +455,6 @@
       left: 0;
       font-weight: bold;
     }
-
-    .credits {
-      margin-top: 2px;
-      margin-bottom: 2px;
-      font-size: 0.6rem;
-      color: #64748b;
-      letter-spacing: 1px;
-    }
-
-    .ranking-container {
-      width: 100%;
-      max-width: 440px;
-      margin-bottom: 3px;
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: 8px;
-      padding: 5px;
-    }
-
-    .ranking-container h3 {
-      font-size: 0.7rem;
-      color: #f87171;
-      margin-bottom: 2px;
-    }
-
-    .ranking-scroll-box {
-      max-height: 80px;
-      overflow-y: auto;
-      touch-action: pan-y;
-    }
-
-    .ranking-scroll-box::-webkit-scrollbar { width: 4px; }
-    .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.6rem;
-    }
-
-    th, td {
-      padding: 1px 2px;
-      border-bottom: 1px solid #334155;
-      text-align: center;
-    }
-
-    th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); }
 
     #controlArea {
       position: absolute;
@@ -562,7 +562,7 @@
     <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
       <div class="top-status-bar">
-        <div style="font-size:0.72rem; color:#94a3b8; margin-top: 2px;">은하 수호대 본부</div>
+        <div style="font-size:0.68rem; color:#94a3b8; margin-top: 1px;">은하 수호대 본부</div>
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div class="coin-badge">🪙 <span id="mainCoinDisplay">0</span></div>
           <div class="coin-info-box">
@@ -572,11 +572,10 @@
         </div>
       </div>
 
-      <div>
-        <h1>은하 수호대<br><span style="font-size:0.85rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
-        
-        <!-- [재배치 완료] 타이틀 바로 아래에 상점과 출격하기 버튼 배치 -->
-        <div class="btn-container" style="margin: 0 auto; max-width: 320px;">
+      <!-- [강제 고정 1] 타이틀 바로 아래 상점/출격 버튼 -->
+      <div class="title-button-group">
+        <h1>은하 수호대<br><span style="font-size:0.82rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
+        <div class="btn-container">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
           <button class="btn" onclick="openStoryScreen()">🚀 출격하기</button>
         </div>
@@ -613,15 +612,13 @@
         </div>
       </div>
 
-      <div>
+      <!-- [강제 고정 2] 닉네임 입력 및 맨 아래 패치 노트 버튼 / 크레디트 -->
+      <div class="bottom-action-group">
         <input type="text" id="nicknameInput" placeholder="닉네임 입력 (필수)" maxlength="8" />
         <div id="nicknameWarning" class="warning-text"></div>
-        
-        <!-- [재배치 완료] 패치 노트 버튼을 최하단 영역으로 이동 -->
         <button class="btn btn-update" onclick="toggleModal('updateModal', true)">📜 패치 노트 및 정보 보기</button>
+        <div class="credits">[만든이 : YYR]</div>
       </div>
-      
-      <div class="credits">[만든이 : YYR]</div>
     </div>
 
     <!-- 상점 모달 -->
@@ -684,10 +681,10 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v4.7.0 (버튼 완벽 재배치 반영)</div>
+            <div class="version-title">v4.9.0 (Flex Order 레이아웃 강제 고정)</div>
             <ul>
-              <li><b>UI 구조 개선</b>: 상점/출격 버튼을 타이틀 아래로 올리고, 패치 노트 버튼을 맨 아래로 정확히 재배치 완료.</li>
-              <li><b>상점 가격 안정화</b>: 고기 및 사과 가격 160코인 인하 적용 유지.</li>
+              <li><b>UI 구조 개편 완료</b>: CSS Flex `order` 속성을 적용하여 코드 순서와 무관하게 타이틀 바로 아래 상점/출격 버튼, 최하단 패치 노트 배치를 완벽하게 고정함.</li>
+              <li><b>상점 가격 안정화</b>: 고기 및 사과 160코인 할인 적용 유지.</li>
             </ul>
           </div>
         </div>
