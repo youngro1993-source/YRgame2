@@ -683,13 +683,13 @@
       transition: transform 0.05s linear;
     }
 
-    /* 4방향 화살표 패드 스타일 (좌우 간격 및 크기를 더 넓혀 조작성 극대화) */
+    /* 4방향 화살표 패드 스타일 (좌우 크기 및 간격 확장 적용) */
     .dpad-container {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      width: 210px;
+      width: 230px;
       height: 125px;
       display: block;
       z-index: 7;
@@ -714,10 +714,10 @@
       color: #fff;
       transform: scale(0.95);
     }
-    #dpadUp { top: 0px; left: 73px; width: 64px; height: 40px; }
-    #dpadDown { bottom: 0px; left: 73px; width: 64px; height: 40px; }
-    #dpadLeft { top: 43px; left: 0px; width: 66px; height: 40px; }
-    #dpadRight { top: 43px; right: 0px; width: 66px; height: 40px; }
+    #dpadUp { top: 0px; left: 81px; width: 68px; height: 40px; }
+    #dpadDown { bottom: 0px; left: 81px; width: 68px; height: 40px; }
+    #dpadLeft { top: 43px; left: 0px; width: 72px; height: 40px; }
+    #dpadRight { top: 43px; right: 0px; width: 72px; height: 40px; }
 
     #joystickStatusNotice {
       position: absolute;
@@ -856,7 +856,7 @@
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.1.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.2.0 업데이트)</button>
       </div>
 
     </div>
@@ -1088,12 +1088,21 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v7.2.0 (스테이지 및 보스 시스템 개편, 조작성 강화)</div>
+            <ul>
+              <li><b>스테이지 클리어형 구조 도입</b>: 무한 킬 수 누적 방식에서 벗어나, 각 스테이지별 일반 몬스터 40마리를 소탕하면 최종 보스가 등장하며 보스 격파 시 다음 스테이지로 확실하게 진입합니다.</li>
+              <li><b>보스 등장 주기 밸런스 조정</b>: 보스가 지나치게 자주 튀어나오던 호흡 문제를 해결하여 일반 스테이지의 파밍과 전투를 충분히 즐길 수 있도록 개편되었습니다.</li>
+              <li><b>조작성 대폭 강화</b>: 4방향 화살표 패드의 좌우 버튼 크기와 간격이 더욱 넓고 편안하게 최적화되었습니다.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
             <div class="version-title">v7.1.0 (보스 난이도 개편 및 조작 설정 추가)</div>
             <ul>
               <li><b>보스 난이도 완화</b>: 보스의 기본 체력 및 스테이지별 체력 성장 배율이 낮아져 후반부 피로도가 대폭 줄었습니다.</li>
               <li><b>탄막 및 패턴 밸런스 조정</b>: 보스의 탄환 속도와 밀도가 완화되고, 패턴 전환 딜레이가 늘어나 회피와 공략이 수월해졌습니다.</li>
               <li><b>체력 회복(하트) 확률 상향</b>: 보스 처치 시 하트 드롭 확률이 25%로 대폭 상향되었습니다.</li>
-              <li><b>메인 화면 설정 메뉴 추가</b>: 설정에서 음소거 설정 및 **조이스틱 / 화살표 4방향 조작** 방식을 직접 선택할 수 있습니다.</li>
+              <li><b>메인 화면 설정 메뉴 추가</b>: 설정에서 음소거 설정 및 조이스틱 / 화살표 4방향 조작 방식을 직접 선택할 수 있습니다.</li>
             </ul>
           </div>
 
@@ -1199,7 +1208,7 @@
         <div id="joystickKnob"></div>
       </div>
 
-      <!-- 4방향 화살표 패드 영역 (좌우 간격 및 크기 최적화) -->
+      <!-- 4방향 화살표 패드 영역 (좌우 크기 및 간격 확장 적용) -->
       <div id="dpadContainer" class="dpad-container">
         <div id="dpadUp" class="dpad-btn">▲</div>
         <div id="dpadLeft" class="dpad-btn">◀</div>
@@ -1217,7 +1226,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v7.1.0";
+    var currentVersionKey = "v7.2.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -2951,8 +2960,8 @@
     }
 
     function spawnMonster() {
-      if (boss) return; // 보스가 소환된 상태에서는 일반 적 생성 중지
-      if (stageMonsterKills >= targetStageKills) return; // 스테이지 목표 킬 수를 채웠으면 생성 중지
+      if (boss) return;
+      if (stageMonsterKills >= targetStageKills) return;
 
       var rand = Math.random();
       var width = 32;
@@ -3210,7 +3219,6 @@
         nextEliteKillTarget += 15;
       }
 
-      // 스테이지 목표 킬 수를 채웠고 아직 보스가 안 나왔다면 보스 소환!
       if (!boss && stageMonsterKills >= targetStageKills && monsters.length === 0) {
         spawnBoss();
       }
@@ -3400,8 +3408,8 @@
 
               boss = null;
               stage++;
-              stageMonsterKills = 0; // 다음 스테이즈 킬 카운트 리셋
-              targetStageKills += 10; // 다음 스테이지는 목표 킬수가 조금씩 늘어남 (선택사항)
+              stageMonsterKills = 0; 
+              targetStageKills += 10; 
               break;
             }
           }
