@@ -646,7 +646,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 205px; 
+      height: 215px; 
       background: rgba(15, 23, 42, 0.95);
       border-top: 2px solid rgba(56, 189, 248, 0.5);
       backdrop-filter: blur(8px);
@@ -656,7 +656,7 @@
 
     #joystickArea {
       position: absolute;
-      bottom: 45px; 
+      bottom: 48px; 
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -683,14 +683,14 @@
       transition: transform 0.05s linear;
     }
 
-    /* 4방향 화살표 패드 스타일 (간격을 더 넓히고 크기를 키워 조작성 향상) */
+    /* 4방향 화살표 패드 스타일 (좌우 간격 및 크기를 더 넓혀 조작성 극대화) */
     .dpad-container {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      width: 190px;
-      height: 120px;
+      width: 210px;
+      height: 125px;
       display: block;
       z-index: 7;
       pointer-events: auto;
@@ -700,7 +700,7 @@
       background: rgba(30, 41, 59, 0.9);
       border: 2px solid rgba(56, 189, 248, 0.8);
       color: #38bdf8;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: bold;
       display: flex;
       justify-content: center;
@@ -714,10 +714,10 @@
       color: #fff;
       transform: scale(0.95);
     }
-    #dpadUp { top: 0px; left: 63px; width: 64px; height: 38px; }
-    #dpadDown { bottom: 0px; left: 63px; width: 64px; height: 38px; }
-    #dpadLeft { top: 41px; left: 0px; width: 60px; height: 38px; }
-    #dpadRight { top: 41px; right: 0px; width: 60px; height: 38px; }
+    #dpadUp { top: 0px; left: 73px; width: 64px; height: 40px; }
+    #dpadDown { bottom: 0px; left: 73px; width: 64px; height: 40px; }
+    #dpadLeft { top: 43px; left: 0px; width: 66px; height: 40px; }
+    #dpadRight { top: 43px; right: 0px; width: 66px; height: 40px; }
 
     #joystickStatusNotice {
       position: absolute;
@@ -1199,7 +1199,7 @@
         <div id="joystickKnob"></div>
       </div>
 
-      <!-- 4방향 화살표 패드 영역 (간격 및 크기 최적화) -->
+      <!-- 4방향 화살표 패드 영역 (좌우 간격 및 크기 최적화) -->
       <div id="dpadContainer" class="dpad-container">
         <div id="dpadUp" class="dpad-btn">▲</div>
         <div id="dpadLeft" class="dpad-btn">◀</div>
@@ -1961,7 +1961,7 @@
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
       if (player) {
-        player.y = canvas.height - player.height - 205;
+        player.y = canvas.height - player.height - 215;
       }
       initStars();
     }
@@ -1976,8 +1976,11 @@
     var gameTime = 0;
     var killCount = 0;
     var bossKillCount = 0;
-    var nextBossKillTarget = 20; 
+    
+    var stageMonsterKills = 0;
+    var targetStageKills = 40; 
     var nextEliteKillTarget = 15;
+
     var bulletCount = 1;
     var playerDamage = 1;
 
@@ -2000,8 +2003,11 @@
       var actualDroneDmg = 1 + droneDmgBonus;
       hudDmgNotice.textContent = playerDamage;
       hudDroneDmgNotice.textContent = actualDroneDmg;
+      
+      var stageProgressText = boss ? "보스전 진행중!" : ("처치: " + stageMonsterKills + "/" + targetStageKills);
+
       joystickStatusNotice.innerHTML = 
-        '<span id="hudStage" style="color:#38bdf8;">Stage ' + stage + '</span> | ' +
+        '<span id="hudStage" style="color:#38bdf8;">Stage ' + stage + ' (' + stageProgressText + ')</span> | ' +
         '<span id="hudLife">' + (player.lives >= 5 ? ("❤️ x" + player.lives) : "❤️".repeat(Math.max(0, player.lives))) + '</span> | ' +
         '<span id="hudCoins">🪙 ' + userCoins + '</span> | ' +
         '<span id="hudScore">Score: ' + score + '</span><br>' +
@@ -2034,7 +2040,6 @@
     var lastShootTime = 0;
     var shootInterval = 100 * 1.35;
 
-    // 조작 변수
     var joystickAxisX = 0; 
     var joystickAxisY = 0; 
     var dpadUpPressed = false;
@@ -2337,7 +2342,6 @@
       }
     }
 
-    // 조이스틱 터치/마우스 핸들러
     var joystickArea = document.getElementById("joystickArea");
     var joystickKnob = document.getElementById("joystickKnob");
     var joystickTouchId = null;
@@ -2420,7 +2424,6 @@
       }
     });
 
-    // 4방향 화살표 패드(D-Pad) 이벤트 바인딩
     function setupDpadButton(btnId, direction) {
       var btn = document.getElementById(btnId);
       
@@ -2895,7 +2898,7 @@
       if (!soundMuted) startBGM();
 
       player.x = canvas.width / 2 - player.width / 2;
-      player.y = canvas.height - player.height - 205;
+      player.y = canvas.height - player.height - 215;
       player.lives = 3 + shopHeartBonusLife;
       player.invincibleTimer = 0;
       player.tilt = 0;
@@ -2911,7 +2914,8 @@
       bossKillCount = 0;
       sessionCoinsEarned = 0;
 
-      nextBossKillTarget = 20; 
+      stageMonsterKills = 0;
+      targetStageKills = 40; 
       nextEliteKillTarget = 15;
       bulletCount = 1;
       gameTime = 0;
@@ -2947,6 +2951,9 @@
     }
 
     function spawnMonster() {
+      if (boss) return; // 보스가 소환된 상태에서는 일반 적 생성 중지
+      if (stageMonsterKills >= targetStageKills) return; // 스테이지 목표 킬 수를 채웠으면 생성 중지
+
       var rand = Math.random();
       var width = 32;
       var height = 32;
@@ -2991,6 +2998,7 @@
     }
 
     function spawnEliteMonster() {
+      if (boss || stageMonsterKills >= targetStageKills) return;
       triggerWarning("ELITE MONSTER!");
       var width = 40;
       var height = 40;
@@ -3154,7 +3162,6 @@
       var originY = boss.y + boss.height / 2;
       createExplosion(originX, originY, "#ef4444", 30);
 
-      // 보스 폭발 시 사방으로 뿌려지는 총알 개수 대폭 축소 (피하기 쉽도록 개선)
       var count = 6 + Math.min(2, Math.floor((stage - 1) / 2)); 
 
       for (var i = 0; i < count; i++) {
@@ -3198,14 +3205,14 @@
         spawnMonster();
       }
 
-      if (killCount >= nextEliteKillTarget) {
+      if (killCount >= nextEliteKillTarget && !boss) {
         spawnEliteMonster();
         nextEliteKillTarget += 15;
       }
 
-      if (!boss && killCount >= nextBossKillTarget) {
+      // 스테이지 목표 킬 수를 채웠고 아직 보스가 안 나왔다면 보스 소환!
+      if (!boss && stageMonsterKills >= targetStageKills && monsters.length === 0) {
         spawnBoss();
-        nextBossKillTarget += 20;
       }
 
       var moveX = 0;
@@ -3231,7 +3238,7 @@
       player.y += moveY * player.speed;
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-      var maxPlayerY = canvas.height - player.height - 205;
+      var maxPlayerY = canvas.height - player.height - 215;
       player.y = Math.max(0, Math.min(maxPlayerY, player.y));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
@@ -3393,6 +3400,8 @@
 
               boss = null;
               stage++;
+              stageMonsterKills = 0; // 다음 스테이즈 킬 카운트 리셋
+              targetStageKills += 10; // 다음 스테이지는 목표 킬수가 조금씩 늘어남 (선택사항)
               break;
             }
           }
@@ -3525,6 +3534,7 @@
               createExplosion(m.x + m.width / 2, m.y + m.height / 2, m.type === "elite" ? "#0284c7" : "#f97316", m.type === "elite" ? 20 : 10);
               killCount++;
               totalMonsterKills++; 
+              stageMonsterKills++;
 
               if (killCount > 0 && killCount % 100 === 0) {
                 userCoins += 10;
@@ -3596,7 +3606,7 @@
         drawEnemyBullet(ctx, enemyBullets[i]);
       }
 
-      for (var i = 0; i < items.length; i++) {
+      for (var i = items.length - 1; i >= 0; i--) {
         drawItem(ctx, items[i]);
       }
 
