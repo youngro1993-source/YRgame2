@@ -1987,7 +1987,7 @@
     var bossKillCount = 0;
     
     var stageMonsterKills = 0;
-    var targetStageKills = 40; 
+    var targetStageKills = 40; // 40마리 고정
     var nextEliteKillTarget = 15;
 
     var bulletCount = 1;
@@ -2924,7 +2924,7 @@
       sessionCoinsEarned = 0;
 
       stageMonsterKills = 0;
-      targetStageKills = 40; 
+      targetStageKills = 40; // 40마리 고정
       nextEliteKillTarget = 15;
       bulletCount = 1;
       gameTime = 0;
@@ -3409,7 +3409,7 @@
               boss = null;
               stage++;
               stageMonsterKills = 0; 
-              targetStageKills += 10; 
+              targetStageKills = 40; // 40마리 고정 유지 (증가하지 않음)
               break;
             }
           }
