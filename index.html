@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>은하 수호대: YOON 행성을 지켜라</title>
-
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body, html { width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; background-color: #050515; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
@@ -30,7 +29,6 @@
     h1 { font-size: 0.95rem; margin-top: 1px; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
     .moon-container { display: flex; flex-direction: column; align-items: center; margin: 1px auto 2px auto; position: relative; width: 100%; max-width: 440px; }
-    
     @keyframes heartbeat {
       0% { transform: scale(1); }
       15% { transform: scale(1.08); }
@@ -39,7 +37,6 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-
     .moon-artwork { width: 40px; height: 40px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 12px rgba(250, 204, 21, 0.4), inset -5px -5px 10px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
     .moon-artwork::before { content: ""; position: absolute; top: 8px; left: 8px; width: 9px; height: 9px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3); }
@@ -50,27 +47,19 @@
     .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.48rem; font-weight: bold; padding: 2px 5px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
     .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; }
-    button.btn { flex: 1; padding: 7px 10px; font-size: 0.78rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); transition: transform 0.1s, background 0.2s; }
+    button.btn { flex: 1; padding: 7px 10px; font-size: 0.78rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); }
     button.btn:active { transform: scale(0.95); }
-    .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4) !important; }
-    .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.4) !important; }
+    .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
+    .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
+    @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-    @keyframes pulseEffect { 0% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); transform: scale(1); } 50% { box-shadow: 0 0 16px rgba(56, 189, 248, 0.8); transform: scale(1.02); } 100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); transform: scale(1); } }
-
-    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 4px 8px; font-size: 0.53rem; text-align: left; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 4px 8px; font-size: 0.53rem; text-align: left; }
     .info-box h4 { color: #facc15; margin-bottom: 2px; text-align: center; font-size: 0.58rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1px; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 6px; }
     .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.15; font-size: 0.5rem; }
-    
     .badge { display: inline-block; width: 12px; height: 12px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 12px; font-size: 0.45rem; margin-right: 4px; flex-shrink: 0; }
-    .badge.upgrade { background: #eab308; }
-    .badge.damage { background: #ef4444; color: #fff; }
-    .badge.laser { background: #22c55e; }
-    .badge.saw { background: #c084fc; }
-    .badge.shotgun { background: #f97316; }
-    .badge.heart { background: #ec4899; color: #fff; }
-    .badge.coin { background: #facc15; color: #000; }
+    .badge.upgrade { background: #eab308; } .badge.damage { background: #ef4444; color: #fff; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
     .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.6); border-radius: 6px; padding: 3px 6px; }
     .ranking-container h3 { font-size: 0.6rem; color: #f87171; margin-bottom: 1px; }
@@ -82,38 +71,29 @@
     th, td { padding: 1px 2px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 2px solid #38bdf8; border-radius: 8px; padding: 5px 8px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 2px solid #38bdf8; border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .welcome-text { color: #facc15; font-size: 0.62rem; font-weight: bold; min-height: 1em; }
-    input[type="text"] { width: 85%; max-width: 200px; padding: 3px 6px; border: 2px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.72rem; text-align: center; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6); }
-    input[type="text"]:focus { border-color: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.7), inset 0 2px 4px rgba(0,0,0,0.6); }
+    input[type="text"] { width: 85%; max-width: 200px; padding: 3px 6px; border: 2px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.72rem; text-align: center; outline: none; }
     .warning-text { color: #f87171; font-size: 0.55rem; min-height: 0.7em; font-weight: 600; }
     .credits { margin-top: 1px; font-size: 0.5rem; color: #64748b; letter-spacing: 1px; }
-    .btn-update { background: transparent !important; border: none !important; outline: none !important; color: #93c5fd !important; font-size: 0.53rem !important; padding: 1px 3px !important; margin: 0 !important; box-shadow: none !important; text-decoration: underline; cursor: pointer; }
-    .btn-update:active { color: #ffffff !important; }
+    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.53rem !important; text-decoration: underline; cursor: pointer; }
 
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
-    .modal-content::-webkit-scrollbar { width: 5px; }
-    .modal-content::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 3px; }
-
+    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; overflow-y: auto; }
     .modal-content h3 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 6px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
-    /* 상점 UI 2열(Grid) 배치 최적화 */
     .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
     .shop-item-icon { font-size: 1.4rem; margin-bottom: 2px; }
     .shop-item-title { font-size: 0.65rem; font-weight: bold; color: #facc15; }
-    .shop-item-desc { font-size: 0.55rem; color: #94a3b8; margin: 2px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .shop-item-status { font-size: 0.6rem; color: #38bdf8; margin-bottom: 4px; }
     .buy-btn { background: #facc15; color: #000; border: none; padding: 4px 6px; border-radius: 4px; font-weight: bold; font-size: 0.65rem; cursor: pointer; width: 100%; }
     .buy-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
-
     .shop-full-width { grid-column: span 2; display: flex; flex-direction: row; align-items: center; text-align: left; gap: 8px; }
     .shop-full-width .shop-item-icon { margin-bottom: 0; font-size: 1.8rem; }
     .shop-full-width .shop-item-info { flex: 1; }
     .shop-full-width .buy-btn { width: auto; padding: 6px 12px; }
 
-    /* 미션 UI는 기존 세로 리스트 유지 */
     .mission-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(5, 150, 105, 0.4); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; text-align: left; }
     .mission-item-info { flex: 1; }
     .mission-item-title { font-size: 0.75rem; font-weight: bold; color: #34d399; }
@@ -126,36 +106,33 @@
     .story-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 12px; text-align: left; font-size: 0.82rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 12px; }
     .story-card span.highlight { color: #facc15; font-weight: bold; }
 
-    .history-scroll-area { overflow-y: auto; padding-right: 6px; flex: 1; text-align: left; touch-action: pan-y; max-height: 300px; }
+    .history-scroll-area { overflow-y: auto; padding-right: 6px; flex: 1; text-align: left; max-height: 300px; }
     .version-block { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #334155; }
     .version-title { font-size: 0.82rem; font-weight: bold; color: #facc15; margin-bottom: 4px; }
     .history-scroll-area ul { list-style: none; font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; }
     .history-scroll-area li { margin-bottom: 4px; position: relative; padding-left: 12px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 205px; background: rgba(15, 23, 42, 0.95); border-top: 2px solid rgba(56, 189, 248, 0.4); backdrop-filter: blur(8px); pointer-events: auto; z-index: 5; }
-    #joystickArea { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 85px; height: 85px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; touch-action: none; display: flex; justify-content: center; align-items: center; z-index: 7; }
-    #joystickKnob { width: 38px; height: 38px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 10px rgba(56, 189, 248, 0.6); position: absolute; pointer-events: none; transition: transform 0.05s linear; }
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 205px; background: rgba(15, 23, 42, 0.95); border-top: 2px solid rgba(56, 189, 248, 0.4); backdrop-filter: blur(8px); z-index: 5; }
+    #joystickArea { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 85px; height: 85px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #joystickKnob { width: 38px; height: 38px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
 
     .dpad-container { position: absolute; bottom: 10px; left: 0; width: 100%; height: 90px; display: block; z-index: 6; pointer-events: none; }
-    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 14px; touch-action: none; box-shadow: 0 4px 15px rgba(0,0,0,0.6); pointer-events: auto; }
-    .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; transform: scale(0.95); }
+    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 14px; pointer-events: auto; }
+    .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
     #dpadLeft { bottom: 10px; left: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
     #dpadRight { bottom: 10px; right: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
     #dpadUp { bottom: 46px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
     #dpadDown { bottom: 4px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
 
-    #joystickStatusNotice { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 94%; padding: 4px 8px; background: rgba(2, 6, 23, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; text-align: center; font-size: 0.72rem; color: #facc15; font-weight: 600; letter-spacing: 0.5px; z-index: 8; pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); line-height: 1.4; }
+    #joystickStatusNotice { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 94%; padding: 4px 8px; background: rgba(2, 6, 23, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; text-align: center; font-size: 0.72rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.4; }
 
     .in-game-top-btns { position: absolute; top: 8px; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 10px; z-index: 9; pointer-events: none; }
-    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.7rem; font-weight: bold; padding: 5px 10px; border-radius: 6px; cursor: pointer; pointer-events: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .in-game-top-btn:active { background: rgba(56, 189, 248, 0.4); color: #fff; }
+    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.7rem; font-weight: bold; padding: 5px 10px; border-radius: 6px; pointer-events: auto; }
 
-    .result-card-box { width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; margin: 8px 0; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+    .result-card-box { width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; margin: 8px 0; text-align: left; }
     .result-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
-    .result-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .result-label { color: #94a3b8; }
-    .result-value { color: #facc15; font-weight: bold; }
+    .result-label { color: #94a3b8; } .result-value { color: #facc15; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -169,7 +146,6 @@
     </div>
 
     <div id="startScreen" class="screen">
-      
       <div class="layout-section">
         <div class="top-status-bar">
           <div style="font-size:0.6rem; color:#94a3b8;">은하 수호대 본부</div>
@@ -188,7 +164,6 @@
       </div>
 
       <div class="layout-section layout-middle">
-        
         <div class="ranking-container">
           <h3>🏆 명예의 전당 (TOP 10)</h3>
           <div class="ranking-sub-notice">※ 매주 토요일 12시 초기화 (기록당 최고 1개)</div>
@@ -230,9 +205,7 @@
             <div class="pilot-status-right">🪙 <span id="mainCoinDisplay">0</span></div>
           </div>
           <div class="pilot-status-row">
-            <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.52rem;">
-              [보조] 상태: <span id="mainDroneStatus">미장착</span>
-            </div>
+            <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.52rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
             <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.52rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
           </div>
         </div>
@@ -242,17 +215,15 @@
           <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
           <button class="btn btn-pulse" onclick="openStoryScreen()">🚀 출격하기</button>
         </div>
-
       </div>
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
         <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기</button>
       </div>
-
     </div>
 
-    <!-- 설정 모달 -->
+    <!-- 모달 창들 -->
     <div id="settingModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>⚙️ 게임 설정</h3>
@@ -266,13 +237,10 @@
             <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.7rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">통합 조작</button>
           </div>
         </div>
-        <div style="text-align: center; margin-top: 5px;">
-          <button class="btn" style="padding: 6px 20px; font-size: 0.8rem;" onclick="toggleModal('settingModal', false)">확인</button>
-        </div>
+        <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; margin-top: 5px;" onclick="toggleModal('settingModal', false)">확인</button>
       </div>
     </div>
 
-    <!-- 출석 모달 -->
     <div id="attendanceModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>📅 일일 출석 체크</h3>
@@ -282,7 +250,6 @@
       </div>
     </div>
 
-    <!-- 이벤트 모달 -->
     <div id="eventModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>🌕 행성 관리자의 선물</h3>
@@ -291,7 +258,6 @@
       </div>
     </div>
 
-    <!-- 랭커 한마디 수정 모달 -->
     <div id="editQuoteModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>💬 랭커 한마디 수정</h3>
@@ -303,171 +269,65 @@
       </div>
     </div>
 
-    <!-- 상점 UI -->
     <div id="shopModal" class="modal-overlay hidden">
       <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <h3 style="margin: 0; border: none;">🛒 수호대 상점</h3>
           <div style="font-weight: bold; color: #facc15; font-size: 0.8rem;">🪙 <span id="shopCoinDisplay">0</span></div>
         </div>
-
         <div class="shop-grid">
-          <div class="shop-item-card">
-            <div class="shop-item-icon">🍖</div>
-            <div class="shop-item-title">고기 (데미지 +1)</div>
-            <div class="shop-item-status">현재: <span id="shopMeatDmg">1</span></div>
-            <button class="buy-btn" id="buyMeatBtn" onclick="buyShopItem('meat')"><span id="meatCostText">160</span> 코인</button>
-          </div>
-          <div class="shop-item-card">
-            <div class="shop-item-icon">🍎</div>
-            <div class="shop-item-title">사과 (연사 증가)</div>
-            <div class="shop-item-status">현재: <span id="shopAppleSpeed">135</span>ms</div>
-            <button class="buy-btn" id="buyAppleBtn" onclick="buyShopItem('apple')"><span id="appleCostText">160</span> 코인</button>
-          </div>
-          <div class="shop-item-card">
-            <div class="shop-item-icon">🍪</div>
-            <div class="shop-item-title">과자 (최대체력 +1)</div>
-            <div class="shop-item-status">현재: <span id="shopHeartLife">3</span></div>
-            <button class="buy-btn" id="buyHeartBtn" onclick="buyShopItem('heart')"><span id="heartCostText">160</span> 코인</button>
-          </div>
-          <div class="shop-item-card">
-            <div class="shop-item-icon">🍬</div>
-            <div class="shop-item-title">사탕 (기체속도 +0.2)</div>
-            <div class="shop-item-status">현재: <span id="shopCandySpeed">2.0</span></div>
-            <button class="buy-btn" id="buyCandyBtn" onclick="buyShopItem('candy')"><span id="candyCostText">160</span> 코인</button>
-          </div>
-          <div class="shop-item-card">
-            <div class="shop-item-icon">🧲</div>
-            <div class="shop-item-title">자석 (범위 30증가)</div>
-            <div class="shop-item-status">현재 범위: <span id="shopMagnetRangeText">0</span></div>
-            <button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button>
-          </div>
-          
-          <div class="shop-item-card shop-full-width">
-            <div class="shop-item-icon">🛸</div>
-            <div class="shop-item-info">
-              <div class="shop-item-title">보조기체 장착</div>
-              <div class="shop-item-desc">좌우 보조기체 2대 추가</div>
-            </div>
-            <button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button>
-          </div>
-          <div class="shop-item-card" id="droneDmgCard" style="display: none;">
-            <div class="shop-item-icon">🔋</div>
-            <div class="shop-item-title">보조 데미지 +1</div>
-            <div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div>
-            <button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button>
-          </div>
-          <div class="shop-item-card" id="droneSpeedCard" style="display: none;">
-            <div class="shop-item-icon">⚙️</div>
-            <div class="shop-item-title">보조 연사 강화</div>
-            <div class="shop-item-status">현재: <span id="shopDroneSpeedText">350</span>ms</div>
-            <button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button>
-          </div>
-          
-          <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);">
-            <div class="shop-item-icon">🔄</div>
-            <div class="shop-item-info">
-              <div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div>
-              <div class="shop-item-desc">모든 강화 환불 (비용 2000코인 차감)</div>
-              <div class="shop-item-status" style="color:#facc15;">환불예상: <span id="shopRefundExpected">0</span> 코인</div>
-            </div>
-            <button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff;" onclick="buyShopItem('reset')">2000 코인</button>
-          </div>
+          <div class="shop-item-card"><div class="shop-item-icon">🍖</div><div class="shop-item-title">고기 (데미지 +1)</div><div class="shop-item-status">현재: <span id="shopMeatDmg">1</span></div><button class="buy-btn" id="buyMeatBtn" onclick="buyShopItem('meat')"><span id="meatCostText">160</span> 코인</button></div>
+          <div class="shop-item-card"><div class="shop-item-icon">🍎</div><div class="shop-item-title">사과 (연사 증가)</div><div class="shop-item-status">현재: <span id="shopAppleSpeed">135</span>ms</div><button class="buy-btn" id="buyAppleBtn" onclick="buyShopItem('apple')"><span id="appleCostText">160</span> 코인</button></div>
+          <div class="shop-item-card"><div class="shop-item-icon">🍪</div><div class="shop-item-title">과자 (최대체력 +1)</div><div class="shop-item-status">현재: <span id="shopHeartLife">3</span></div><button class="buy-btn" id="buyHeartBtn" onclick="buyShopItem('heart')"><span id="heartCostText">160</span> 코인</button></div>
+          <div class="shop-item-card"><div class="shop-item-icon">🍬</div><div class="shop-item-title">사탕 (기체속도 +0.2)</div><div class="shop-item-status">현재: <span id="shopCandySpeed">2.0</span></div><button class="buy-btn" id="buyCandyBtn" onclick="buyShopItem('candy')"><span id="candyCostText">160</span> 코인</button></div>
+          <div class="shop-item-card"><div class="shop-item-icon">🧲</div><div class="shop-item-title">자석 (범위 30증가)</div><div class="shop-item-status">현재 범위: <span id="shopMagnetRangeText">0</span></div><button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button></div>
+          <div class="shop-item-card shop-full-width"><div class="shop-item-icon">🛸</div><div class="shop-item-info"><div class="shop-item-title">보조기체 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">좌우 보조기체 2대 추가</div></div><button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button></div>
+          <div class="shop-item-card" id="droneDmgCard" style="display: none;"><div class="shop-item-icon">🔋</div><div class="shop-item-title">보조 데미지 +1</div><div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div><button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button></div>
+          <div class="shop-item-card" id="droneSpeedCard" style="display: none;"><div class="shop-item-icon">⚙️</div><div class="shop-item-title">보조 연사 강화</div><div class="shop-item-status">현재: <span id="shopDroneSpeedText">350</span>ms</div><button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button></div>
+          <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);"><div class="shop-item-icon">🔄</div><div class="shop-item-info"><div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div><div class="shop-item-status" style="color:#facc15; margin:0;">환불예상: <span id="shopRefundExpected">0</span> 코인</div></div><button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff; width:auto; padding:6px 12px;" onclick="buyShopItem('reset')">2000 코인</button></div>
         </div>
-
-        <div style="text-align: center; margin-top: auto;">
-          <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; width: 100%;" onclick="toggleModal('shopModal', false)">닫기</button>
-        </div>
+        <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; width: 100%; margin-top: auto;" onclick="toggleModal('shopModal', false)">닫기</button>
       </div>
     </div>
 
-    <!-- 미션 UI -->
     <div id="missionModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3 style="margin-bottom: 8px;">📋 무한 반복 미션</h3>
-        <div class="mission-item-card">
-          <div class="mission-item-info">
-            <div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div>
-            <div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div>
-            <div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div>
-          </div>
-          <button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button>
-        </div>
-        <div class="mission-item-card">
-          <div class="mission-item-info">
-            <div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div>
-            <div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div>
-            <div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div>
-          </div>
-          <button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button>
-        </div>
-        <div class="mission-item-card">
-          <div class="mission-item-info">
-            <div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div>
-            <div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div>
-            <div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div>
-          </div>
-          <button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button>
-        </div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div><div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div></div><button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button></div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
         <button class="btn" style="margin-top: 8px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
     </div>
 
-    <!-- 스토리(출격) UI -->
     <div id="storyModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>🌌 윤(YOON) 행성의 위기</h3>
-        <div class="story-card">
-          서기 2140년, <span class="highlight">'YOON(윤)'</span> 행성에 외계 함대가 침공했습니다.<br><br>
-          유일한 희망인 <span class="highlight" id="storyPilotName">Pilot</span> 파일럿!<br>적들의 공습을 뚫고 행성의 평화를 되찾아주세요!
-        </div>
-        <div style="text-align: center; margin-bottom: 10px;">
-          <label style="font-size: 0.65rem; color: #facc15;">💬 TOP 10 달성 시 보일 한마디 미리 입력</label>
-          <input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 수호자다!" maxlength="25" style="width: 100%; max-width: 280px; margin-top: 4px;" />
-        </div>
+        <div class="story-card">서기 2140년, <span class="highlight">'YOON(윤)'</span> 행성에 외계 함대가 침공했습니다.<br><br>유일한 희망인 <span class="highlight" id="storyPilotName">Pilot</span> 파일럿!<br>적들의 공습을 뚫고 행성의 평화를 되찾아주세요!</div>
+        <div style="text-align: center; margin-bottom: 10px;"><label style="font-size: 0.65rem; color: #facc15;">💬 TOP 10 달성 시 보일 한마디 미리 입력</label><input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 수호자다!" maxlength="25" style="width: 100%; max-width: 280px; margin-top: 4px;" /></div>
         <button class="btn btn-pulse" onclick="startGame()">🚀 전투 개시!</button>
       </div>
     </div>
 
-    <!-- 패치 내역 UI -->
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block">
-            <div class="version-title">v7.8.0 (완전판 최적화 및 보스 패턴 개선)</div>
-            <ul>
-              <li><b>보스 돌진 완화</b>: 보스가 연속 돌진을 자제하여 회피 기회가 늘어납니다.</li>
-              <li><b>보스 출현 최적화</b>: 보스 출현 시 모든 잔여 몹과 총알이 깔끔하게 제거됩니다.</li>
-              <li><b>중급몹 체력 스케일링</b>: 스테이지 비례 엘리트 몹 체력이 대폭 상승합니다.</li>
-              <li><b>자석 아이템 상점 추가</b>: 근처 아이템을 끌어당기는 기능이 도입되었습니다.</li>
-              <li><b>상점 UI 개편 및 텍스트 정비</b>: 스크롤이 축소되고 시인성이 강화되었습니다.</li>
-              <li><b>탄환 캡 적용</b>: 탄환 최대치(x6) 도달 시 한글 표기 및 추가 드롭이 제한됩니다.</li>
-              <li><b>달 애니메이션</b>: 메인 화면의 달이 두근두근 살아 숨쉽니다!</li>
-            </ul>
-          </div>
+          <div class="version-block"><div class="version-title">v7.8.1 (랭킹 안정화 패치)</div><ul><li>랭킹 로딩 지연 및 DOM 에러 원인 완벽 보완</li><li>데이터 연동 실패 시 안내 문구 즉시 출력</li></ul></div>
         </div>
-        <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;">
-          <input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;">
-          <label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label>
-        </div>
+        <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
       </div>
     </div>
 
-    <!-- 일시정지 UI -->
     <div id="pauseModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>⏸️ PAUSED</h3>
         <p style="margin-top: 15px; font-size: 1rem;" id="pauseText">게임이 일시정지 되었습니다.</p>
-        <div style="margin-top: 20px;" id="pauseBtnGroup">
-          <button class="btn" onclick="resumeGameWithCountdown()">계속 하기</button>
-          <button class="btn" style="background: linear-gradient(135deg, #475569, #334155); margin-top: 8px;" onclick="quitGame()">게임 종료</button>
-        </div>
+        <div style="margin-top: 20px;" id="pauseBtnGroup"><button class="btn" onclick="resumeGameWithCountdown()">계속 하기</button><button class="btn" style="background: linear-gradient(135deg, #475569, #334155); margin-top: 8px;" onclick="quitGame()">게임 종료</button></div>
       </div>
     </div>
 
-    <!-- 게임오버 UI -->
     <div id="rankScreen" class="screen hidden" style="justify-content: center; overflow-y: auto;">
       <h1>GAME OVER</h1>
       <div class="result-card-box">
@@ -478,32 +338,18 @@
         <div class="result-row"><span class="result-label">보스 몬스터 처치</span><span class="result-value" id="resBossKills">0마리</span></div>
         <div class="result-row"><span class="result-label">이번 게임 코인 획득</span><span class="result-value" id="resCoins">🪙 0개</span></div>
       </div>
-      
-      <div class="btn-container" style="margin-top: 10px;">
-        <button class="btn" onclick="startGame()">다시 하기</button>
-        <button class="btn" style="background: #475569;" onclick="goToMainScreen()">메인 화면</button>
-      </div>
+      <div class="btn-container" style="margin-top: 10px;"><button class="btn" onclick="startGame()">다시 하기</button><button class="btn" style="background: #475569;" onclick="goToMainScreen()">메인 화면</button></div>
     </div>
 
-    <!-- 조이스틱 및 인게임 상태창 -->
     <div id="controlArea" class="hidden">
       <div id="joystickStatusNotice">
-        <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | 
-        <span id="hudLife">❤️ x3</span> | 
-        <span id="hudCoins">🪙 +0</span> | 
-        <span id="hudScore">Score: 0</span><br>
+        <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | <span id="hudLife">❤️ x3</span> | <span id="hudCoins">🪙 +0</span> | <span id="hudScore">Score: 0</span><br>
         무기: <span id="hudWeaponName">기본 탄환</span> | <span id="hudBulletCount">x1</span> | 데미지: <span id="hudDmgNotice">1</span> (보조기체 데미지: <span id="hudDroneDmgNotice">1</span>)
       </div>
-      
-      <div id="joystickArea">
-        <div id="joystickKnob"></div>
-      </div>
-
+      <div id="joystickArea"><div id="joystickKnob"></div></div>
       <div id="dpadContainer" class="dpad-container">
-        <div id="dpadLeft" class="dpad-btn">◀</div>
-        <div id="dpadRight" class="dpad-btn">▶</div>
-        <div id="dpadUp" class="dpad-btn">▲</div>
-        <div id="dpadDown" class="dpad-btn">▼</div>
+        <div id="dpadLeft" class="dpad-btn">◀</div><div id="dpadRight" class="dpad-btn">▶</div>
+        <div id="dpadUp" class="dpad-btn">▲</div><div id="dpadDown" class="dpad-btn">▼</div>
       </div>
     </div>
   </div>
@@ -513,11 +359,8 @@
     var soundMuted = false;
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
-    var isPaused = false;
-    var isCountingDown = false;
-    var lastSoundTime = 0;
-
-    var currentVersionKey = "v7.8.0";
+    var isPaused = false, isCountingDown = false, lastSoundTime = 0;
+    var currentVersionKey = "v7.8.1";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -531,7 +374,6 @@
     var shopHeartBonusLife = parseInt(localStorage.getItem("yoon_heart_bonus") || "0");
     var shopCandyCost = parseFloat(localStorage.getItem("yoon_candy_cost") || "160");
     var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
-
     var shopMagnetCost = parseFloat(localStorage.getItem("yoon_magnet_cost") || "300");
     var shopMagnetLevel = parseInt(localStorage.getItem("yoon_magnet_level") || "0");
 
@@ -556,10 +398,8 @@
     var missionRewardBoss = parseInt(localStorage.getItem("yoon_m_reward_boss") || "100");
     var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
     var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
-    
-    var sessionCoinsEarned = 0;
 
-    function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; document.head.appendChild(s); }
+    function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
     window.addEventListener('DOMContentLoaded', function() {
       loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js", function() {
@@ -569,9 +409,14 @@
             projectId: "yoon-space-game-2fbae", storageBucket: "yoon-space-game-2fbae.firebasestorage.app",
             messagingSenderId: "524266726245", appId: "1:524266726245:web:46ce8be41498337e09b78c"
           };
-          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-          db = firebase.firestore();
-          checkAndResetWeeklyRanking();
+          try {
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            checkAndResetWeeklyRanking();
+          } catch(e) {
+            console.error(e);
+            updateLeaderboardUI(true);
+          }
         });
       });
       var savedNick = localStorage.getItem("yoon_nickname") || "";
@@ -579,10 +424,7 @@
       var savedQuote = localStorage.getItem("yoon_quote") || "";
       if (savedQuote) document.getElementById("rankingQuoteInput").value = savedQuote;
 
-      updateShopUI();
-      updateMissionUI();
-      checkDailyAttendance();
-
+      updateShopUI(); updateMissionUI(); checkDailyAttendance();
       if (localStorage.getItem("yoon_dismissed_update_version") !== currentVersionKey) toggleModal('updateModal', true);
 
       document.addEventListener("visibilitychange", function() {
@@ -599,8 +441,7 @@
 
     function toggleModal(id, show) {
       var target = document.getElementById(id);
-      if (show) target.classList.remove("hidden");
-      else target.classList.add("hidden");
+      if (show) target.classList.remove("hidden"); else target.classList.add("hidden");
     }
 
     function saveShopData() {
@@ -692,24 +533,21 @@
       document.getElementById('mRewardKillText').innerText = missionRewardKill;
       document.getElementById('missionKillProgress').innerText = Math.min(missionTargetKill, totalMonsterKills);
       var claimKillBtn = document.getElementById('claimKillBtn');
-      if (totalMonsterKills >= missionTargetKill) { claimKillBtn.innerText = "보상 받기"; claimKillBtn.disabled = false; }
-      else { claimKillBtn.innerText = "진행중"; claimKillBtn.disabled = true; }
+      if (totalMonsterKills >= missionTargetKill) { claimKillBtn.innerText = "보상 받기"; claimKillBtn.disabled = false; } else { claimKillBtn.innerText = "진행중"; claimKillBtn.disabled = true; }
 
       document.getElementById('mTargetBossText').innerText = missionTargetBoss;
       document.getElementById('mTargetBossSub').innerText = missionTargetBoss;
       document.getElementById('mRewardBossText').innerText = missionRewardBoss;
       document.getElementById('missionBossProgress').innerText = Math.min(missionTargetBoss, totalBossKills);
       var claimBossBtn = document.getElementById('claimBossBtn');
-      if (totalBossKills >= missionTargetBoss) { claimBossBtn.innerText = "보상 받기"; claimBossBtn.disabled = false; }
-      else { claimBossBtn.innerText = "진행중"; claimBossBtn.disabled = true; }
+      if (totalBossKills >= missionTargetBoss) { claimBossBtn.innerText = "보상 받기"; claimBossBtn.disabled = false; } else { claimBossBtn.innerText = "진행중"; claimBossBtn.disabled = true; }
 
       document.getElementById('mTargetShopText').innerText = missionTargetShop;
       document.getElementById('mTargetShopSub').innerText = missionTargetShop;
       document.getElementById('mRewardShopText').innerText = missionRewardShop;
       document.getElementById('missionShopProgress').innerText = Math.min(missionTargetShop, shopPurchaseCount);
       var claimShopBtn = document.getElementById('claimShopBtn');
-      if (shopPurchaseCount >= missionTargetShop) { claimShopBtn.innerText = "보상 받기"; claimShopBtn.disabled = false; }
-      else { claimShopBtn.innerText = "진행중"; claimShopBtn.disabled = true; }
+      if (shopPurchaseCount >= missionTargetShop) { claimShopBtn.innerText = "보상 받기"; claimShopBtn.disabled = false; } else { claimShopBtn.innerText = "진행중"; claimShopBtn.disabled = true; }
     }
 
     function buyShopItem(type) {
@@ -780,36 +618,41 @@
     }
 
     function checkAndResetWeeklyRanking() {
-      if (!db) return;
+      if (!db) { updateLeaderboardUI(true); return; }
       var now = new Date(), day = now.getDay(), hours = now.getHours();
       if (day === 6 && hours === 0) {
         var lastResetStr = localStorage.getItem("yoon_last_ranking_reset_week") || "";
         var currentWeekStr = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
         if (lastResetStr !== currentWeekStr) {
           db.collection("rankings").get().then(function(querySnapshot) {
-            var batch = db.batch();
-            querySnapshot.forEach(function(doc) { batch.delete(doc.ref); });
+            var batch = db.batch(); querySnapshot.forEach(function(doc) { batch.delete(doc.ref); });
             batch.commit().then(function() { localStorage.setItem("yoon_last_ranking_reset_week", currentWeekStr); updateLeaderboardUI(); });
-          });
+          }).catch(function(){ updateLeaderboardUI(true); });
           return;
         }
       }
       updateLeaderboardUI();
     }
 
-    function updateLeaderboardUI() {
-      if (!db) return;
+    function updateLeaderboardUI(isError) {
+      var bodyEl = document.getElementById("mainRankingBody");
+      var bubbleBoard = document.getElementById("rankerBubbleBoard");
+      if (!bodyEl) return;
+
+      if (isError || !db) {
+        bodyEl.innerHTML = "<tr><td colspan='6'>랭킹을 불러올 수 없습니다.</td></tr>";
+        bubbleBoard.innerHTML = '<div class="ranker-speech-bubble"><div class="bubble-text-part">👑 [안내] 네트워크 연결을 확인해주세요.</div></div>';
+        return;
+      }
+
       db.collection("rankings").orderBy("score", "desc").limit(50).get().then(function(querySnapshot) {
         var rankings = [], seenNicknames = {};
         querySnapshot.forEach(function(doc) {
           var data = doc.data(), nick = data.nickname || "익명";
-          if (nick === "test123") { doc.ref.delete(); return; }
           if (!seenNicknames[nick]) { seenNicknames[nick] = true; rankings.push(data); }
-          else doc.ref.delete();
         });
         rankings = rankings.slice(0, 10);
         
-        var bubbleBoard = document.getElementById("rankerBubbleBoard");
         var bubbleHtml = "";
         for (var i = 0; i < Math.min(5, rankings.length); i++) {
           var r = rankings[i], qText = r.quote ? r.quote : "(한마디 없음)";
@@ -817,17 +660,20 @@
           if (r.deviceId === deviceId) bubbleHtml += '<button class="bubble-edit-btn" onclick="openEditQuoteModal()">수정</button>';
           bubbleHtml += '</div>';
         }
+        if(bubbleHtml === "") bubbleHtml = '<div class="ranker-speech-bubble"><div class="bubble-text-part">👑 [안내] 첫 번째 랭커가 되어보세요!</div></div>';
         bubbleBoard.innerHTML = bubbleHtml;
 
-        var htmlContent = rankings.length === 0 ? "<tr><td colspan='6'>기록이 없습니다.</td></tr>" : "";
+        var htmlContent = rankings.length === 0 ? "<tr><td colspan='6'>등록된 기록이 없습니다.</td></tr>" : "";
         for (var i = 0; i < rankings.length; i++) {
           var r = rankings[i];
           var dateObj = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : new Date();
           var dtStr = (dateObj.getMonth()+1) + "/" + dateObj.getDate() + " " + dateObj.getHours() + ":" + (dateObj.getMinutes()<10?"0":"") + dateObj.getMinutes();
           htmlContent += "<tr><td>" + (i+1) + "</td><td>" + dtStr + "</td><td>" + (r.nickname||"익명") + "</td><td>" + (r.monsterKills||0) + "</td><td>" + (r.bossKills||0) + "</td><td>" + (r.score||0) + "</td></tr>";
         }
-        document.getElementById("rankingBody").innerHTML = htmlContent;
-        document.getElementById("mainRankingBody").innerHTML = htmlContent;
+        bodyEl.innerHTML = htmlContent;
+      }).catch(function(err) {
+        console.error("랭킹 조회 실패:", err);
+        bodyEl.innerHTML = "<tr><td colspan='6'>랭킹 데이터 오류 (권한 확인)</td></tr>";
       });
     }
 
@@ -835,22 +681,18 @@
       if (!db || nickname === "test123") return;
       db.collection("rankings").where("nickname", "==", nickname).get().then(function(snapshot) {
         if (snapshot.empty) {
-          db.collection("rankings").add({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(updateLeaderboardUI);
+          db.collection("rankings").add({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function(){ updateLeaderboardUI(); });
         } else {
           var docs = snapshot.docs, highestDoc = docs[0], highestScore = highestDoc.data().score || 0;
           for (var i=1; i<docs.length; i++) { if (docs[i].data().score > highestScore) { highestScore = docs[i].data().score; highestDoc = docs[i]; } }
           if (score > highestScore) {
             highestDoc.ref.update({ score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function() {
               var batch = db.batch(); docs.forEach(function(d){ if(d.id !== highestDoc.id) batch.delete(d.ref); });
-              batch.commit().then(updateLeaderboardUI);
+              batch.commit().then(function(){ updateLeaderboardUI(); });
             });
-          } else {
-            var batch = db.batch(), needsDel = false;
-            docs.forEach(function(d){ if(d.id !== highestDoc.id) { batch.delete(d.ref); needsDel = true; } });
-            if (needsDel) batch.commit().then(updateLeaderboardUI); else updateLeaderboardUI();
           }
         }
-      });
+      }).catch(function(e){ console.error("점수 저장 실패", e); });
     }
 
     function checkNicknameInput(val) {
@@ -866,7 +708,7 @@
     function saveNewQuoteFromModal() {
       var newQuote = document.getElementById("modalQuoteInput").value.trim();
       localStorage.setItem("yoon_quote", newQuote); document.getElementById("rankingQuoteInput").value = newQuote; toggleModal("editQuoteModal", false);
-      if (db) db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snap) { if(!snap.empty) snap.docs[0].ref.update({quote: newQuote}).then(updateLeaderboardUI); });
+      if (db) db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snap) { if(!snap.empty) snap.docs[0].ref.update({quote: newQuote}).then(function(){ updateLeaderboardUI(); }); });
     }
 
     function openStoryScreen() {
@@ -884,15 +726,14 @@
     function toggleSound() {
       soundMuted = !soundMuted;
       document.getElementById("mainSoundBtn").textContent = soundMuted ? "🔇" : "🔊";
-      var sBtn = document.getElementById("settingSoundToggleBtn"); sBtn.textContent = soundMuted ? "꺼짐" : "켜짐"; sBtn.style.background = soundMuted ? "linear-gradient(135deg, #475569, #334155)" : "linear-gradient(135deg, #2563eb, #1d4ed8)";
+      var sBtn = document.getElementById("settingSoundToggleBtn"); sBtn.textContent = soundMuted ? "꺼짐" : "켜짐";
       if (soundMuted) stopBGM(); else if (!isGameOver && !isPaused && !isCountingDown) startBGM();
     }
     function openSettingModal() { initAudio(); toggleModal('settingModal', true); }
     function toggleSoundFromModal() { toggleSound(); }
     function toggleControlTypeFromModal() {
       initAudio(); controlType = (controlType === "integrated") ? "arrows" : "integrated"; localStorage.setItem("yoon_control_type", controlType);
-      var cBtn = document.getElementById("settingControlToggleBtn");
-      cBtn.textContent = controlType === "integrated" ? "통합 조작" : "상하좌우 화살표"; cBtn.style.background = controlType === "integrated" ? "linear-gradient(135deg, #059669, #047857)" : "linear-gradient(135deg, #2563eb, #1d4ed8)";
+      var cBtn = document.getElementById("settingControlToggleBtn"); cBtn.textContent = controlType === "integrated" ? "통합 조작" : "상하좌우 화살표";
       applyControlTypeUI();
     }
     function applyControlTypeUI() {
@@ -902,9 +743,7 @@
     
     function playSound(type) {
       if (!audioCtx || soundMuted) return;
-      var nowTime = Date.now();
-      if (nowTime - lastSoundTime < 35 && type !== 'explosion' && type !== 'gameover') return;
-      lastSoundTime = nowTime;
+      var nowTime = Date.now(); if (nowTime - lastSoundTime < 35 && type !== 'explosion' && type !== 'gameover') return; lastSoundTime = nowTime;
       var osc = audioCtx.createOscillator(), gain = audioCtx.createGain(), now = audioCtx.currentTime;
       osc.connect(gain); gain.connect(audioCtx.destination);
       if (type === 'normal') { osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.08); gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0, now + 0.08); osc.start(now); osc.stop(now + 0.08); }
@@ -956,7 +795,7 @@
     var playerNickname = "", playerQuote = "";
     var player = { x: 0, y: 0, width: 28, height: 28, speed: 2.0, tilt: 0, maxTilt: 0.35, lives: 3, invincibleTimer: 0 };
     var bullets = [], monsters = [], items = [], enemyBullets = [], particles = [], damageTexts = [];
-    var keys = {}, isGameOver = false, isPaused = false, isCountingDown = false, gameSpeedMultiplier = 1.0, gameAnimationId;
+    var keys = {}, isGameOver = false, isPaused = false, isCountingDown = false, gameAnimationId;
     var score = 0, bestScore = parseInt(localStorage.getItem("yoon_space_best") || "0"), stage = 1;
     var killCount = 0, bossKillCount = 0, sessionCoinsEarned = 0, gameTime = 0, warningTimer = 0, warningTextStr = "", shakeTimer = 0;
     var stageMonsterKills = 0, targetStageKills = 30, nextEliteKillTarget = 15;
@@ -1003,7 +842,8 @@
 
     function startGame() {
       var nick = document.getElementById("nicknameInput").value.trim();
-      if (!nick) return; playerNickname = nick; playerQuote = document.getElementById("rankingQuoteInput").value.trim();
+      if (!nick) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); return; }
+      playerNickname = nick; playerQuote = document.getElementById("rankingQuoteInput").value.trim();
       localStorage.setItem("yoon_nickname", playerNickname); localStorage.setItem("yoon_quote", playerQuote);
       toggleModal("storyModal", false); document.getElementById("startScreen").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden");
       document.getElementById("controlArea").classList.remove("hidden"); document.getElementById("inGameTopBtns").classList.remove("hidden");
