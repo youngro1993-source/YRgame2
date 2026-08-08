@@ -192,7 +192,6 @@
       box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3);
     }
 
-    /* 랭커 상시 말풍선 스타일 (슬라이드 캐러셀 or 리스트 형태) */
     .ranker-bubble-board {
       margin-top: 4px;
       width: 100%;
@@ -727,7 +726,6 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* 게임 진행 상단 콤팩트 바 스타일 */
     .game-hud-bar {
       position: absolute;
       top: 10px;
@@ -753,7 +751,6 @@
       gap: 4px;
     }
 
-    /* 게임오버 정산 카드 스타일 */
     .result-card-box {
       width: 100%;
       max-width: 400px;
@@ -788,7 +785,6 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- 게임 중 상단 콤팩트 HUD 바 -->
     <div id="gameHudBar" class="game-hud-bar hidden">
       <div class="game-hud-item" id="hudStage">Stage 1</div>
       <div class="game-hud-item" id="hudLife">❤️ x3</div>
@@ -796,10 +792,8 @@
       <div class="game-hud-item" id="hudScore">Score: 0</div>
     </div>
 
-    <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
       
-      <!-- [1] 상단 영역 -->
       <div class="layout-section">
         <div class="top-status-bar">
           <div style="font-size:0.6rem; color:#94a3b8;">은하 수호대 본부</div>
@@ -808,14 +802,12 @@
 
         <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         
-        <!-- 달 클릭 영역 및 랭커 상시 말풍선 컨테이너 -->
         <div class="moon-container">
           <div class="moon-artwork" onclick="handleMoonClick()"></div>
           <div id="rankerBubbleBoard" class="ranker-bubble-board"></div>
         </div>
       </div>
 
-      <!-- [2] 중앙 영역 -->
       <div class="layout-section layout-middle">
         
         <div class="info-box">
@@ -832,7 +824,6 @@
           </div>
         </div>
 
-        <!-- 랭킹표 -->
         <div class="ranking-container">
           <h3>🏆 명예의 전당 (TOP 10)</h3>
           <div class="ranking-sub-notice">※ 닉네임당 최고 점수 1개만 등록됩니다 (매주 토요일 12시 초기화)</div>
@@ -855,14 +846,12 @@
           </div>
         </div>
 
-        <!-- 닉네임 입력란 박스 -->
         <div class="nickname-box">
           <div id="welcomeMessage" class="welcome-text"></div>
           <input type="text" id="nicknameInput" placeholder="파일럿 닉네임 입력 (필수)" maxlength="8" oninput="checkNicknameInput(this.value)" />
           <div id="nicknameWarning" class="warning-text"></div>
         </div>
 
-        <!-- 내 비행기 현재상태 -->
         <div class="pilot-status-title">✈️ 내 비행기 현재상태</div>
         <div class="pilot-status-card">
           <div class="pilot-status-left">
@@ -873,7 +862,6 @@
           </div>
         </div>
 
-        <!-- 상점, 미션, 출격하기 버튼 -->
         <div class="btn-container" style="margin-top: 6px; margin-bottom: 2px;">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
           <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
@@ -882,7 +870,6 @@
 
       </div>
 
-      <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
         <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.8.0 업데이트)</button>
@@ -890,18 +877,16 @@
 
     </div>
 
-    <!-- 달 클릭 이벤트 안내 모달 창 -->
     <div id="eventModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>🌕 행성 관리자의 선물</h3>
-        <p id="eventMessageText" style="margin: 15px 0; font-size: 0.85rem; line-height: 1.5; color: #facc15; font-weight: bold;"></p>
+        <p id="eventMessageText" style="margin: 15px 0; font-size: 0.85rem; line-height: 1.5; color: #facc15; font-weight: bold; white-space: pre-line;"></p>
         <div style="text-align: center; margin-top: 10px;">
           <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('eventModal', false)">확인</button>
         </div>
       </div>
     </div>
 
-    <!-- 말풍선 수정 모달 창 -->
     <div id="editQuoteModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>💬 랭커 한마디 수정</h3>
@@ -914,7 +899,6 @@
       </div>
     </div>
 
-    <!-- 상점 모달 -->
     <div id="shopModal" class="modal-overlay hidden">
       <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -988,7 +972,6 @@
       </div>
     </div>
 
-    <!-- 미션 모달 -->
     <div id="missionModal" class="modal-overlay hidden">
       <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -1029,7 +1012,6 @@
       </div>
     </div>
 
-    <!-- 배경 스토리 모달 -->
     <div id="storyModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>🌌 윤(YOON) 행성의 위기</h3>
@@ -1048,7 +1030,6 @@
       </div>
     </div>
 
-    <!-- 패치 노트 모달 -->
     <div id="updateModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
@@ -1101,7 +1082,6 @@
       </div>
     </div>
 
-    <!-- 일시정지 모달 -->
     <div id="pauseModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>⏸️ PAUSED</h3>
@@ -1113,11 +1093,9 @@
       </div>
     </div>
 
-    <!-- 게임 오버 화면 -->
     <div id="rankScreen" class="screen hidden" style="justify-content: center; overflow-y: auto;">
       <h1>GAME OVER</h1>
       
-      <!-- 개선된 게임 정산 요약 카드 -->
       <div class="result-card-box">
         <div class="result-row">
           <span class="result-label">파일럿</span>
@@ -1173,7 +1151,6 @@
       </div>
     </div>
 
-    <!-- 독립 조작 컨트롤 패널 영역 -->
     <div id="controlArea" class="hidden">
       <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1 | 데미지: 1</div>
       <div id="btnLeft" class="arrow-btn">◀</div>
@@ -1216,6 +1193,7 @@
     var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
     var moonReward30Claimed = localStorage.getItem("yoon_moon_reward_30") === "true";
     var moonReward300Claimed = localStorage.getItem("yoon_moon_reward_300") === "true";
+    var moonReward400Claimed = localStorage.getItem("yoon_moon_reward_400") === "true";
 
     var totalMonsterKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
@@ -1247,6 +1225,7 @@
       localStorage.setItem("yoon_moon_clicks", moonClickCount);
       localStorage.setItem("yoon_moon_reward_30", moonReward30Claimed);
       localStorage.setItem("yoon_moon_reward_300", moonReward300Claimed);
+      localStorage.setItem("yoon_moon_reward_400", moonReward400Claimed);
 
       localStorage.setItem("yoon_total_kills", totalMonsterKills);
       localStorage.setItem("yoon_total_boss_kills", totalBossKills);
@@ -1270,7 +1249,7 @@
         saveShopData();
         updateShopUI();
         playSound('item');
-        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다. -YOON행성 관리자-";
+        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다.\n-YOON행성 관리자-";
         toggleModal("eventModal", true);
       } else if (moonClickCount === 300 && !moonReward300Claimed) {
         moonReward300Claimed = true;
@@ -1278,7 +1257,15 @@
         saveShopData();
         updateShopUI();
         playSound('item');
-        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다. -YOON행성 관리자-";
+        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다.\n-YOON행성 관리자-";
+        toggleModal("eventModal", true);
+      } else if (moonClickCount === 400 && !moonReward400Claimed) {
+        moonReward400Claimed = true;
+        userCoins += 100000;
+        saveShopData();
+        updateShopUI();
+        playSound('item');
+        document.getElementById("eventMessageText").textContent = "당신의 끝없는 손길에 감동받아 코인 100,000개를 지급합니다.\n-YOON행성 관리자-";
         toggleModal("eventModal", true);
       }
     }
@@ -1486,7 +1473,6 @@
 
           rankings = rankings.slice(0, 10);
 
-          // 상시 랭커 말풍선 보드 렌더링 (TOP 3)
           var bubbleBoard = document.getElementById("rankerBubbleBoard");
           var bubbleHtml = "";
           var myCurrentNickname = localStorage.getItem("yoon_nickname") || "";
@@ -1511,7 +1497,6 @@
 
           bubbleBoard.innerHTML = bubbleHtml;
 
-          // 만약 내가 TOP 3 안에 들었는데 로컬 저장된 quote가 없다면 초기화 또는 반영
           var htmlContent = "";
           if (rankings.length === 0) {
             htmlContent = "<tr><td colspan='6'>등록된 기록이 없습니다.</td></tr>";
