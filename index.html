@@ -641,7 +641,6 @@
       font-weight: bold;
     }
 
-    /* 조작 패드 영역을 더 아래로 내려 개방감 확보 (height 205px, 경계선 조정) */
     #controlArea {
       position: absolute;
       bottom: 0;
@@ -655,7 +654,6 @@
       z-index: 5;
     }
 
-    /* 조이스틱 영역 */
     #joystickArea {
       position: absolute;
       bottom: 40px;
@@ -685,7 +683,6 @@
       transition: transform 0.05s linear;
     }
 
-    /* 상하좌우 화살표 패드 영역 */
     .dpad-container {
       position: absolute;
       bottom: 10px;
@@ -715,11 +712,11 @@
       color: #fff;
       transform: scale(0.95);
     }
-    /* 좌우 버튼: 더 큼직하게 확장 / 상하 버튼: 컴팩트하게 유지 */
+    /* 좌우 화살표: 큼직한 크기 유지 / 상하 화살표: 화면 정중앙 배치 및 크기 조정 */
     #dpadLeft { bottom: 10px; left: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
     #dpadRight { bottom: 10px; right: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
-    #dpadUp { bottom: 42px; left: 50%; transform: translateX(-85px); width: 65px; height: 38px; font-size: 1.2rem; }
-    #dpadDown { bottom: 3px; left: 50%; transform: translateX(-85px); width: 65px; height: 38px; font-size: 1.2rem; }
+    #dpadUp { bottom: 46px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
+    #dpadDown { bottom: 4px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
 
     #joystickStatusNotice {
       position: absolute;
@@ -741,7 +738,6 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* 게임 내 최상단 구석 일시정지 및 배속 버튼 */
     .in-game-top-btns {
       position: absolute;
       top: 8px;
@@ -805,7 +801,6 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- 인게임 최상단 구석 버튼들 -->
     <div id="inGameTopBtns" class="in-game-top-btns hidden">
       <button class="in-game-top-btn" onclick="openPauseModal()">⏸️ 일시정지</button>
       <button class="in-game-top-btn" id="speedToggleBtn" onclick="toggleGameSpeed()">⚡ 1.0x</button>
@@ -1126,11 +1121,18 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v7.6.0 (조작 화살표 중앙 정렬, 보스전 몬스터 지속 스폰 및 패턴 다양화)</div>
+            <ul>
+              <li><b>상하좌우 화살표 정렬</b>: '상하좌우 화살표' 조작 모드 시 상하 화살표가 화면 중앙에 깔끔하게 정렬됩니다.</li>
+              <li><b>보스전 일반 몬스터 스폰</b>: 보스 전투 중에도 일반 몬스터들이 멈추지 않고 계속해서 등장하여 긴장감을 높입니다.</li>
+              <li><b>보스 움직임 패턴 다양화</b>: 보스의 이동 및 공격 패턴이 더욱 다채롭고 역동적으로 개선되었습니다.</li>
+              <li><b>중급 몬스터 체력 상향</b>: 엘리트(중급) 몬스터의 체력이 상향되어 전투 난이도가 조정되었습니다.</li>
+            </ul>
+          </div>
+          <div class="version-block">
             <div class="version-title">v7.5.0 (조작 모드별 화살표 최적화 및 실시간 획득 코인 표기)</div>
             <ul>
-              <li><b>조작 모드 분리</b>: 통합 조작 모드 시 조이스틱과 좌우 화살표만 표시되며, 상하 화살표는 숨겨집니다.</li>
-              <li><b>실시간 획득 코인 표기</b>: 게임 내 상단 HUD 코인 항목에 이번 게임에서 실시간으로 획득한 코인 숫자가 표기됩니다.</li>
-              <li><b>조작부 개방감 개선</b>: 조작 패드 영역을 아래로 내려 넓고 시원한 게임 화면을 제공합니다.</li>
+              <li>조작 모드별 화살표 최적화 및 실시간 획득 코인 표기가 적용되었습니다.</li>
             </ul>
           </div>
           <div class="version-block">
@@ -1248,7 +1250,6 @@
         무기: 기본 탄환 | x1 | DMG: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
       </div>
       
-      <!-- 조작 영역 (조이스틱 + 좌우 대형 화살표 + 선택적 상하 화살표) -->
       <div id="joystickArea">
         <div id="joystickKnob"></div>
       </div>
@@ -1265,13 +1266,13 @@
   <script>
     var db = null;
     var soundMuted = false;
-    var controlType = localStorage.getItem("yoon_control_type") || "integrated"; // "integrated" 또는 "arrows"
+    var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v7.5.0";
+    var currentVersionKey = "v7.6.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -2796,7 +2797,7 @@
       var cx = boss.x + boss.width / 2;
       var cy = boss.y + boss.height / 2;
 
-      if (boss.designType === 4) { 
+      if (boss.designType === 4 || boss.type === "spinner") { 
         ctx.save();
         ctx.translate(cx | 0, cy | 0);
         if (boss.state === 'spin') {
@@ -2806,9 +2807,9 @@
                             Math.atan2(boss.targetDashY - boss.y, boss.targetDashX - boss.x) :
                             Math.atan2(boss.baseY - boss.y, (canvas.width/2 - boss.width/2) - boss.x);
           ctx.rotate(targetAngle + Math.PI/2);
-        } else if (boss.state === 'wander') {
-          var wanderAngle = Math.atan2(boss.vy, boss.vx);
-          ctx.rotate(wanderAngle + Math.PI/2);
+        } else if (boss.state === 'wander' || boss.state === 'zigzag') {
+          var moveAngle = Math.atan2(boss.vy, boss.vx);
+          ctx.rotate(moveAngle + Math.PI/2);
         }
         
         ctx.fillStyle = "#f43f5e";
@@ -3034,9 +3035,6 @@
     }
 
     function spawnMonster() {
-      if (boss) return;
-      if (stageMonsterKills >= targetStageKills) return;
-
       var rand = Math.random();
       var width = 32;
       var height = 32;
@@ -3081,13 +3079,13 @@
     }
 
     function spawnEliteMonster() {
-      if (boss || stageMonsterKills >= targetStageKills) return;
       triggerWarning("ELITE MONSTER!");
       var width = 40;
       var height = 40;
       var x = Math.random() * (canvas.width - width);
       x = Math.max(0, Math.min(canvas.width - width, x)); 
-      var hp = 6 + (stage - 1) * 2;
+      // 중급 몬스터 체력 상향 (기존 6 + 스테이지 비례 에서 대폭 상향)
+      var hp = 20 + (stage - 1) * 8;
 
       monsters.push({
         id: Math.random().toString(36).substr(2, 9),
@@ -3109,22 +3107,25 @@
       bossSpawnCount++;
       var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.2, bossSpawnCount - 1));
       
-      var bType = (stage >= 10 && Math.random() > 0.5) ? "spinner" : "normal";
+      // 다양한 보스 타입 무작위 선정
+      var bossTypes = ["normal", "spinner", "zigzag", "charger"];
+      var chosenType = bossTypes[Math.floor(Math.random() * bossTypes.length)];
+      if (stage < 3) chosenType = "normal";
 
       boss = {
-        type: bType,
+        type: chosenType,
         x: canvas.width / 2 - 40,
         y: 40,
         baseY: 40,
         width: 80,
         height: 60,
-        speedX: 0.95, 
-        speedY: 0.65,
+        speedX: 1.1, 
+        speedY: 0.7,
         hp: calculatedHp,
         maxHp: calculatedHp,
         lastShoot: 0,
         patternTimer: 0,
-        designType: (bType === "spinner") ? 4 : Math.floor(Math.random() * 4),
+        designType: (chosenType === "spinner") ? 4 : Math.floor(Math.random() * 4),
         isCharging: false,
         chargeTimer: 0,
         targetY: 40,
@@ -3191,30 +3192,39 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
-      if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
+      if (boss.type === "charger") {
+        // 돌진형 보스 탄막
+        for (var i = 0; i < 4; i++) {
+          var angle = (Math.PI / 4) * i + (Math.PI / 8);
+          enemyBullets.push({
+            x: originX - 6, y: originY, width: 14, height: 14,
+            vx: Math.cos(angle) * 2.0, vy: Math.sin(angle) * 2.0, isHeavy: true
+          });
+        }
+      } else if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
         var baseAngle = (gameTime * 0.1);
-        for (var i = 0; i < 6; i++) {
-          var angle = baseAngle + (Math.PI / 3) * i;
+        for (var i = 0; i < 8; i++) {
+          var angle = baseAngle + (Math.PI / 4) * i;
           enemyBullets.push({
             x: originX - 6,
             y: originY - 10,
             width: 14,
             height: 14,
-            vx: Math.cos(angle) * 1.4, 
-            vy: Math.sin(angle) * 1.4,
+            vx: Math.cos(angle) * 1.6, 
+            vy: Math.sin(angle) * 1.6,
             isHeavy: true
           });
         }
       } else if (boss.patternTimer % 2 === 0) {
-        var angles = [-0.25, 0, 0.25];
+        var angles = [-0.35, -0.15, 0.15, 0.35];
         angles.forEach(function(angle) {
           enemyBullets.push({
             x: originX - 6,
             y: originY,
             width: 14,
             height: 14,
-            vx: Math.sin(angle) * 1.7,
-            vy: Math.cos(angle) * 1.7,
+            vx: Math.sin(angle) * 1.8,
+            vy: Math.cos(angle) * 1.8,
             isHeavy: true
           });
         });
@@ -3222,7 +3232,7 @@
         var dx = (player.x + player.width / 2) - originX;
         var dy = (player.y + player.height / 2) - originY;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var speed = 1.8; 
+        var speed = 1.9; 
 
         enemyBullets.push({
           x: originX - 7,
@@ -3283,12 +3293,13 @@
 
       shootDrones();
 
+      // 보스가 출현 중이어도 일반 몬스터와 엘리트 몬스터가 계속해서 스폰되도록 수정
       var currentSpawnInterval = Math.max(24, Math.floor(74 / Math.pow(1.2, stage - 1))); 
       if (Math.floor(gameTime) % currentSpawnInterval === 0) {
         spawnMonster();
       }
 
-      if (killCount >= nextEliteKillTarget && !boss) {
+      if (killCount >= nextEliteKillTarget) {
         spawnEliteMonster();
         nextEliteKillTarget += 15;
       }
@@ -3358,6 +3369,7 @@
         }
       }
 
+      // 보스 움직임 패턴 다양화 로직
       if (boss) {
         if (boss.type === "normal") {
           boss.x += boss.speedX * gameSpeedMultiplier;
@@ -3366,31 +3378,77 @@
           }
 
           boss.chargeTimer += gameSpeedMultiplier;
-          if (boss.chargeTimer > 250) {
+          if (boss.chargeTimer > 220) {
             boss.isCharging = true;
-            boss.targetY = canvas.height / 2 - 50; 
-            if (boss.chargeTimer > 350) {
+            boss.targetY = canvas.height / 2 - 40; 
+            if (boss.chargeTimer > 320) {
               boss.isCharging = false;
               boss.targetY = boss.baseY;
-              if (boss.chargeTimer > 500) boss.chargeTimer = 0;
+              if (boss.chargeTimer > 450) boss.chargeTimer = 0;
             }
           } else {
-            boss.targetY = boss.baseY + Math.sin(gameTime * 0.04) * 45;
+            boss.targetY = boss.baseY + Math.sin(gameTime * 0.05) * 50;
           }
-          boss.y += (boss.targetY - boss.y) * 0.05 * gameSpeedMultiplier;
+          boss.y += (boss.targetY - boss.y) * 0.06 * gameSpeedMultiplier;
 
-          var bossShootInterval = Math.max(65, 120 - (stage - 1) * 4);
+          var bossShootInterval = Math.max(55, 110 - (stage - 1) * 4);
           if (gameTime - boss.lastShoot > bossShootInterval) {
             fireBossPattern(boss);
             boss.lastShoot = gameTime;
           }
-        } else if (boss.type === "spinner") {
+        } 
+        else if (boss.type === "charger") {
+          // 돌진형 패턴: 플레이어 위치를 향해 빠르게 돌진 후 복귀
+          boss.stateTimer += gameSpeedMultiplier;
+          if (boss.state === 'idle') {
+            boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.08 * gameSpeedMultiplier;
+            boss.y += (boss.baseY - boss.y) * 0.08 * gameSpeedMultiplier;
+            if (boss.stateTimer > 90) {
+              boss.state = 'dash';
+              boss.stateTimer = 0;
+              boss.targetDashX = player.x;
+              boss.targetDashY = player.y;
+            }
+          } else if (boss.state === 'dash') {
+            boss.x += (boss.targetDashX - boss.x) * 0.15 * gameSpeedMultiplier;
+            boss.y += (boss.targetDashY - boss.y) * 0.15 * gameSpeedMultiplier;
+            if (boss.stateTimer > 25) {
+              boss.state = 'return';
+              boss.stateTimer = 0;
+            }
+          } else if (boss.state === 'return') {
+            boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.1 * gameSpeedMultiplier;
+            boss.y += (boss.baseY - boss.y) * 0.1 * gameSpeedMultiplier;
+            if (boss.stateTimer > 40) {
+              boss.state = 'idle';
+              boss.stateTimer = 0;
+            }
+          }
+          var chargerInterval = Math.max(60, 100 - stage * 3);
+          if (gameTime - boss.lastShoot > chargerInterval) {
+            fireBossPattern(boss);
+            boss.lastShoot = gameTime;
+          }
+        }
+        else if (boss.type === "zigzag") {
+          // 지그재그 웨이브 패턴
+          boss.x += boss.speedX * gameSpeedMultiplier;
+          if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.speedX *= -1;
+          boss.y = boss.baseY + Math.sin(gameTime * 0.08) * 65;
+
+          var zigzagInterval = Math.max(50, 90 - stage * 2);
+          if (gameTime - boss.lastShoot > zigzagInterval) {
+            fireBossPattern(boss);
+            boss.lastShoot = gameTime;
+          }
+        }
+        else if (boss.type === "spinner") {
           boss.stateTimer += gameSpeedMultiplier;
           if (boss.state === 'idle') {
             boss.y += (boss.baseY + Math.sin(gameTime * 0.04) * 10 - boss.y) * 0.1 * gameSpeedMultiplier;
             boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.05 * gameSpeedMultiplier; 
             
-            if (boss.stateTimer > 110) {
+            if (boss.stateTimer > 100) {
               boss.state = 'dash';
               boss.stateTimer = 0;
               boss.targetDashX = player.x + player.width/2 - boss.width/2;
@@ -3400,7 +3458,7 @@
             boss.x += (boss.targetDashX - boss.x) * 0.12 * gameSpeedMultiplier;
             boss.y += (boss.targetDashY - boss.y) * 0.12 * gameSpeedMultiplier;
             
-            if (boss.stateTimer > 35) {
+            if (boss.stateTimer > 30) {
               boss.state = 'return';
               boss.stateTimer = 0;
             }
@@ -3416,20 +3474,20 @@
               boss.spinAngle = 0;
             }
           } else if (boss.state === 'spin') {
-            if (Math.floor(boss.stateTimer) % 5 === 0) {
+            if (Math.floor(boss.stateTimer) % 4 === 0) {
               var cx = boss.x + boss.width/2;
               var cy = boss.y + boss.height/2;
-              boss.spinAngle += 0.5;
+              boss.spinAngle += 0.55;
               enemyBullets.push({
                 x: cx - 6, y: cy - 6, width: 14, height: 14,
-                vx: Math.cos(boss.spinAngle) * 3.0, vy: Math.sin(boss.spinAngle) * 3.0, isHeavy: true
+                vx: Math.cos(boss.spinAngle) * 3.2, vy: Math.sin(boss.spinAngle) * 3.2, isHeavy: true
               });
             }
-            if (boss.stateTimer > 80) {
+            if (boss.stateTimer > 70) {
               boss.state = 'wander';
               boss.stateTimer = 0;
-              boss.vx = (Math.random() > 0.5 ? 1 : -1) * 1.8;
-              boss.vy = (Math.random() > 0.5 ? 1 : -1) * 1.2;
+              boss.vx = (Math.random() > 0.5 ? 1 : -1) * 2.0;
+              boss.vy = (Math.random() > 0.5 ? 1 : -1) * 1.4;
             }
           } else if (boss.state === 'wander') {
             boss.x += boss.vx * gameSpeedMultiplier;
@@ -3438,7 +3496,7 @@
             if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1;
             if (boss.y <= 10 || boss.y + boss.height >= canvas.height * 0.35) boss.vy *= -1;
             
-            var bossWanderShootInterval = Math.max(65, 120 - (stage - 1) * 4);
+            var bossWanderShootInterval = Math.max(55, 110 - (stage - 1) * 4);
             if (gameTime - boss.lastShoot > bossWanderShootInterval) {
               fireBossPattern(boss);
               boss.lastShoot = gameTime;
