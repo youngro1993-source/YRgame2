@@ -641,14 +641,15 @@
       font-weight: bold;
     }
 
+    /* 조작 패드 영역을 더 아래로 내려 개방감 확보 (height 205px, 경계선 조정) */
     #controlArea {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 245px; 
+      height: 205px; 
       background: rgba(15, 23, 42, 0.95);
-      border-top: 2px solid rgba(56, 189, 248, 0.5);
+      border-top: 2px solid rgba(56, 189, 248, 0.4);
       backdrop-filter: blur(8px);
       pointer-events: auto;
       z-index: 5;
@@ -657,11 +658,11 @@
     /* 조이스틱 영역 */
     #joystickArea {
       position: absolute;
-      bottom: 60px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      width: 90px;
-      height: 90px;
+      width: 85px;
+      height: 85px;
       background: rgba(30, 41, 59, 0.7);
       border: 2px dashed rgba(56, 189, 248, 0.6);
       border-radius: 50%;
@@ -673,8 +674,8 @@
     }
 
     #joystickKnob {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%);
       border: 2px solid #ffffff;
       border-radius: 50%;
@@ -684,13 +685,13 @@
       transition: transform 0.05s linear;
     }
 
-    /* 상하좌우 화살표 패드 영역 (조이스틱 하단 및 좌우에 배치) */
+    /* 상하좌우 화살표 패드 영역 */
     .dpad-container {
       position: absolute;
-      bottom: 15px;
+      bottom: 10px;
       left: 0;
       width: 100%;
-      height: 95px;
+      height: 90px;
       display: block;
       z-index: 6;
       pointer-events: none;
@@ -714,11 +715,11 @@
       color: #fff;
       transform: scale(0.95);
     }
-    /* 상하 버튼: 상/하 크기 유지, 좌우 버튼: 더 큼직하게 확장 */
-    #dpadLeft { bottom: 10px; left: 15px; width: 120px; height: 65px; font-size: 2.2rem; }
-    #dpadRight { bottom: 10px; right: 15px; width: 120px; height: 65px; font-size: 2.2rem; }
-    #dpadUp { bottom: 45px; left: 50%; transform: translateX(-95px); width: 75px; height: 42px; font-size: 1.4rem; }
-    #dpadDown { bottom: 3px; left: 50%; transform: translateX(-95px); width: 75px; height: 42px; font-size: 1.4rem; }
+    /* 좌우 버튼: 더 큼직하게 확장 / 상하 버튼: 컴팩트하게 유지 */
+    #dpadLeft { bottom: 10px; left: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
+    #dpadRight { bottom: 10px; right: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
+    #dpadUp { bottom: 42px; left: 50%; transform: translateX(-85px); width: 65px; height: 38px; font-size: 1.2rem; }
+    #dpadDown { bottom: 3px; left: 50%; transform: translateX(-85px); width: 65px; height: 38px; font-size: 1.2rem; }
 
     #joystickStatusNotice {
       position: absolute;
@@ -1125,10 +1126,35 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v7.5.0 (조작 모드별 화살표 최적화 및 실시간 획득 코인 표기)</div>
+            <ul>
+              <li><b>조작 모드 분리</b>: 통합 조작 모드 시 조이스틱과 좌우 화살표만 표시되며, 상하 화살표는 숨겨집니다.</li>
+              <li><b>실시간 획득 코인 표기</b>: 게임 내 상단 HUD 코인 항목에 이번 게임에서 실시간으로 획득한 코인 숫자가 표기됩니다.</li>
+              <li><b>조작부 개방감 개선</b>: 조작 패드 영역을 아래로 내려 넓고 시원한 게임 화면을 제공합니다.</li>
+            </ul>
+          </div>
+          <div class="version-block">
             <div class="version-title">v7.4.0 (조작 설정 개편 및 인게임 편의 기능)</div>
             <ul>
-              <li><b>조작 설정 개편</b>: '통합 조작'과 '상하좌우 화살표' 조작 모드로 정비되었습니다.</li>
-              <li><b>인게임 최상단 버튼</b>: 일시정지 버튼 및 1.5배속 진행 버튼이 추가되었습니다.</li>
+              <li>조작 설정 개편 및 인게임 일시정지, 1.5배속 버튼이 추가되었습니다.</li>
+            </ul>
+          </div>
+          <div class="version-block">
+            <div class="version-title">v7.3.0 (통합 조작 기본 적용 및 UI 개선)</div>
+            <ul>
+              <li>기본 조작이 통합 조작으로 설정되며, 화면 양 끝에 대형 좌우 화살표가 배치되었습니다.</li>
+            </ul>
+          </div>
+          <div class="version-block">
+            <div class="version-title">v7.2.0 (보조기체 및 미션 시스템 확장)</div>
+            <ul>
+              <li>보조기체 장착 및 무한 반복 미션 시스템이 도입되었습니다.</li>
+            </ul>
+          </div>
+          <div class="version-block">
+            <div class="version-title">v7.1.0 (명예의 전당 및 한마디 기능 추가)</div>
+            <ul>
+              <li>TOP 10 명예의 전당 및 랭커 말풍선 한마디 기능이 추가되었습니다.</li>
             </ul>
           </div>
         </div>
@@ -1217,12 +1243,12 @@
       <div id="joystickStatusNotice">
         <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | 
         <span id="hudLife">❤️ x3</span> | 
-        <span id="hudCoins">🪙 0</span> | 
+        <span id="hudCoins">🪙 +0</span> | 
         <span id="hudScore">Score: 0</span><br>
         무기: 기본 탄환 | x1 | DMG: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
       </div>
       
-      <!-- 통합 조작 영역 (조이스틱 + 양 끝 대형 좌우 화살표 + 상하 화살표) -->
+      <!-- 조작 영역 (조이스틱 + 좌우 대형 화살표 + 선택적 상하 화살표) -->
       <div id="joystickArea">
         <div id="joystickKnob"></div>
       </div>
@@ -1240,12 +1266,12 @@
     var db = null;
     var soundMuted = false;
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; // "integrated" 또는 "arrows"
-    var gameSpeedMultiplier = 1.0; // 1.0 또는 1.5
+    var gameSpeedMultiplier = 1.0; 
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v7.4.0";
+    var currentVersionKey = "v7.5.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -1795,10 +1821,17 @@
 
     function applyControlTypeUI() {
       var joystickAreaEl = document.getElementById("joystickArea");
+      var dpadUpEl = document.getElementById("dpadUp");
+      var dpadDownEl = document.getElementById("dpadDown");
+
       if (controlType === "integrated") {
         joystickAreaEl.style.display = "flex";
+        dpadUpEl.style.display = "none";
+        dpadDownEl.style.display = "none";
       } else {
         joystickAreaEl.style.display = "none";
+        dpadUpEl.style.display = "flex";
+        dpadDownEl.style.display = "flex";
       }
     }
 
@@ -2007,7 +2040,7 @@
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
       if (player) {
-        player.y = canvas.height - player.height - 245;
+        player.y = canvas.height - player.height - 205;
       }
       initStars();
     }
@@ -2055,7 +2088,7 @@
       joystickStatusNotice.innerHTML = 
         '<span id="hudStage" style="color:#38bdf8;">Stage ' + stage + ' (' + stageProgressText + ')</span> | ' +
         '<span id="hudLife">' + (player.lives >= 5 ? ("❤️ x" + player.lives) : "❤️".repeat(Math.max(0, player.lives))) + '</span> | ' +
-        '<span id="hudCoins">🪙 ' + userCoins + '</span> | ' +
+        '<span id="hudCoins">🪙 +' + sessionCoinsEarned + '</span> | ' +
         '<span id="hudScore">Score: ' + score + '</span><br>' +
         '무기: ' + weaponNames[currentWeapon] + ' | x' + bulletCount + ' | DMG: <span id="hudDmgNotice">' + playerDamage + '</span> (보조: <span id="hudDroneDmgNotice">' + actualDroneDmg + '</span>)';
     }
@@ -2947,7 +2980,7 @@
       if (!soundMuted) startBGM();
 
       player.x = canvas.width / 2 - player.width / 2;
-      player.y = canvas.height - player.height - 245;
+      player.y = canvas.height - player.height - 205;
       player.lives = 3 + shopHeartBonusLife;
       player.invincibleTimer = 0;
       player.tilt = 0;
@@ -3289,7 +3322,7 @@
       player.y += moveY * player.speed * gameSpeedMultiplier;
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-      var maxPlayerY = canvas.height - player.height - 245;
+      var maxPlayerY = canvas.height - player.height - 205;
       player.y = Math.max(0, Math.min(maxPlayerY, player.y));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
