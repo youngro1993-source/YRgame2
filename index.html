@@ -641,7 +641,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 160px;
+      height: 180px; /* HUD 겹침 방지를 위해 높이 확장 */
       background: rgba(15, 23, 42, 0.92);
       border-top: 2px solid rgba(56, 189, 248, 0.5);
       backdrop-filter: blur(8px);
@@ -651,7 +651,7 @@
 
     .arrow-btn {
       position: absolute;
-      bottom: 45px;
+      bottom: 55px; /* 높이 확장에 맞춰 버튼 위젯 상승 */
       width: 75px;
       height: 75px;
       background: rgba(30, 41, 59, 0.8);
@@ -681,7 +681,7 @@
 
     #joystickArea {
       position: absolute;
-      bottom: 30px;
+      bottom: 40px; /* 높이 확장에 맞춰 조이스틱 상승 */
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -842,9 +842,21 @@
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.9.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.0.0 업데이트)</button>
       </div>
 
+    </div>
+
+    <!-- 출석 모달 -->
+    <div id="attendanceModal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3>📅 일일 출석 체크</h3>
+        <p id="attRewardText" style="margin: 15px 0; font-size: 0.95rem; line-height: 1.5; color: #facc15; font-weight: bold;"></p>
+        <p id="attStreakText" style="font-size: 0.75rem; color: #94a3b8;"></p>
+        <div style="text-align: center; margin-top: 15px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('attendanceModal', false)">보상 받기</button>
+        </div>
+      </div>
     </div>
 
     <div id="eventModal" class="modal-overlay hidden">
@@ -960,6 +972,18 @@
           </button>
         </div>
 
+        <div class="shop-item-card" style="border-color: #ef4444; background: rgba(30, 0, 0, 0.5);">
+          <div class="shop-item-icon">🔄</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title" style="color:#ef4444;">업그레이드 전체 초기화권</div>
+            <div class="shop-item-desc">모든 업그레이드 내역을 초기화하고 사용한 코인을 환불받습니다. (이용권 구매비 2000코인 차감)</div>
+            <div class="shop-item-status" style="color:#facc15;">환불 예상: <span id="shopRefundExpected">0</span> 코인</div>
+          </div>
+          <button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff;" onclick="buyShopItem('reset')">
+            2000 코인
+          </button>
+        </div>
+
         <div style="text-align: center; margin-top: auto; padding-top: 6px;">
           <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('shopModal', false)">닫기</button>
         </div>
@@ -1030,27 +1054,19 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v6.9.0 (보조기체 업그레이드 및 UI 개선)</div>
+            <div class="version-title">v7.0.0 (시스템 개편 및 컨텐츠 확장)</div>
             <ul>
-              <li><b>보조기체 스탯 강화 시스템</b>: 상점에서 보조기체 장착 후 데미지와 연사 속도를 개별적으로 업그레이드할 수 있습니다.</li>
-              <li><b>보조기체 디자인 개선</b>: 전투 화면 내 보조기체의 외형 디테일과 시인성이 대폭 업그레이드되었습니다.</li>
-              <li><b>상태정보창 재배치</b>: 게임 진행 시 기존 상단에 있던 스테이지·체력·코인·점수 HUD 정보를 하단 무기 현황(조이스틱 상단) 바와 통합하여 깔끔하게 배치했습니다.</li>
-              <li><b>기체 데미지 표기</b>: 현재 내 비행기의 기본 데미지 옆에 보조기체 데미지가 함께 표시됩니다.</li>
-            </ul>
-          </div>
-
-          <div class="version-block">
-            <div class="version-title">v6.8.0 (상시 랭커 말풍선 및 실시간 수정 기능)</div>
-            <ul>
-              <li><b>상시 랭커 말풍선</b>: 게임 시작 화면의 달 밑에 현재 TOP 5 랭커들의 순위와 말풍선이 상시 노출됩니다.</li>
-              <li><b>말풍선 실시간 수정</b>: 내가 TOP 5 랭커에 포함되어 있을 경우 언제든지 자신의 말풍선을 수정할 수 있는 버튼이 활성화됩니다.</li>
+              <li><b>출석체크 시스템 도입</b>: 매일 접속 시 500코인, 7일 연속 개근 시 1000코인을 특별 지급합니다!</li>
+              <li><b>신규 10스테이지 보스 추가</b>: 10스테이지 이후부터 플레이어를 향해 돌진 후 회전하며 공격하는 새로운 패턴의 보스가 등장합니다.</li>
+              <li><b>초기화권 아이템 추가</b>: 상점에서 2000코인으로 모든 업그레이드 내역을 초기화하고, 여태껏 사용한 코인을 전액 환불받을 수 있는 기능이 추가되었습니다.</li>
+              <li><b>UI/UX 개선</b>: 게임 진행 화면 하단의 조이스틱 및 상태 정보창 텍스트가 겹치지 않도록 높이 비율을 쾌적하게 개선했습니다.</li>
             </ul>
           </div>
           
           <div class="version-block">
-            <div class="version-title">v6.5.0 (랭킹 초기화 시스템, 보조기체 추가)</div>
+            <div class="version-title">v6.9.0 (보조기체 업그레이드 및 UI 개선)</div>
             <ul>
-              <li>매주 토요일 새벽 12시 랭킹 초기화 및 상점 3,000코인 보조기체(좌우 장착) 추가.</li>
+              <li>상점 내 보조기체 데미지, 연사 개별 업그레이드 기능 추가 및 인게임 외형 디테일 개선.</li>
             </ul>
           </div>
         </div>
@@ -1158,7 +1174,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.9.0";
+    var currentVersionKey = "v7.0.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -1243,6 +1259,48 @@
       localStorage.setItem("yoon_m_reward_shop", missionRewardShop);
     }
 
+    function checkDailyAttendance() {
+      var today = new Date();
+      var dateStr = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+      var lastDate = localStorage.getItem("yoon_att_date");
+      var streak = parseInt(localStorage.getItem("yoon_att_streak") || "0");
+
+      if (lastDate !== dateStr) {
+        var yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        var yStr = yesterday.getFullYear() + "-" + (yesterday.getMonth() + 1) + "-" + yesterday.getDate();
+
+        if (lastDate === yStr) {
+          streak++;
+        } else {
+          streak = 1;
+        }
+
+        var reward = 500;
+        var isPerfect = false;
+        
+        if (streak >= 7) {
+          reward = 1000;
+          streak = 0; 
+          isPerfect = true;
+        }
+
+        userCoins += reward;
+        localStorage.setItem("yoon_att_date", dateStr);
+        localStorage.setItem("yoon_att_streak", streak.toString());
+        saveShopData();
+
+        document.getElementById("attRewardText").textContent = isPerfect ? "🎉 7일 개근 특별 보상! 코인 1000개 지급!" : "🎁 출석 보상! 코인 500개 지급!";
+        document.getElementById("attStreakText").textContent = "현재 연속 출석: " + (isPerfect ? 7 : streak) + "일차";
+        
+        setTimeout(function() {
+          toggleModal("attendanceModal", true);
+          updateShopUI();
+          playSound('item');
+        }, 500);
+      }
+    }
+
     function handleMoonClick() {
       initAudio();
       moonClickCount++;
@@ -1313,6 +1371,7 @@
 
       updateShopUI();
       updateMissionUI();
+      checkDailyAttendance();
 
       var dismissedVersion = localStorage.getItem("yoon_dismissed_update_version");
       if (dismissedVersion !== currentVersionKey) {
@@ -1875,6 +1934,30 @@
       else target.classList.add("hidden");
     }
 
+    function calculateRefund() {
+      var refund = 0;
+      function sumCost(base, rate, count) {
+        var sum = 0;
+        var current = base;
+        for(var i=0; i<count; i++) {
+          sum += Math.floor(current);
+          current *= rate;
+        }
+        return sum;
+      }
+      refund += sumCost(160, 1.2, shopMeatBonusDmg);
+      refund += sumCost(160, 1.2, shopAppleCount);
+      refund += sumCost(160, 1.2, shopHeartBonusLife);
+      refund += sumCost(160, 1.2, shopCandyCount);
+      
+      if (hasDrone) {
+        refund += 3000;
+        refund += sumCost(500, 1.25, droneDmgBonus);
+        refund += sumCost(500, 1.25, droneSpeedCount);
+      }
+      return refund;
+    }
+
     function updateShopUI() {
       var currentBaseDmg = 1 + shopMeatBonusDmg;
       var currentInterval = Math.round((100 * 1.35) * Math.pow(0.9, shopAppleCount));
@@ -1937,6 +2020,10 @@
         droneDmgCard.style.display = "none";
         droneSpeedCard.style.display = "none";
       }
+
+      var expectedRefund = calculateRefund();
+      document.getElementById('shopRefundExpected').innerText = expectedRefund;
+      document.getElementById('buyResetBtn').disabled = (userCoins < 2000);
     }
 
     function updateMissionUI() {
@@ -2018,7 +2105,20 @@
     }
 
     function buyShopItem(type) {
-      if (type === 'meat' && userCoins >= shopMeatCost) {
+      if (type === 'reset' && userCoins >= 2000) {
+        var refund = calculateRefund();
+        userCoins = userCoins - 2000 + refund;
+        
+        shopMeatBonusDmg = 0; shopMeatCost = 160;
+        shopAppleCount = 0; shopAppleCost = 160;
+        shopHeartBonusLife = 0; shopHeartCost = 160;
+        shopCandyCount = 0; shopCandyCost = 160;
+        hasDrone = false;
+        droneDmgBonus = 0; droneDmgCost = 500;
+        droneSpeedCount = 0; droneSpeedCost = 500;
+        
+        shopPurchaseCount++;
+      } else if (type === 'meat' && userCoins >= shopMeatCost) {
         userCoins -= Math.floor(shopMeatCost);
         shopMeatBonusDmg += 1;
         shopMeatCost *= 1.2;
@@ -2494,13 +2594,35 @@
       var cx = boss.x + boss.width / 2;
       var cy = boss.y + boss.height / 2;
 
-      if (boss.designType === 0) {
+      if (boss.designType === 4) { // 신규 Spinner 보스
+        ctx.save();
+        ctx.translate(cx | 0, cy | 0);
+        if (boss.state === 'spin') {
+          ctx.rotate(gameTime * 0.2);
+        } else if (boss.state === 'dash') {
+          var angle = Math.atan2(boss.targetDashY - boss.y, boss.targetDashX - boss.x);
+          ctx.rotate(angle + Math.PI/2);
+        }
+        
+        ctx.fillStyle = "#f43f5e";
+        ctx.beginPath();
+        ctx.moveTo(0, -boss.height/2);
+        ctx.lineTo(boss.width/2, boss.height/2);
+        ctx.lineTo(-boss.width/2, boss.height/2);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.fillStyle = "#facc15";
+        ctx.beginPath();
+        ctx.arc(0, 0, 15, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+      else if (boss.designType === 0) {
         ctx.fillStyle = "#dc2626";
         ctx.fillRect((boss.x) | 0, (boss.y) | 0, boss.width | 0, boss.height | 0);
-        
         ctx.fillStyle = "#38bdf8";
         ctx.fillRect((boss.x + 10) | 0, (boss.y + 10) | 0, (boss.width - 20) | 0, 8);
-        
         ctx.fillStyle = "#fef08a";
         ctx.fillRect((boss.x + 12) | 0, (boss.y + 25) | 0, 15, 15);
         ctx.fillRect((boss.x + boss.width - 27) | 0, (boss.y + 25) | 0, 15, 15);
@@ -2509,12 +2631,10 @@
         ctx.beginPath();
         ctx.ellipse(cx | 0, cy | 0, boss.width / 2, boss.height / 2, 0, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
         ctx.arc(cx | 0, cy | 0, 16, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.fillStyle = "#ef4444";
         ctx.beginPath();
         ctx.arc((cx + Math.sin(gameTime * 0.05) * 4) | 0, cy | 0, 8, 0, Math.PI * 2);
@@ -2522,7 +2642,6 @@
       } else if (boss.designType === 2) {
         ctx.fillStyle = "#0284c7";
         ctx.fillRect((boss.x + 15) | 0, (boss.y) | 0, (boss.width - 30) | 0, boss.height | 0);
-
         ctx.save();
         ctx.translate(cx | 0, cy | 0);
         ctx.rotate(gameTime * 0.03);
@@ -2538,7 +2657,6 @@
         ctx.lineTo((boss.x) | 0, (boss.y) | 0);
         ctx.closePath();
         ctx.fill();
-
         ctx.fillStyle = "#facc15";
         ctx.beginPath();
         ctx.arc(cx | 0, (boss.y + 20) | 0, 10, 0, Math.PI * 2);
@@ -2772,7 +2890,10 @@
       bossSpawnCount++;
       var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.3, bossSpawnCount - 1));
       
+      var bType = (stage >= 10 && Math.random() > 0.5) ? "spinner" : "normal";
+
       boss = {
+        type: bType,
         x: canvas.width / 2 - 40,
         y: 40,
         baseY: 40,
@@ -2784,10 +2905,15 @@
         maxHp: calculatedHp,
         lastShoot: 0,
         patternTimer: 0,
-        designType: Math.floor(Math.random() * 4),
+        designType: (bType === "spinner") ? 4 : Math.floor(Math.random() * 4),
         isCharging: false,
         chargeTimer: 0,
-        targetY: 40
+        targetY: 40,
+        state: 'idle',
+        stateTimer: 0,
+        targetDashX: 0,
+        targetDashY: 0,
+        spinAngle: 0
       };
     }
 
@@ -2974,8 +3100,7 @@
       player.y += moveY * player.speed;
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-      
-      var maxPlayerY = canvas.height - player.height - 160;
+      var maxPlayerY = canvas.height - player.height - 180;
       player.y = Math.max(0, Math.min(maxPlayerY, player.y));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
@@ -3012,30 +3137,74 @@
       }
 
       if (boss) {
-        boss.x += boss.speedX;
-        if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
-          boss.speedX *= -1;
-        }
-
-        boss.chargeTimer++;
-        if (boss.chargeTimer > 250) {
-          boss.isCharging = true;
-          boss.targetY = canvas.height / 2 - 50; 
-          if (boss.chargeTimer > 350) {
-            boss.isCharging = false;
-            boss.targetY = boss.baseY;
-            if (boss.chargeTimer > 500) boss.chargeTimer = 0;
+        if (boss.type === "normal") {
+          boss.x += boss.speedX;
+          if (boss.x <= 0 || boss.x + boss.width >= canvas.width) {
+            boss.speedX *= -1;
           }
-        } else {
-          boss.targetY = boss.baseY + Math.sin(gameTime * 0.04) * 45;
-        }
 
-        boss.y += (boss.targetY - boss.y) * 0.05;
+          boss.chargeTimer++;
+          if (boss.chargeTimer > 250) {
+            boss.isCharging = true;
+            boss.targetY = canvas.height / 2 - 50; 
+            if (boss.chargeTimer > 350) {
+              boss.isCharging = false;
+              boss.targetY = boss.baseY;
+              if (boss.chargeTimer > 500) boss.chargeTimer = 0;
+            }
+          } else {
+            boss.targetY = boss.baseY + Math.sin(gameTime * 0.04) * 45;
+          }
+          boss.y += (boss.targetY - boss.y) * 0.05;
 
-        var bossShootInterval = Math.max(50, 100 - (stage - 1) * 4);
-        if (gameTime - boss.lastShoot > bossShootInterval) {
-          fireBossPattern(boss);
-          boss.lastShoot = gameTime;
+          var bossShootInterval = Math.max(50, 100 - (stage - 1) * 4);
+          if (gameTime - boss.lastShoot > bossShootInterval) {
+            fireBossPattern(boss);
+            boss.lastShoot = gameTime;
+          }
+        } else if (boss.type === "spinner") {
+          boss.stateTimer++;
+          if (boss.state === 'idle') {
+            boss.y += (boss.baseY + Math.sin(gameTime * 0.04) * 10 - boss.y) * 0.1;
+            boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.05; 
+            
+            if (boss.stateTimer > 90) {
+              boss.state = 'dash';
+              boss.stateTimer = 0;
+              boss.targetDashX = player.x + player.width/2 - boss.width/2;
+              boss.targetDashY = player.y - boss.height - 10;
+            }
+          } else if (boss.state === 'dash') {
+            boss.x += (boss.targetDashX - boss.x) * 0.12;
+            boss.y += (boss.targetDashY - boss.y) * 0.12;
+            
+            if (boss.stateTimer > 40) {
+              boss.state = 'spin';
+              boss.stateTimer = 0;
+              boss.spinAngle = 0;
+            }
+          } else if (boss.state === 'spin') {
+            if (boss.stateTimer % 5 === 0) {
+              var cx = boss.x + boss.width/2;
+              var cy = boss.y + boss.height/2;
+              boss.spinAngle += 0.5;
+              enemyBullets.push({
+                x: cx - 6, y: cy - 6, width: 14, height: 14,
+                vx: Math.cos(boss.spinAngle) * 3.5, vy: Math.sin(boss.spinAngle) * 3.5, isHeavy: true
+              });
+            }
+            if (boss.stateTimer > 100) {
+              boss.state = 'return';
+              boss.stateTimer = 0;
+            }
+          } else if (boss.state === 'return') {
+            boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.06;
+            boss.y += (boss.baseY - boss.y) * 0.06;
+            if (boss.stateTimer > 60) {
+              boss.state = 'idle';
+              boss.stateTimer = 0;
+            }
+          }
         }
 
         for (var j = bullets.length - 1; j >= 0; j--) {
