@@ -654,9 +654,10 @@
       z-index: 5;
     }
 
+    /* 조이스틱 + 화살표 통합 조작 영역 스타일 */
     #joystickArea {
       position: absolute;
-      bottom: 48px; 
+      bottom: 45px;
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -665,7 +666,7 @@
       border: 2px dashed rgba(56, 189, 248, 0.6);
       border-radius: 50%;
       touch-action: none;
-      display: none;
+      display: flex;
       justify-content: center;
       align-items: center;
       z-index: 7;
@@ -683,16 +684,15 @@
       transition: transform 0.05s linear;
     }
 
-    /* 4방향 화살표 패드 스타일 (좌우 크기 및 간격 확장 적용) */
     .dpad-container {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      width: 230px;
+      width: 250px;
       height: 125px;
       display: block;
-      z-index: 7;
+      z-index: 6;
       pointer-events: auto;
     }
     .dpad-btn {
@@ -700,7 +700,7 @@
       background: rgba(30, 41, 59, 0.9);
       border: 2px solid rgba(56, 189, 248, 0.8);
       color: #38bdf8;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: bold;
       display: flex;
       justify-content: center;
@@ -714,10 +714,8 @@
       color: #fff;
       transform: scale(0.95);
     }
-    #dpadUp { top: 0px; left: 81px; width: 68px; height: 40px; }
-    #dpadDown { bottom: 0px; left: 81px; width: 68px; height: 40px; }
-    #dpadLeft { top: 43px; left: 0px; width: 72px; height: 40px; }
-    #dpadRight { top: 43px; right: 0px; width: 72px; height: 40px; }
+    #dpadLeft { top: 43px; left: 0px; width: 85px; height: 42px; }
+    #dpadRight { top: 43px; right: 0px; width: 85px; height: 42px; }
 
     #joystickStatusNotice {
       position: absolute;
@@ -856,7 +854,7 @@
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.2.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.3.0 업데이트)</button>
       </div>
 
     </div>
@@ -872,7 +870,7 @@
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.82rem; font-weight: bold; color: #38bdf8;">조작 방식 선택</span>
-            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #d97706, #b45309);" onclick="toggleControlTypeFromModal()">화살표 4방향</button>
+            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">통합 조작</button>
           </div>
         </div>
         <div style="text-align: center; margin-top: 10px;">
@@ -1088,9 +1086,17 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v7.3.0 (보스 등장 주기 단축 및 통합 조작 지원)</div>
+            <ul>
+              <li><b>보스 등장 주기 30마리 고정</b>: 스테이지 클리어형 구조에서 일반 몬스터 처치 목표가 30마리로 조정되어 더욱 속도감 있는 전투를 즐기실 수 있습니다.</li>
+              <li><b>통합 조작 방식 추가</b>: 가운데 조이스틱과 좌우 화살표 버튼이 함께 배치된 통합 조작 UI가 추가되었으며, 설정에서 변경 및 기본 적용이 가능합니다.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
             <div class="version-title">v7.2.0 (스테이지 및 보스 시스템 개편, 조작성 강화)</div>
             <ul>
-              <li><b>스테이지 클리어형 구조 도입</b>: 무한 킬 수 누적 방식에서 벗어나, 각 스테이지별 일반 몬스터 40마리를 소탕하면 최종 보스가 등장하며 보스 격파 시 다음 스테이지로 확실하게 진입합니다.</li>
+              <li><b>스테이지 클리어형 구조 도입</b>: 무한 킬 수 누적 방식에서 벗어나, 각 스테이지별 일반 몬스터 소탕 시 최종 보스가 등장하며 보스 격파 시 다음 스테이지로 확실하게 진입합니다.</li>
               <li><b>보스 등장 주기 밸런스 조정</b>: 보스가 지나치게 자주 튀어나오던 호흡 문제를 해결하여 일반 스테이지의 파밍과 전투를 충분히 즐길 수 있도록 개편되었습니다.</li>
               <li><b>조작성 대폭 강화</b>: 4방향 화살표 패드의 좌우 버튼 크기와 간격이 더욱 넓고 편안하게 최적화되었습니다.</li>
             </ul>
@@ -1103,13 +1109,6 @@
               <li><b>탄막 및 패턴 밸런스 조정</b>: 보스의 탄환 속도와 밀도가 완화되고, 패턴 전환 딜레이가 늘어나 회피와 공략이 수월해졌습니다.</li>
               <li><b>체력 회복(하트) 확률 상향</b>: 보스 처치 시 하트 드롭 확률이 25%로 대폭 상향되었습니다.</li>
               <li><b>메인 화면 설정 메뉴 추가</b>: 설정에서 음소거 설정 및 조이스틱 / 화살표 4방향 조작 방식을 직접 선택할 수 있습니다.</li>
-            </ul>
-          </div>
-
-          <div class="version-block">
-            <div class="version-title">v7.0.0 (시스템 개편 및 컨텐츠 확장)</div>
-            <ul>
-              <li>출석체크 시스템, 10스테이지 신규 보스 및 업그레이드 초기화권 도입.</li>
             </ul>
           </div>
         </div>
@@ -1203,17 +1202,14 @@
         무기: 기본 탄환 | x1 | DMG: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
       </div>
       
-      <!-- 조이스틱 영역 -->
+      <!-- 조이스틱 + 화살표 통합 조작 영역 -->
       <div id="joystickArea">
         <div id="joystickKnob"></div>
       </div>
 
-      <!-- 4방향 화살표 패드 영역 (좌우 크기 및 간격 확장 적용) -->
       <div id="dpadContainer" class="dpad-container">
-        <div id="dpadUp" class="dpad-btn">▲</div>
         <div id="dpadLeft" class="dpad-btn">◀</div>
         <div id="dpadRight" class="dpad-btn">▶</div>
-        <div id="dpadDown" class="dpad-btn">▼</div>
       </div>
     </div>
   </div>
@@ -1221,12 +1217,12 @@
   <script>
     var db = null;
     var soundMuted = false;
-    var controlType = localStorage.getItem("yoon_control_type") || "dpad";
+    var controlType = localStorage.getItem("yoon_control_type") || "integrated";
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v7.2.0";
+    var currentVersionKey = "v7.3.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -1733,11 +1729,11 @@
       }
 
       var controlBtn = document.getElementById("settingControlToggleBtn");
-      if (controlType === "joystick") {
-        controlBtn.textContent = "조이스틱";
+      if (controlType === "integrated") {
+        controlBtn.textContent = "통합 조작";
         controlBtn.style.background = "linear-gradient(135deg, #059669, #047857)";
       } else {
-        controlBtn.textContent = "화살표 4방향";
+        controlBtn.textContent = "조이스틱만";
         controlBtn.style.background = "linear-gradient(135deg, #d97706, #b45309)";
       }
     }
@@ -1748,21 +1744,18 @@
 
     function toggleControlTypeFromModal() {
       initAudio();
-      controlType = (controlType === "joystick") ? "dpad" : "joystick";
+      controlType = (controlType === "integrated") ? "joystick" : "integrated";
       localStorage.setItem("yoon_control_type", controlType);
       updateSettingModalUI();
       applyControlTypeUI();
     }
 
     function applyControlTypeUI() {
-      var joystickArea = document.getElementById("joystickArea");
       var dpadContainer = document.getElementById("dpadContainer");
-      if (controlType === "joystick") {
-        joystickArea.style.display = "flex";
-        dpadContainer.style.display = "none";
-      } else {
-        joystickArea.style.display = "none";
+      if (controlType === "integrated") {
         dpadContainer.style.display = "block";
+      } else {
+        dpadContainer.style.display = "none";
       }
     }
 
@@ -1987,7 +1980,7 @@
     var bossKillCount = 0;
     
     var stageMonsterKills = 0;
-    var targetStageKills = 40; // 40마리 고정
+    var targetStageKills = 30; // 30마리 고정
     var nextEliteKillTarget = 15;
 
     var bulletCount = 1;
@@ -2051,8 +2044,6 @@
 
     var joystickAxisX = 0; 
     var joystickAxisY = 0; 
-    var dpadUpPressed = false;
-    var dpadDownPressed = false;
     var dpadLeftPressed = false;
     var dpadRightPressed = false;
 
@@ -2440,8 +2431,6 @@
         e.preventDefault();
         initAudio();
         btn.classList.add("pressed");
-        if (direction === 'up') dpadUpPressed = true;
-        if (direction === 'down') dpadDownPressed = true;
         if (direction === 'left') dpadLeftPressed = true;
         if (direction === 'right') dpadRightPressed = true;
       }
@@ -2449,8 +2438,6 @@
       function pressOff(e) {
         e.preventDefault();
         btn.classList.remove("pressed");
-        if (direction === 'up') dpadUpPressed = false;
-        if (direction === 'down') dpadDownPressed = false;
         if (direction === 'left') dpadLeftPressed = false;
         if (direction === 'right') dpadRightPressed = false;
       }
@@ -2462,8 +2449,6 @@
       btn.addEventListener("mouseup", pressOff);
     }
 
-    setupDpadButton("dpadUp", "up");
-    setupDpadButton("dpadDown", "down");
     setupDpadButton("dpadLeft", "left");
     setupDpadButton("dpadRight", "right");
 
@@ -2924,7 +2909,7 @@
       sessionCoinsEarned = 0;
 
       stageMonsterKills = 0;
-      targetStageKills = 40; // 40마리 고정
+      targetStageKills = 30; // 30마리 고정
       nextEliteKillTarget = 15;
       bulletCount = 1;
       gameTime = 0;
@@ -3228,8 +3213,8 @@
 
       if (keys["ArrowLeft"] || keys["KeyA"] || dpadLeftPressed) moveX -= 1;
       if (keys["ArrowRight"] || keys["KeyD"] || dpadRightPressed) moveX += 1;
-      if (keys["ArrowUp"] || keys["KeyW"] || dpadUpPressed) moveY -= 1;
-      if (keys["ArrowDown"] || keys["KeyS"] || dpadDownPressed) moveY += 1;
+      if (keys["ArrowUp"] || keys["KeyW"]) moveY -= 1;
+      if (keys["ArrowDown"] || keys["KeyS"]) moveY += 1;
 
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
@@ -3409,7 +3394,7 @@
               boss = null;
               stage++;
               stageMonsterKills = 0; 
-              targetStageKills = 40; // 40마리 고정 유지 (증가하지 않음)
+              targetStageKills = 30; // 30마리 고정 유지
               break;
             }
           }
