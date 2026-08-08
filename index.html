@@ -440,29 +440,6 @@
       color: #ffffff !important;
     }
 
-    .top-controls {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 15;
-      display: flex;
-      gap: 10px;
-    }
-
-    .icon-btn {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      color: #fff;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      font-size: 1.1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
     .modal-overlay {
       position: absolute;
       top: 0;
@@ -801,11 +778,6 @@
       <div class="game-hud-item" id="hudScore">Score: 0</div>
     </div>
 
-    <div id="topControls" class="top-controls hidden">
-      <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
-      <button class="icon-btn" id="pauseBtn" onclick="togglePause()">⏸️</button>
-    </div>
-
     <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
       
@@ -895,7 +867,7 @@
       <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.6.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.7.0 업데이트)</button>
       </div>
 
     </div>
@@ -1052,12 +1024,20 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v6.7.0 (자동 일시정지 및 HUD 깔끔화)</div>
+            <ul>
+              <li><b>UI 깔끔화</b>: 게임 화면 상단에 있던 정지 및 음소거 버튼을 제거하여 완전히 몰입할 수 있도록 시야를 넓혔습니다.</li>
+              <li><b>자동 일시정지</b>: 화면을 벗어나거나 백그라운드로 전환될 경우(visibilitychange 이벤트) 자동으로 일시정지 모드가 작동합니다.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
             <div class="version-title">v6.6.0 (최적화 및 랭킹 시스템 개편)</div>
             <ul>
               <li><b>UI 최적화</b>: 생명력(하트) 5개 이상 획득 시 숫자로 간략히 표기되어 깔끔한 UI를 제공합니다.</li>
               <li><b>피격 판정 개선</b>: 미사일이 비행기 주변을 스치기만 해도 죽던 현상을 개선하여 실제 기체 크기에 맞게 히트박스를 완화했습니다.</li>
               <li><b>명예의 전당 개선</b>: 닉네임당 최고 기록 1개만 남도록 중복을 방지하며, 컬럼명이 '최고점수'로 변경되었습니다.</li>
-              <li><b>랭커 혜택 추가</b>: TOP 3 랭커에게는 달 아래에 모두가 볼 수 있는 말풍선 한마디 권한이 부여됩니다.</li>
+              <li><b>랭커 혜택 추가 (NEW!)</b>: TOP 3 랭커에게는 달 그림 아래에 모든 유저가 볼 수 있는 말풍선 한마디 권한이 부여됩니다.</li>
               <li><b>적 탄환 시인성 강화</b>: 적이 발사하는 탄환의 가시성과 크기를 개선하여 회피하기 쉽게 조정했습니다.</li>
             </ul>
           </div>
@@ -1171,7 +1151,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.6.0";
+    var currentVersionKey = "v6.7.0";
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -1307,7 +1287,22 @@
       if (dismissedVersion !== currentVersionKey) {
         toggleModal('updateModal', true);
       }
+
+      // 화면 이탈/백그라운드 전환 시 자동 일시정지 처리 (visibilitychange)
+      document.addEventListener("visibilitychange", function() {
+        if (document.hidden && !isGameOver && !isPaused && !isCountingDown) {
+          triggerAutoPause();
+        }
+      });
     });
+
+    function triggerAutoPause() {
+      isPaused = true;
+      stopBGM();
+      document.getElementById("pauseModal").classList.remove("hidden");
+      document.getElementById("pauseText").textContent = "앱이 백그라운드로 전환되어 일시정지 되었습니다.";
+      document.getElementById("pauseBtnGroup").style.display = "block";
+    }
 
     function checkAndResetWeeklyRanking() {
       if (!db) return;
@@ -1452,7 +1447,6 @@
 
           rankings = rankings.slice(0, 10);
 
-          // 3위 이내 랭커의 말풍선 설정 처리 (1위~3위 중 quote가 있는 첫 번째 또는 1위 랭커)
           var bubbleContainer = document.getElementById("rankerBubbleContainer");
           var topRankerWithQuote = null;
           for (var i = 0; i < Math.min(3, rankings.length); i++) {
@@ -1515,24 +1509,9 @@
       soundMuted = !soundMuted;
       var soundIcon = soundMuted ? "🔇" : "🔊";
       document.getElementById("mainSoundBtn").textContent = soundIcon;
-      var ingameSoundBtn = document.getElementById("soundBtn");
-      if (ingameSoundBtn) ingameSoundBtn.textContent = soundIcon;
 
       if (soundMuted) stopBGM();
       else if (!isGameOver && !isPaused && !isCountingDown) startBGM();
-    }
-
-    function togglePause() {
-      if (isGameOver || isCountingDown) return;
-      if (!isPaused) {
-        isPaused = true;
-        document.getElementById("pauseModal").classList.remove("hidden");
-        document.getElementById("pauseText").textContent = "게임이 일시정지 되었습니다.";
-        document.getElementById("pauseBtnGroup").style.display = "block";
-        stopBGM();
-      } else {
-        resumeGameWithCountdown();
-      }
     }
 
     function resumeGameWithCountdown() {
@@ -1687,7 +1666,6 @@
     var startScreen = document.getElementById("startScreen");
     var rankScreen = document.getElementById("rankScreen");
     var controlArea = document.getElementById("controlArea");
-    var topControls = document.getElementById("topControls");
     var updateModal = document.getElementById("updateModal");
     var storyModal = document.getElementById("storyModal");
     var shopModal = document.getElementById("shopModal");
@@ -2437,7 +2415,7 @@
       var barWidth = canvas.width * 0.6;
       var barHeight = 14;
       var barX = (canvas.width - barWidth) / 2;
-      var barY = 35; // HUD 바 아래로 위치 조정
+      var barY = 35;
       var hpRatio = Math.max(0, boss.hp / boss.maxHp);
 
       ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
@@ -2508,10 +2486,8 @@
       ctx.restore();
     }
 
-    // 적 총알 시인성 강화 (크기를 키우고 외곽선/후광 효과 추가)
     function drawEnemyBullet(ctx, eb) {
       ctx.save();
-      // 발광 효과 및 선명한 색상 대비
       ctx.shadowColor = eb.isHeavy ? "#f87171" : "#ff0055";
       ctx.shadowBlur = 6;
       ctx.fillStyle = eb.isHeavy ? "#ff4444" : "#ff1166";
@@ -2519,7 +2495,6 @@
       ctx.arc((eb.x + eb.width / 2) | 0, (eb.y + eb.height / 2) | 0, eb.width / 2, 0, Math.PI * 2);
       ctx.fill();
       
-      // 내부 코어 (하이라이트)
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.arc((eb.x + eb.width / 2) | 0, (eb.y + eb.height / 2) | 0, eb.width / 4, 0, Math.PI * 2);
@@ -2532,7 +2507,6 @@
       startScreen.classList.add("hidden");
       rankScreen.classList.add("hidden");
       controlArea.classList.remove("hidden");
-      topControls.classList.remove("hidden");
       gameHudBar.classList.remove("hidden");
 
       playerQuote = rankingQuoteInput.value.trim();
@@ -2589,7 +2563,6 @@
       stopBGM();
       rankScreen.classList.add("hidden");
       controlArea.classList.add("hidden");
-      topControls.classList.add("hidden");
       gameHudBar.classList.add("hidden");
       startScreen.classList.remove("hidden");
       updateShopUI();
@@ -2746,7 +2719,7 @@
           enemyBullets.push({
             x: originX - 6,
             y: originY - 10,
-            width: 14, // 시인성 강화 크기 확대
+            width: 14,
             height: 14,
             vx: Math.cos(angle) * 1.7, 
             vy: Math.sin(angle) * 1.7,
@@ -3045,7 +3018,7 @@
             enemyBullets.push({
               x: m.x + m.width / 2 - 5,
               y: m.y + m.height,
-              width: 10, // 시인성 강화 크기 확대
+              width: 10,
               height: 10,
               vx: 0,
               vy: bulletSpeed,
@@ -3063,7 +3036,7 @@
             enemyBullets.push({
               x: m.x + m.width / 2 - 6,
               y: m.y + m.height,
-              width: 12, // 시인성 강화 크기 확대
+              width: 12,
               height: 12,
               vx: (dx / dist) * 1.8,
               vy: (dy / dist) * 1.8,
@@ -3145,7 +3118,6 @@
         if (m && m.y > canvas.height) monsters.splice(i, 1);
       }
 
-      // 콤팩트 상단 HUD 업데이트
       updateGameHudBar();
     }
 
@@ -3263,11 +3235,9 @@
       cancelAnimationFrame(gameAnimationId);
 
       controlArea.classList.add("hidden");
-      topControls.classList.add("hidden");
       gameHudBar.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
-      // 정산 요약 카드 데이터 반영
       document.getElementById("resPilotName").textContent = playerNickname;
       document.getElementById("resScore").textContent = score + "점" + (score >= bestScore && score > 0 ? " (NEW BEST!)" : "");
       document.getElementById("resStage").textContent = "Stage " + stage;
