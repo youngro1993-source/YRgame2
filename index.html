@@ -151,13 +151,20 @@
       word-break: keep-all;
     }
 
+    .moon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 1px auto 2px auto;
+      position: relative;
+    }
+
     .moon-artwork {
       width: 40px;
       height: 40px;
       background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%);
       border-radius: 50%;
       box-shadow: 0 0 12px rgba(250, 204, 21, 0.4), inset -5px -5px 10px rgba(0, 0, 0, 0.5);
-      margin: 1px auto 2px auto;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -181,6 +188,37 @@
       background: rgba(161, 98, 7, 0.35);
       border-radius: 50%;
       box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3);
+    }
+
+    /* 랭커 3위 말풍선 스타일 */
+    .ranker-speech-bubble {
+      margin-top: 4px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid #facc15;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.55rem;
+      color: #facc15;
+      max-width: 220px;
+      word-break: break-all;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      position: relative;
+      animation: floatBubble 2s infinite ease-in-out;
+    }
+    .ranker-speech-bubble::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 5px 5px 5px;
+      border-style: solid;
+      border-color: transparent transparent #facc15 transparent;
+    }
+
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
     }
 
     .btn-container {
@@ -300,7 +338,7 @@
     }
 
     .ranking-sub-notice {
-      font-size: 0.5rem;
+      font-size: 0.48rem;
       color: #cbd5e1;
       margin-bottom: 3px;
       font-weight: bold;
@@ -693,12 +731,75 @@
       pointer-events: none;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
+
+    /* 게임 진행 상단 콤팩트 바 스타일 */
+    .game-hud-bar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      backdrop-filter: blur(4px);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .game-hud-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* 게임오버 정산 카드 스타일 */
+    .result-card-box {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 2px solid #38bdf8;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px 0;
+      text-align: left;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 4px;
+    }
+    .result-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .result-label { color: #94a3b8; }
+    .result-value { color: #facc15; font-weight: bold; }
   </style>
 </head>
 <body>
 
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
+
+    <!-- 게임 중 상단 콤팩트 HUD 바 -->
+    <div id="gameHudBar" class="game-hud-bar hidden">
+      <div class="game-hud-item" id="hudStage">Stage 1</div>
+      <div class="game-hud-item" id="hudLife">❤️ x3</div>
+      <div class="game-hud-item" id="hudCoins">🪙 0</div>
+      <div class="game-hud-item" id="hudScore">Score: 0</div>
+    </div>
 
     <div id="topControls" class="top-controls hidden">
       <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
@@ -717,8 +818,11 @@
 
         <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         
-        <!-- 달 클릭 이벤트 적용 영역 -->
-        <div class="moon-artwork" onclick="handleMoonClick()"></div>
+        <!-- 달 클릭 영역 및 랭커 3위 말풍선 컨테이너 -->
+        <div class="moon-container">
+          <div class="moon-artwork" onclick="handleMoonClick()"></div>
+          <div id="rankerBubbleContainer" class="hidden"></div>
+        </div>
       </div>
 
       <!-- [2] 중앙 영역 -->
@@ -741,7 +845,7 @@
         <!-- 랭킹표 -->
         <div class="ranking-container">
           <h3>🏆 명예의 전당 (TOP 10)</h3>
-          <div class="ranking-sub-notice">매주 토요일 새벽 12시 초기화</div>
+          <div class="ranking-sub-notice">※ 닉네임당 최고 점수 1개만 등록됩니다 (매주 토요일 12시 초기화)</div>
           <div class="ranking-scroll-box">
             <table>
               <thead>
@@ -751,7 +855,7 @@
                   <th>닉네임</th>
                   <th>몬스터킬</th>
                   <th>보스킬</th>
-                  <th>점수</th>
+                  <th>최고점수</th>
                 </tr>
               </thead>
               <tbody id="mainRankingBody">
@@ -863,7 +967,6 @@
           </button>
         </div>
 
-        <!-- 3천 코인 보조기체 아이템 추가 -->
         <div class="shop-item-card">
           <div class="shop-item-icon">🛸</div>
           <div class="shop-item-info">
@@ -932,6 +1035,10 @@
           행성의 방어막이 모두 무너진 지금, 유일한 희망은 은하 수호대의 파일럿인 <span class="highlight" id="storyPilotName">Pilot</span> 당신뿐입니다!<br><br>
           적들의 무자비한 공습을 뚫고, <span class="highlight">'YOON 행성'</span>의 평화를 되찾아주세요!
         </div>
+        <div style="text-align: center; margin-bottom: 10px;">
+          <label style="font-size: 0.72rem; color: #facc15; display: block; margin-bottom: 4px;">💬 TOP 3 달성 시 모두에게 보일 한마디 입력</label>
+          <input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 은하의 수호자다!" maxlength="25" style="width: 100%; max-width: 280px;" />
+        </div>
         <div style="text-align: center;">
           <button class="btn btn-pulse" onclick="startGame()">🚀 전투 개시!</button>
         </div>
@@ -949,8 +1056,9 @@
             <ul>
               <li><b>UI 최적화</b>: 생명력(하트) 5개 이상 획득 시 숫자로 간략히 표기되어 깔끔한 UI를 제공합니다.</li>
               <li><b>피격 판정 개선</b>: 미사일이 비행기 주변을 스치기만 해도 죽던 현상을 개선하여 실제 기체 크기에 맞게 히트박스를 완화했습니다.</li>
-              <li><b>명예의 전당 개선</b>: 랭킹에 중복된 닉네임이 도배되는 것을 방지하기 위해 닉네임당 최고 기록 1개만 남도록 수정되었습니다.</li>
-              <li><b>게임 최적화</b>: 전반적인 게임 렌더링 및 메모리 최적화를 진행하였습니다.</li>
+              <li><b>명예의 전당 개선</b>: 닉네임당 최고 기록 1개만 남도록 중복을 방지하며, 컬럼명이 '최고점수'로 변경되었습니다.</li>
+              <li><b>랭커 혜택 추가</b>: TOP 3 랭커에게는 달 아래에 모두가 볼 수 있는 말풍선 한마디 권한이 부여됩니다.</li>
+              <li><b>적 탄환 시인성 강화</b>: 적이 발사하는 탄환의 가시성과 크기를 개선하여 회피하기 쉽게 조정했습니다.</li>
             </ul>
           </div>
           
@@ -988,13 +1096,38 @@
     <!-- 게임 오버 화면 -->
     <div id="rankScreen" class="screen hidden" style="justify-content: center; overflow-y: auto;">
       <h1>GAME OVER</h1>
-      <p id="finalScoreText" style="margin-bottom: 4px;">Score: 0</p>
       
-      <p id="sessionResultText" style="color: #facc15; font-weight: bold; margin-bottom: 10px; font-size: 0.85rem;">이번 게임: 0킬 / 0코인 획득</p>
+      <!-- 개선된 게임 정산 요약 카드 -->
+      <div class="result-card-box">
+        <div class="result-row">
+          <span class="result-label">파일럿</span>
+          <span class="result-value" id="resPilotName">Pilot</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">최종 점수</span>
+          <span class="result-value" id="resScore">0점</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">도달 스테이지</span>
+          <span class="result-value" id="resStage">Stage 1</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">일반 몬스터 처치</span>
+          <span class="result-value" id="resKills">0마리</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">보스 몬스터 처치</span>
+          <span class="result-value" id="resBossKills">0마리</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">이번 게임 코인 획득</span>
+          <span class="result-value" id="resCoins">🪙 0개</span>
+        </div>
+      </div>
       
       <div class="ranking-container">
         <h3>🏆 명예의 전당 (TOP 10)</h3>
-        <div class="ranking-sub-notice">매주 토요일 새벽 12시 초기화</div>
+        <div class="ranking-sub-notice">※ 닉네임당 최고 점수 1개만 등록됩니다</div>
         <div class="ranking-scroll-box">
           <table>
             <thead>
@@ -1004,7 +1137,7 @@
                 <th>닉네임</th>
                 <th>몬스터킬</th>
                 <th>보스킬</th>
-                <th>점수</th>
+                <th>최고점수</th>
               </tr>
             </thead>
             <tbody id="rankingBody">
@@ -1162,6 +1295,11 @@
         document.getElementById("nicknameInput").value = savedNick;
         checkNicknameInput(savedNick);
       }
+      var savedQuote = localStorage.getItem("yoon_quote") || "";
+      if (savedQuote) {
+        document.getElementById("rankingQuoteInput").value = savedQuote;
+      }
+
       updateShopUI();
       updateMissionUI();
 
@@ -1218,7 +1356,7 @@
       }
     }
 
-    function saveScore(nickname, score, monsterKills, bossKills) {
+    function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db) return;
       db.collection("rankings").where("nickname", "==", nickname).get()
       .then(function(querySnapshot) {
@@ -1228,6 +1366,7 @@
             score: score,
             monsterKills: monsterKills || 0,
             bossKills: bossKills || 0,
+            quote: quote || "",
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           }).then(function() { updateLeaderboardUI(); });
         } else {
@@ -1247,6 +1386,7 @@
               score: score,
               monsterKills: monsterKills || 0,
               bossKills: bossKills || 0,
+              quote: quote || "",
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(function() {
               var batch = db.batch();
@@ -1288,12 +1428,11 @@
       return month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
-    // 개선된 updateLeaderboardUI 함수 (데이터베이스 유기적 클린업)
     function updateLeaderboardUI() {
       if (!db) return;
       db.collection("rankings")
         .orderBy("score", "desc")
-        .limit(50) // 넉넉하게 불러온 뒤 화면 렌더링 전 필터링 수행
+        .limit(50)
         .get()
         .then(function(querySnapshot) {
           var rankings = [];
@@ -1303,18 +1442,32 @@
             var data = doc.data();
             var nick = data.nickname || "익명";
             
-            // 처음 등장하는 닉네임(최고점)이면 랭킹에 등록
             if (!seenNicknames[nick]) {
               seenNicknames[nick] = true;
               rankings.push(data);
             } else {
-              // 이미 더 높은 점수로 등록된 닉네임이라면, 이 하위 점수는 중복이므로 DB에서 청소
               doc.ref.delete().catch(function(e){});
             }
           });
 
-          // 상위 10개만 남겨서 화면에 출력
           rankings = rankings.slice(0, 10);
+
+          // 3위 이내 랭커의 말풍선 설정 처리 (1위~3위 중 quote가 있는 첫 번째 또는 1위 랭커)
+          var bubbleContainer = document.getElementById("rankerBubbleContainer");
+          var topRankerWithQuote = null;
+          for (var i = 0; i < Math.min(3, rankings.length); i++) {
+            if (rankings[i].quote && rankings[i].quote.trim() !== "") {
+              topRankerWithQuote = rankings[i];
+              break;
+            }
+          }
+
+          if (topRankerWithQuote) {
+            bubbleContainer.innerHTML = "👑 " + topRankerWithQuote.nickname + ": \"" + topRankerWithQuote.quote + "\"";
+            bubbleContainer.classList.remove("hidden");
+          } else {
+            bubbleContainer.classList.add("hidden");
+          }
 
           var htmlContent = "";
           if (rankings.length === 0) {
@@ -1539,12 +1692,17 @@
     var storyModal = document.getElementById("storyModal");
     var shopModal = document.getElementById("shopModal");
     var missionModal = document.getElementById("missionModal");
+    var gameHudBar = document.getElementById("gameHudBar");
+
     var storyPilotName = document.getElementById("storyPilotName");
     var nicknameInput = document.getElementById("nicknameInput");
+    var rankingQuoteInput = document.getElementById("rankingQuoteInput");
     var nicknameWarning = document.getElementById("nicknameWarning");
-    var finalScoreText = document.getElementById("finalScoreText");
-    var sessionResultText = document.getElementById("sessionResultText");
-    var joystickStatusNotice = document.getElementById("joystickStatusNotice");
+    
+    var hudStage = document.getElementById("hudStage");
+    var hudLife = document.getElementById("hudLife");
+    var hudCoins = document.getElementById("hudCoins");
+    var hudScore = document.getElementById("hudScore");
 
     var stars = [];
     function initStars() {
@@ -1587,6 +1745,7 @@
     }
 
     var playerNickname = "";
+    var playerQuote = "";
     var score = 0;
     var bestScore = parseInt(localStorage.getItem("yoon_space_best") || "0");
     var stage = 1;
@@ -2278,7 +2437,7 @@
       var barWidth = canvas.width * 0.6;
       var barHeight = 14;
       var barX = (canvas.width - barWidth) / 2;
-      var barY = 15;
+      var barY = 35; // HUD 바 아래로 위치 조정
       var hpRatio = Math.max(0, boss.hp / boss.maxHp);
 
       ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
@@ -2349,11 +2508,23 @@
       ctx.restore();
     }
 
+    // 적 총알 시인성 강화 (크기를 키우고 외곽선/후광 효과 추가)
     function drawEnemyBullet(ctx, eb) {
-      ctx.fillStyle = eb.isHeavy ? "#f87171" : "#ff2222";
+      ctx.save();
+      // 발광 효과 및 선명한 색상 대비
+      ctx.shadowColor = eb.isHeavy ? "#f87171" : "#ff0055";
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = eb.isHeavy ? "#ff4444" : "#ff1166";
       ctx.beginPath();
       ctx.arc((eb.x + eb.width / 2) | 0, (eb.y + eb.height / 2) | 0, eb.width / 2, 0, Math.PI * 2);
       ctx.fill();
+      
+      // 내부 코어 (하이라이트)
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc((eb.x + eb.width / 2) | 0, (eb.y + eb.height / 2) | 0, eb.width / 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
 
     function startGame() {
@@ -2362,6 +2533,10 @@
       rankScreen.classList.add("hidden");
       controlArea.classList.remove("hidden");
       topControls.classList.remove("hidden");
+      gameHudBar.classList.remove("hidden");
+
+      playerQuote = rankingQuoteInput.value.trim();
+      localStorage.setItem("yoon_quote", playerQuote);
 
       resizeCanvas();
       isPaused = false;
@@ -2415,6 +2590,7 @@
       rankScreen.classList.add("hidden");
       controlArea.classList.add("hidden");
       topControls.classList.add("hidden");
+      gameHudBar.classList.add("hidden");
       startScreen.classList.remove("hidden");
       updateShopUI();
       updateMissionUI();
@@ -2568,10 +2744,10 @@
         for (var i = 0; i < 6; i++) {
           var angle = baseAngle + (Math.PI / 3) * i;
           enemyBullets.push({
-            x: originX - 5,
+            x: originX - 6,
             y: originY - 10,
-            width: 10,
-            height: 10,
+            width: 14, // 시인성 강화 크기 확대
+            height: 14,
             vx: Math.cos(angle) * 1.7, 
             vy: Math.sin(angle) * 1.7,
             isHeavy: true
@@ -2581,10 +2757,10 @@
         var angles = [-0.25, 0, 0.25];
         angles.forEach(function(angle) {
           enemyBullets.push({
-            x: originX - 5,
+            x: originX - 6,
             y: originY,
-            width: 10,
-            height: 10,
+            width: 14,
+            height: 14,
             vx: Math.sin(angle) * 2.0,
             vy: Math.cos(angle) * 2.0,
             isHeavy: true
@@ -2597,10 +2773,10 @@
         var speed = 2.15; 
 
         enemyBullets.push({
-          x: originX - 6,
+          x: originX - 7,
           y: originY,
-          width: 12,
-          height: 12,
+          width: 16,
+          height: 16,
           vx: (dx / dist) * speed,
           vy: (dy / dist) * speed,
           isHeavy: true
@@ -2623,10 +2799,10 @@
         var angle = (Math.PI * 2 / count) * i;
         var speed = 2.0; 
         enemyBullets.push({
-          x: originX - 5,
-          y: originY - 5,
-          width: 10,
-          height: 10,
+          x: originX - 6,
+          y: originY - 6,
+          width: 14,
+          height: 14,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           isHeavy: true
@@ -2867,10 +3043,10 @@
         if (m.type === "shooter") {
           if (gameTime - m.lastShoot > shooterInterval) {
             enemyBullets.push({
-              x: m.x + m.width / 2 - 3,
+              x: m.x + m.width / 2 - 5,
               y: m.y + m.height,
-              width: 6,
-              height: 6,
+              width: 10, // 시인성 강화 크기 확대
+              height: 10,
               vx: 0,
               vy: bulletSpeed,
               isHeavy: false
@@ -2885,10 +3061,10 @@
             var dy = (player.y + player.height / 2) - (m.y + m.height);
             var dist = Math.sqrt(dx * dx + dy * dy);
             enemyBullets.push({
-              x: m.x + m.width / 2 - 5,
+              x: m.x + m.width / 2 - 6,
               y: m.y + m.height,
-              width: 10,
-              height: 10,
+              width: 12, // 시인성 강화 크기 확대
+              height: 12,
               vx: (dx / dist) * 1.8,
               vy: (dy / dist) * 1.8,
               isHeavy: true
@@ -2968,6 +3144,25 @@
 
         if (m && m.y > canvas.height) monsters.splice(i, 1);
       }
+
+      // 콤팩트 상단 HUD 업데이트
+      updateGameHudBar();
+    }
+
+    function updateGameHudBar() {
+      hudStage.textContent = "Stage " + stage;
+      
+      var heartsStr = "";
+      if (player.lives >= 5) {
+        heartsStr = "❤️ x" + player.lives;
+      } else {
+        for (var h = 0; h < player.lives; h++) {
+          heartsStr += "❤️";
+        }
+      }
+      hudLife.textContent = heartsStr;
+      hudCoins.textContent = "🪙 " + userCoins;
+      hudScore.textContent = "Score: " + score;
     }
 
     function draw() {
@@ -3051,23 +3246,6 @@
       }
 
       ctx.restore();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 14px sans-serif";
-      ctx.textAlign = "left";
-      ctx.fillText("Stage: " + stage, 15, 25);
-      ctx.fillText("Score: " + score + " (Best: " + bestScore + ")", 15, 45);
-      ctx.fillText("데미지: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
-
-      var heartsText = "LIFE: ";
-      if (player.lives >= 5) {
-        heartsText += "❤️ x" + player.lives;
-      } else {
-        for (var h = 0; h < player.lives; h++) {
-          heartsText += "❤️";
-        }
-      }
-      ctx.fillText(heartsText, 15, 85);
     }
 
     function gameLoop() {
@@ -3086,13 +3264,18 @@
 
       controlArea.classList.add("hidden");
       topControls.classList.add("hidden");
+      gameHudBar.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
-      finalScoreText.textContent = "Pilot: " + playerNickname + " | 데미지: " + playerDamage + " | Kills: " + killCount + " | Boss: " + bossKillCount + " | Score: " + score;
+      // 정산 요약 카드 데이터 반영
+      document.getElementById("resPilotName").textContent = playerNickname;
+      document.getElementById("resScore").textContent = score + "점" + (score >= bestScore && score > 0 ? " (NEW BEST!)" : "");
+      document.getElementById("resStage").textContent = "Stage " + stage;
+      document.getElementById("resKills").textContent = killCount + "마리";
+      document.getElementById("resBossKills").textContent = bossKillCount + "마리";
+      document.getElementById("resCoins").textContent = "🪙 " + sessionCoinsEarned + "개";
       
-      sessionResultText.textContent = "이번 게임: " + killCount + "킬 / " + sessionCoinsEarned + "코인 획득!";
-      
-      saveScore(playerNickname, score, killCount, bossKillCount);
+      saveScore(playerNickname, score, killCount, bossKillCount, playerQuote);
     }
   </script>
 </body>
