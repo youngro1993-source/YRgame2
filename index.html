@@ -1056,10 +1056,9 @@
     var shopCandyCost = parseFloat(localStorage.getItem("yoon_candy_cost") || "160");
     var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
 
-    // 보조기체 구매 여부 상태 (3천 코인)
     var hasDrone = localStorage.getItem("yoon_has_drone") === "true";
     var droneLastShootTime = 0;
-    var droneShootInterval = 350; // 느리게 나가는 속도
+    var droneShootInterval = 350; 
 
     var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
     var moonReward30Claimed = localStorage.getItem("yoon_moon_reward_30") === "true";
@@ -1172,20 +1171,16 @@
       }
     });
 
-    // 매주 토요일 새벽 12시 랭킹 초기화 시스템 검사
     function checkAndResetWeeklyRanking() {
       if (!db) return;
       var now = new Date();
-      // getDay(): 0 일요일, 6 토요일
       var day = now.getDay();
       var hours = now.getHours();
 
-      // 토요일(6) 새벽 12시~1시 사이 검사하여 이번주 초기화 수행 여부 판단
       if (day === 6 && hours === 0) {
         var lastResetWeekStr = localStorage.getItem("yoon_last_ranking_reset_week") || "";
-        var currentWeekStr = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate(); // 날짜 기준
+        var currentWeekStr = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
         if (lastResetWeekStr !== currentWeekStr) {
-          // 서버 문서 전체 삭제 또는 클라이언트 리셋 플래그 처리
           db.collection("rankings").get().then(function(querySnapshot) {
             var batch = db.batch();
             querySnapshot.forEach(function(doc) {
@@ -1225,11 +1220,9 @@
 
     function saveScore(nickname, score, monsterKills, bossKills) {
       if (!db) return;
-      // 닉네임 기반으로 쿼리하여 중복 방지 (최고 점수 1개만 남기기)
       db.collection("rankings").where("nickname", "==", nickname).get()
       .then(function(querySnapshot) {
         if (querySnapshot.empty) {
-          // 신규 등록
           db.collection("rankings").add({
             nickname: nickname,
             score: score,
@@ -1250,14 +1243,12 @@
           }
 
           if (score > highestScore) {
-            // 새 점수가 더 높을 경우, 제일 높았던 도큐먼트를 업데이트
             highestDoc.ref.update({
               score: score,
               monsterKills: monsterKills || 0,
               bossKills: bossKills || 0,
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(function() {
-              // 나머지 중복 도큐먼트는 삭제
               var batch = db.batch();
               docs.forEach(function(d) {
                 if (d.id !== highestDoc.id) batch.delete(d.ref);
@@ -1265,7 +1256,6 @@
               batch.commit().then(function() { updateLeaderboardUI(); });
             });
           } else {
-            // 새 점수가 더 낮거나 같을 경우, 중복된 데이터가 있다면 최고 점수만 남기고 모두 삭제
             var batch = db.batch();
             var needsDelete = false;
             docs.forEach(function(d) {
@@ -1298,17 +1288,33 @@
       return month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
+    // 개선된 updateLeaderboardUI 함수 (데이터베이스 유기적 클린업)
     function updateLeaderboardUI() {
       if (!db) return;
       db.collection("rankings")
         .orderBy("score", "desc")
-        .limit(10)
+        .limit(50) // 넉넉하게 불러온 뒤 화면 렌더링 전 필터링 수행
         .get()
         .then(function(querySnapshot) {
           var rankings = [];
+          var seenNicknames = {};
+
           querySnapshot.forEach(function(doc) {
-            rankings.push(doc.data());
+            var data = doc.data();
+            var nick = data.nickname || "익명";
+            
+            // 처음 등장하는 닉네임(최고점)이면 랭킹에 등록
+            if (!seenNicknames[nick]) {
+              seenNicknames[nick] = true;
+              rankings.push(data);
+            } else {
+              // 이미 더 높은 점수로 등록된 닉네임이라면, 이 하위 점수는 중복이므로 DB에서 청소
+              doc.ref.delete().catch(function(e){});
+            }
           });
+
+          // 상위 10개만 남겨서 화면에 출력
+          rankings = rankings.slice(0, 10);
 
           var htmlContent = "";
           if (rankings.length === 0) {
@@ -1684,7 +1690,6 @@
       document.getElementById('candyCostText').innerText = Math.floor(shopCandyCost);
       document.getElementById('buyCandyBtn').disabled = userCoins < shopCandyCost;
 
-      // 보조기체 상점 UI 반영
       var droneStatusEl = document.getElementById('shopDroneStatus');
       var buyDroneBtn = document.getElementById('buyDroneBtn');
       if (hasDrone) {
@@ -2043,7 +2048,6 @@
       });
     }
 
-    // 보조기체 발사 함수 (좌우에 하나씩, 데미지 1, 느린 속도)
     function shootDrones() {
       if (!hasDrone) return;
       var now = Date.now();
@@ -2126,7 +2130,6 @@
       ctx.fillRect((x) | 0, (y + height - 5) | 0, 2, 3);
       ctx.fillRect((x + width - 2) | 0, (y + height - 5) | 0, 2, 3);
 
-      // 보조기체 렌더링
       if (hasDrone) {
         ctx.fillStyle = "#facc15";
         ctx.fillRect((x - 12) | 0, (y + 8) | 0, 8, 12);
@@ -2521,7 +2524,6 @@
       }
     }
 
-    // 기본 충돌 박스 (아이템, 총알-몬스터 등)
     function checkCollision(r1, r2) {
       return (
         r1.x < r2.x + r2.width &&
@@ -2531,7 +2533,6 @@
       );
     }
 
-    // 플레이어 전용 충돌 박스 (스치기만 해도 죽지 않도록 마진 적용)
     function checkPlayerHitbox(p, obj) {
       var mx = 6;
       var my = 6;
@@ -2652,7 +2653,6 @@
         lastShootTime = now;
       }
 
-      // 보조기체 발사 처리
       shootDrones();
 
       var currentSpawnInterval = Math.max(24, Math.floor(74 / Math.pow(1.2, stage - 1))); 
@@ -2824,7 +2824,6 @@
       for (var i = items.length - 1; i >= 0; i--) {
         items[i].y += items[i].speed;
 
-        // 아이템은 스치기만 해도 쉽게 획득할 수 있도록 기본 박스 적용
         if (checkCollision(player, items[i])) {
           playSound('item');
           var itemType = items[i].type;
@@ -2984,13 +2983,10 @@
 
       updateAndDrawStars();
 
-      // [렌더링 레이어 순서 조정]
-      // 1. 총알을 먼저 그려서 커진 탄환이 비행기(플레이어)를 가리지 않도록 설정
       for (var i = 0; i < bullets.length; i++) {
         drawBullet(ctx, bullets[i]);
       }
 
-      // 2. 플레이어 비행기를 나중에 그려서 총알이 비행기 위를 침범하지 않도록 함
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
 
       for (var i = 0; i < enemyBullets.length; i++) {
@@ -3063,7 +3059,6 @@
       ctx.fillText("Score: " + score + " (Best: " + bestScore + ")", 15, 45);
       ctx.fillText("데미지: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
 
-      // 생명력이 5개 이상이면 숫자로 표기하여 UI 최적화
       var heartsText = "LIFE: ";
       if (player.lives >= 5) {
         heartsText += "❤️ x" + player.lives;
