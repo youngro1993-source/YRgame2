@@ -791,7 +791,7 @@
       <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.5.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.6.0 업데이트)</button>
       </div>
 
     </div>
@@ -945,25 +945,19 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v6.5.0 (랭킹 초기화 시스템, 보조기체 추가)</div>
+            <div class="version-title">v6.6.0 (최적화 및 랭킹 시스템 개편)</div>
             <ul>
-              <li><b>랭킹 초기화 시스템</b>: 매주 토요일 새벽 12시에 랭킹 데이터가 자동 초기화되며 명예의 전당에 안내 문구가 추가되었습니다.</li>
-              <li><b>보조기체 판매</b>: 상점에서 3,000코인으로 좌우 보조기체 2대를 장착할 수 있습니다. (데미지 1, 느린 속도로 탄환 발사)</li>
-              <li><b>총알 레이어 조정</b>: 탄환이 커져도 플레이어 비행기를 가리지 않도록 렌더링 순서가 조정되었습니다.</li>
-            </ul>
-          </div>
-
-          <div class="version-block">
-            <div class="version-title">v6.4.0 (보스 & 중급몬스터 대규모 밸런스 패치)</div>
-            <ul>
-              <li>보스 체력 7배 상향 및 화면 중앙 돌격, +1 아이템 중급 몬스터 2% 드롭 등.</li>
+              <li><b>UI 최적화</b>: 생명력(하트) 5개 이상 획득 시 숫자로 간략히 표기되어 깔끔한 UI를 제공합니다.</li>
+              <li><b>피격 판정 개선</b>: 미사일이 비행기 주변을 스치기만 해도 죽던 현상을 개선하여 실제 기체 크기에 맞게 히트박스를 완화했습니다.</li>
+              <li><b>명예의 전당 개선</b>: 랭킹에 중복된 닉네임이 도배되는 것을 방지하기 위해 닉네임당 최고 기록 1개만 남도록 수정되었습니다.</li>
+              <li><b>게임 최적화</b>: 전반적인 게임 렌더링 및 메모리 최적화를 진행하였습니다.</li>
             </ul>
           </div>
           
           <div class="version-block">
-            <div class="version-title">v6.1.0 (랭킹표, 닉네임 화면 재배치)</div>
+            <div class="version-title">v6.5.0 (랭킹 초기화 시스템, 보조기체 추가)</div>
             <ul>
-              <li>컴포넌트 레이아웃 최적화 및 닉네임 입력란 직관적 정렬 적용.</li>
+              <li>매주 토요일 새벽 12시 랭킹 초기화 및 상점 3,000코인 보조기체(좌우 장착) 추가.</li>
             </ul>
           </div>
         </div>
@@ -1044,7 +1038,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.5.0";
+    var currentVersionKey = "v6.6.0";
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -1231,18 +1225,65 @@
 
     function saveScore(nickname, score, monsterKills, bossKills) {
       if (!db) return;
-      db.collection("rankings").add({
-        nickname: nickname,
-        score: score,
-        monsterKills: monsterKills || 0,
-        bossKills: bossKills || 0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(function() {
-        updateLeaderboardUI();
+      // 닉네임 기반으로 쿼리하여 중복 방지 (최고 점수 1개만 남기기)
+      db.collection("rankings").where("nickname", "==", nickname).get()
+      .then(function(querySnapshot) {
+        if (querySnapshot.empty) {
+          // 신규 등록
+          db.collection("rankings").add({
+            nickname: nickname,
+            score: score,
+            monsterKills: monsterKills || 0,
+            bossKills: bossKills || 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(function() { updateLeaderboardUI(); });
+        } else {
+          var docs = querySnapshot.docs;
+          var highestDoc = docs[0];
+          var highestScore = highestDoc.data().score || 0;
+          
+          for (var i = 1; i < docs.length; i++) {
+            if (docs[i].data().score > highestScore) {
+              highestScore = docs[i].data().score;
+              highestDoc = docs[i];
+            }
+          }
+
+          if (score > highestScore) {
+            // 새 점수가 더 높을 경우, 제일 높았던 도큐먼트를 업데이트
+            highestDoc.ref.update({
+              score: score,
+              monsterKills: monsterKills || 0,
+              bossKills: bossKills || 0,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function() {
+              // 나머지 중복 도큐먼트는 삭제
+              var batch = db.batch();
+              docs.forEach(function(d) {
+                if (d.id !== highestDoc.id) batch.delete(d.ref);
+              });
+              batch.commit().then(function() { updateLeaderboardUI(); });
+            });
+          } else {
+            // 새 점수가 더 낮거나 같을 경우, 중복된 데이터가 있다면 최고 점수만 남기고 모두 삭제
+            var batch = db.batch();
+            var needsDelete = false;
+            docs.forEach(function(d) {
+              if (d.id !== highestDoc.id) {
+                batch.delete(d.ref);
+                needsDelete = true;
+              }
+            });
+            if (needsDelete) {
+              batch.commit().then(function() { updateLeaderboardUI(); });
+            } else {
+              updateLeaderboardUI();
+            }
+          }
+        }
       })
       .catch(function(error) {
-        console.error("서버 점수 저장 실패:", error);
+        console.error("서버 점수 저장/업데이트 실패:", error);
       });
     }
 
@@ -1524,7 +1565,7 @@
         }
         ctx.save();
         ctx.globalAlpha = s.alpha;
-        ctx.fillRect(s.x, s.y, s.size, s.size);
+        ctx.fillRect(s.x | 0, s.y | 0, s.size, s.size);
         ctx.restore();
       }
     }
@@ -2012,12 +2053,10 @@
         var droneRightX = player.x + player.width + 2;
         var droneY = player.y + 6;
 
-        // 좌측 보조기체 탄환 (데미지 1, 속도 느림: -4.5)
         bullets.push({
           x: droneLeftX, y: droneY, width: 5, height: 10,
           type: "normal", vx: 0, vy: -4.5, damage: 1
         });
-        // 우측 보조기체 탄환 (데미지 1, 속도 느림: -4.5)
         bullets.push({
           x: droneRightX, y: droneY, width: 5, height: 10,
           type: "normal", vx: 0, vy: -4.5, damage: 1
@@ -2030,16 +2069,16 @@
       var cx = x + width / 2;
       var cy = y + height / 2;
 
-      ctx.translate(cx, cy);
+      ctx.translate(cx | 0, cy | 0);
       ctx.rotate(player.tilt);
-      ctx.translate(-cx, -cy);
+      ctx.translate(-(cx | 0), -(cy | 0));
 
       if (player.invincibleTimer > 0) {
         ctx.save();
         ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(cx, y + height / 2, width + 4, 0, Math.PI * 2);
+        ctx.arc(cx | 0, (y + height / 2) | 0, width + 4, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
 
@@ -2051,49 +2090,47 @@
 
       ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444";
       ctx.beginPath();
-      ctx.moveTo(cx - 4, y + height - 2);
-      ctx.lineTo(cx, y + height + 8 + (Math.random() * 3));
-      ctx.lineTo(cx + 4, y + height - 2);
+      ctx.moveTo((cx - 4) | 0, (y + height - 2) | 0);
+      ctx.lineTo((cx) | 0, (y + height + 8 + (Math.random() * 3)) | 0);
+      ctx.lineTo((cx + 4) | 0, (y + height - 2) | 0);
       ctx.closePath();
       ctx.fill();
 
       ctx.fillStyle = "#1d4ed8";
       ctx.beginPath();
-      ctx.moveTo(cx, y + 2);
-      ctx.lineTo(x + width, y + height - 3);
-      ctx.lineTo(x + width - 4, y + height);
-      ctx.lineTo(cx, y + height - 6);
-      ctx.lineTo(x + 4, y + height);
-      ctx.lineTo(x, y + height - 3);
+      ctx.moveTo((cx) | 0, (y + 2) | 0);
+      ctx.lineTo((x + width) | 0, (y + height - 3) | 0);
+      ctx.lineTo((x + width - 4) | 0, (y + height) | 0);
+      ctx.lineTo((cx) | 0, (y + height - 6) | 0);
+      ctx.lineTo((x + 4) | 0, (y + height) | 0);
+      ctx.lineTo((x) | 0, (y + height - 3) | 0);
       ctx.closePath();
       ctx.fill();
 
       ctx.fillStyle = "#3b82f6";
       ctx.beginPath();
-      ctx.moveTo(cx, y);
-      ctx.lineTo(cx + 6, y + 11);
-      ctx.lineTo(cx + 4, y + height - 3);
-      ctx.lineTo(cx - 4, y + height - 3);
-      ctx.lineTo(cx - 6, y + 11);
+      ctx.moveTo((cx) | 0, (y) | 0);
+      ctx.lineTo((cx + 6) | 0, (y + 11) | 0);
+      ctx.lineTo((cx + 4) | 0, (y + height - 3) | 0);
+      ctx.lineTo((cx - 4) | 0, (y + height - 3) | 0);
+      ctx.lineTo((cx - 6) | 0, (y + 11) | 0);
       ctx.closePath();
       ctx.fill();
 
       ctx.fillStyle = "#f43f5e";
       ctx.beginPath();
-      ctx.ellipse(cx, y + 11, 2.5, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse((cx) | 0, (y + 11) | 0, 2.5, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(x, y + height - 5, 2, 3);
-      ctx.fillRect(x + width - 2, y + height - 5, 2, 3);
+      ctx.fillRect((x) | 0, (y + height - 5) | 0, 2, 3);
+      ctx.fillRect((x + width - 2) | 0, (y + height - 5) | 0, 2, 3);
 
-      // 보조기체 장착 시 비행기 좌우에 렌더링
+      // 보조기체 렌더링
       if (hasDrone) {
         ctx.fillStyle = "#facc15";
-        // 좌측 보조기체
-        ctx.fillRect(x - 12, y + 8, 8, 12);
-        // 우측 보조기체
-        ctx.fillRect(x + width + 4, y + 8, 8, 12);
+        ctx.fillRect((x - 12) | 0, (y + 8) | 0, 8, 12);
+        ctx.fillRect((x + width + 4) | 0, (y + 8) | 0, 8, 12);
       }
 
       ctx.restore();
@@ -2104,7 +2141,7 @@
       var unit = width / 8;
       for (var r = 0; r < shape.length; r++) {
         for (var c = 0; c < shape[r].length; c++) {
-          if (shape[r][c] === 1) ctx.fillRect(x + c * unit, y + r * unit, unit, unit);
+          if (shape[r][c] === 1) ctx.fillRect((x + c * unit) | 0, (y + r * unit) | 0, unit | 0, unit | 0);
         }
       }
     }
@@ -2173,9 +2210,9 @@
 
       var hpRatio = m.hp / m.maxHp;
       ctx.fillStyle = "rgba(0,0,0,0.5)";
-      ctx.fillRect(m.x, m.y - 8, m.width, 4);
+      ctx.fillRect((m.x) | 0, (m.y - 8) | 0, m.width | 0, 4);
       ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(m.x, m.y - 8, m.width * hpRatio, 4);
+      ctx.fillRect((m.x) | 0, (m.y - 8) | 0, (m.width * hpRatio) | 0, 4);
     }
 
     function drawBoss(ctx, boss) {
@@ -2185,52 +2222,52 @@
 
       if (boss.designType === 0) {
         ctx.fillStyle = "#dc2626";
-        ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+        ctx.fillRect((boss.x) | 0, (boss.y) | 0, boss.width | 0, boss.height | 0);
         
         ctx.fillStyle = "#38bdf8";
-        ctx.fillRect(boss.x + 10, boss.y + 10, boss.width - 20, 8);
+        ctx.fillRect((boss.x + 10) | 0, (boss.y + 10) | 0, (boss.width - 20) | 0, 8);
         
         ctx.fillStyle = "#fef08a";
-        ctx.fillRect(boss.x + 12, boss.y + 25, 15, 15);
-        ctx.fillRect(boss.x + boss.width - 27, boss.y + 25, 15, 15);
+        ctx.fillRect((boss.x + 12) | 0, (boss.y + 25) | 0, 15, 15);
+        ctx.fillRect((boss.x + boss.width - 27) | 0, (boss.y + 25) | 0, 15, 15);
       } else if (boss.designType === 1) {
         ctx.fillStyle = "#9333ea";
         ctx.beginPath();
-        ctx.ellipse(cx, cy, boss.width / 2, boss.height / 2, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx | 0, cy | 0, boss.width / 2, boss.height / 2, 0, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+        ctx.arc(cx | 0, cy | 0, 16, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = "#ef4444";
         ctx.beginPath();
-        ctx.arc(cx + Math.sin(gameTime * 0.05) * 4, cy, 8, 0, Math.PI * 2);
+        ctx.arc((cx + Math.sin(gameTime * 0.05) * 4) | 0, cy | 0, 8, 0, Math.PI * 2);
         ctx.fill();
       } else if (boss.designType === 2) {
         ctx.fillStyle = "#0284c7";
-        ctx.fillRect(boss.x + 15, boss.y, boss.width - 30, boss.height);
+        ctx.fillRect((boss.x + 15) | 0, (boss.y) | 0, (boss.width - 30) | 0, boss.height | 0);
 
         ctx.save();
-        ctx.translate(cx, cy);
+        ctx.translate(cx | 0, cy | 0);
         ctx.rotate(gameTime * 0.03);
         ctx.strokeStyle = "#38bdf8";
         ctx.lineWidth = 4;
-        ctx.strokeRect(-boss.width / 2, -10, boss.width, 20);
+        ctx.strokeRect((-boss.width / 2) | 0, -10, boss.width | 0, 20);
         ctx.restore();
       } else {
         ctx.fillStyle = "#d97706";
         ctx.beginPath();
-        ctx.moveTo(cx, boss.y + boss.height);
-        ctx.lineTo(boss.x + boss.width, boss.y);
-        ctx.lineTo(boss.x, boss.y);
+        ctx.moveTo(cx | 0, (boss.y + boss.height) | 0);
+        ctx.lineTo((boss.x + boss.width) | 0, (boss.y) | 0);
+        ctx.lineTo((boss.x) | 0, (boss.y) | 0);
         ctx.closePath();
         ctx.fill();
 
         ctx.fillStyle = "#facc15";
         ctx.beginPath();
-        ctx.arc(cx, boss.y + 20, 10, 0, Math.PI * 2);
+        ctx.arc(cx | 0, (boss.y + 20) | 0, 10, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.restore();
@@ -2242,18 +2279,18 @@
       var hpRatio = Math.max(0, boss.hp / boss.maxHp);
 
       ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-      ctx.fillRect(barX, barY, barWidth, barHeight);
+      ctx.fillRect(barX | 0, barY | 0, barWidth | 0, barHeight | 0);
       ctx.fillStyle = "#ef4444";
-      ctx.fillRect(barX, barY, barWidth * hpRatio, barHeight);
+      ctx.fillRect(barX | 0, barY | 0, (barWidth * hpRatio) | 0, barHeight | 0);
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 1.5;
-      ctx.strokeRect(barX, barY, barWidth, barHeight);
+      ctx.strokeRect(barX | 0, barY | 0, barWidth | 0, barHeight | 0);
 
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("HP: " + Math.max(0, boss.hp) + " / " + boss.maxHp, canvas.width / 2, barY + barHeight / 2 + 1);
+      ctx.fillText("HP: " + Math.max(0, boss.hp | 0) + " / " + boss.maxHp, canvas.width / 2, barY + barHeight / 2 + 1);
     }
 
     function drawItem(ctx, item) {
@@ -2269,7 +2306,7 @@
       
       ctx.fillStyle = colorMap[item.type] || "#eab308";
       ctx.beginPath();
-      ctx.arc(item.x + item.width / 2, item.y + item.height / 2, item.width / 2, 0, Math.PI * 2);
+      ctx.arc((item.x + item.width / 2) | 0, (item.y + item.height / 2) | 0, item.width / 2, 0, Math.PI * 2);
       ctx.fill();
       
       ctx.fillStyle = (item.type === "coin") ? "#000000" : "#ffffff";
@@ -2278,7 +2315,7 @@
       ctx.textBaseline = "middle";
 
       var textMap = { "laser": "L", "saw": "S", "shotgun": "G", "upgrade": "+1", "damage": "D", "coin": "🪙", "heart": "H" };
-      ctx.fillText(textMap[item.type] || "+1", item.x + item.width / 2, item.y + item.height / 2);
+      ctx.fillText(textMap[item.type] || "+1", (item.x + item.width / 2) | 0, (item.y + item.height / 2) | 0);
     }
 
     function drawBullet(ctx, b) {
@@ -2287,24 +2324,24 @@
 
       if (b.type === "laser") {
         ctx.fillStyle = "#4ade80";
-        ctx.fillRect(b.x, b.y, b.width, b.height);
+        ctx.fillRect(b.x | 0, b.y | 0, b.width | 0, b.height | 0);
       } else if (b.type === "saw") {
         ctx.save();
-        ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
+        ctx.translate((b.x + b.width / 2) | 0, (b.y + b.height / 2) | 0);
         ctx.rotate(b.angle || 0);
         ctx.fillStyle = "#a855f7";
-        ctx.fillRect(-b.width / 2, -b.height / 2, b.width, b.height);
+        ctx.fillRect((-b.width / 2) | 0, (-b.height / 2) | 0, b.width | 0, b.height | 0);
         ctx.fillStyle = "#e9d5ff";
-        ctx.fillRect(-b.width / 4, -b.height / 4, b.width / 2, b.height / 2);
+        ctx.fillRect((-b.width / 4) | 0, (-b.height / 4) | 0, (b.width / 2) | 0, (b.height / 2) | 0);
         ctx.restore();
       } else if (b.type === "shotgun") {
         ctx.fillStyle = "#fb923c";
         ctx.beginPath();
-        ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width / 2, 0, Math.PI * 2);
+        ctx.arc((b.x + b.width / 2) | 0, (b.y + b.height / 2) | 0, b.width / 2, 0, Math.PI * 2);
         ctx.fill();
       } else {
         ctx.fillStyle = "#facc15";
-        ctx.fillRect(b.x, b.y, b.width, b.height);
+        ctx.fillRect(b.x | 0, b.y | 0, b.width | 0, b.height | 0);
       }
       ctx.restore();
     }
@@ -2312,7 +2349,7 @@
     function drawEnemyBullet(ctx, eb) {
       ctx.fillStyle = eb.isHeavy ? "#f87171" : "#ff2222";
       ctx.beginPath();
-      ctx.arc(eb.x + eb.width / 2, eb.y + eb.height / 2, eb.width / 2, 0, Math.PI * 2);
+      ctx.arc((eb.x + eb.width / 2) | 0, (eb.y + eb.height / 2) | 0, eb.width / 2, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -2484,12 +2521,25 @@
       }
     }
 
+    // 기본 충돌 박스 (아이템, 총알-몬스터 등)
     function checkCollision(r1, r2) {
       return (
         r1.x < r2.x + r2.width &&
         r1.x + r1.width > r2.x &&
         r1.y < r2.y + r2.height &&
         r1.y + r1.height > r2.y
+      );
+    }
+
+    // 플레이어 전용 충돌 박스 (스치기만 해도 죽지 않도록 마진 적용)
+    function checkPlayerHitbox(p, obj) {
+      var mx = 6;
+      var my = 6;
+      return (
+        p.x + mx < obj.x + obj.width &&
+        p.x + p.width - mx > obj.x &&
+        p.y + my < obj.y + obj.height &&
+        p.y + p.height - my > obj.y
       );
     }
 
@@ -2750,7 +2800,7 @@
           }
         }
 
-        if (boss && checkCollision(player, boss)) {
+        if (boss && checkPlayerHitbox(player, boss)) {
           handlePlayerHit();
         }
       }
@@ -2760,7 +2810,7 @@
         eb.x += eb.vx;
         eb.y += eb.vy;
 
-        if (checkCollision(player, eb)) {
+        if (checkPlayerHitbox(player, eb)) {
           handlePlayerHit();
           enemyBullets.splice(i, 1);
           continue;
@@ -2774,6 +2824,7 @@
       for (var i = items.length - 1; i >= 0; i--) {
         items[i].y += items[i].speed;
 
+        // 아이템은 스치기만 해도 쉽게 획득할 수 있도록 기본 박스 적용
         if (checkCollision(player, items[i])) {
           playSound('item');
           var itemType = items[i].type;
@@ -2847,7 +2898,7 @@
           }
         }
 
-        if (checkCollision(player, m)) {
+        if (checkPlayerHitbox(player, m)) {
           handlePlayerHit();
         }
 
@@ -2927,7 +2978,7 @@
       if (shakeTimer > 0) {
         var offsetX = (Math.random() - 0.5) * 8;
         var offsetY = (Math.random() - 0.5) * 8;
-        ctx.translate(offsetX, offsetY);
+        ctx.translate(offsetX | 0, offsetY | 0);
         shakeTimer--;
       }
 
@@ -2978,7 +3029,7 @@
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.arc(p.x | 0, p.y | 0, p.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
@@ -2990,7 +3041,7 @@
         ctx.fillStyle = dt.color;
         var fontSize = Math.floor(13 * (dt.fontScale || 1.0));
         ctx.font = "bold " + fontSize + "px sans-serif";
-        ctx.fillText(dt.text, dt.x, dt.y);
+        ctx.fillText(dt.text, dt.x | 0, dt.y | 0);
         ctx.restore();
       }
 
@@ -2999,7 +3050,7 @@
         ctx.fillStyle = (Math.floor(warningTimer / 8) % 2 === 0) ? "#ef4444" : "#facc15";
         ctx.font = "black 22px sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(warningTextStr, canvas.width / 2, canvas.height / 2 - 20);
+        ctx.fillText(warningTextStr, (canvas.width / 2) | 0, (canvas.height / 2 - 20) | 0);
         ctx.restore();
       }
 
@@ -3012,9 +3063,14 @@
       ctx.fillText("Score: " + score + " (Best: " + bestScore + ")", 15, 45);
       ctx.fillText("데미지: " + playerDamage + " | Kills: " + killCount + " | 🪙 " + userCoins, 15, 65);
 
+      // 생명력이 5개 이상이면 숫자로 표기하여 UI 최적화
       var heartsText = "LIFE: ";
-      for (var h = 0; h < player.lives; h++) {
-        heartsText += "❤️";
+      if (player.lives >= 5) {
+        heartsText += "❤️ x" + player.lives;
+      } else {
+        for (var h = 0; h < player.lives; h++) {
+          heartsText += "❤️";
+        }
       }
       ctx.fillText(heartsText, 15, 85);
     }
