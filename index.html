@@ -646,47 +646,17 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 180px; 
-      background: rgba(15, 23, 42, 0.92);
+      height: 195px; 
+      background: rgba(15, 23, 42, 0.95);
       border-top: 2px solid rgba(56, 189, 248, 0.5);
       backdrop-filter: blur(8px);
       pointer-events: auto;
       z-index: 5;
     }
 
-    .arrow-btn {
-      position: absolute;
-      bottom: 55px; 
-      width: 75px;
-      height: 75px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 2px solid rgba(56, 189, 248, 0.6);
-      border-radius: 50%;
-      color: #38bdf8;
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: auto;
-      touch-action: none;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-      transition: background 0.1s, transform 0.1s;
-      z-index: 7;
-    }
-
-    #btnLeft { left: 20px; }
-    #btnRight { right: 20px; }
-
-    .arrow-btn:active, .arrow-btn.pressed {
-      background: rgba(56, 189, 248, 0.4);
-      color: #fff;
-      transform: scale(0.92);
-    }
-
     #joystickArea {
       position: absolute;
-      bottom: 40px; 
+      bottom: 45px; 
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -695,7 +665,7 @@
       border: 2px dashed rgba(56, 189, 248, 0.6);
       border-radius: 50%;
       touch-action: none;
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
       z-index: 7;
@@ -713,15 +683,15 @@
       transition: transform 0.05s linear;
     }
 
-    /* 4방향 화살표 패드 스타일 (설정에서 선택 시 표시) */
+    /* 4방향 화살표 패드 스타일 (개선된 배치: 상단 HUD와 절대 겹치지 않도록 높이 및 크기 최적화) */
     .dpad-container {
       position: absolute;
-      bottom: 40px;
+      bottom: 22px;
       left: 50%;
       transform: translateX(-50%);
-      width: 140px;
-      height: 100px;
-      display: none;
+      width: 160px;
+      height: 110px;
+      display: block;
       z-index: 7;
       pointer-events: auto;
     }
@@ -730,35 +700,37 @@
       background: rgba(30, 41, 59, 0.85);
       border: 2px solid rgba(56, 189, 248, 0.6);
       color: #38bdf8;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
       font-weight: bold;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 8px;
+      border-radius: 10px;
       touch-action: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
     .dpad-btn:active, .dpad-btn.pressed {
       background: rgba(56, 189, 248, 0.4);
       color: #fff;
+      transform: scale(0.94);
     }
-    #dpadUp { top: 0px; left: 45px; width: 50px; height: 32px; }
-    #dpadDown { bottom: 0px; left: 45px; width: 50px; height: 32px; }
-    #dpadLeft { top: 34px; left: 5px; width: 45px; height: 32px; }
-    #dpadRight { top: 34px; right: 5px; width: 45px; height: 32px; }
+    #dpadUp { top: 0px; left: 52px; width: 56px; height: 35px; }
+    #dpadDown { bottom: 0px; left: 52px; width: 56px; height: 35px; }
+    #dpadLeft { top: 38px; left: 0px; width: 52px; height: 35px; }
+    #dpadRight { top: 38px; right: 0px; width: 52px; height: 35px; }
 
     #joystickStatusNotice {
       position: absolute;
-      top: 8px;
+      top: 6px;
       left: 50%;
       transform: translateX(-50%);
-      width: 90%;
-      padding: 4px 10px;
-      background: rgba(2, 6, 23, 0.9);
+      width: 94%;
+      padding: 3px 8px;
+      background: rgba(2, 6, 23, 0.92);
       border: 1px solid rgba(56, 189, 248, 0.4);
-      border-radius: 12px;
+      border-radius: 10px;
       text-align: center;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: #facc15;
       font-weight: 600;
       letter-spacing: 0.5px;
@@ -900,7 +872,7 @@
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.82rem; font-weight: bold; color: #38bdf8;">조작 방식 선택</span>
-            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">조이스틱</button>
+            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #d97706, #b45309);" onclick="toggleControlTypeFromModal()">화살표 4방향</button>
           </div>
         </div>
         <div style="text-align: center; margin-top: 10px;">
@@ -1227,7 +1199,7 @@
         <div id="joystickKnob"></div>
       </div>
 
-      <!-- 4방향 화살표 패드 영역 -->
+      <!-- 4방향 화살표 패드 영역 (기본 조작) -->
       <div id="dpadContainer" class="dpad-container">
         <div id="dpadUp" class="dpad-btn">▲</div>
         <div id="dpadLeft" class="dpad-btn">◀</div>
@@ -1240,7 +1212,7 @@
   <script>
     var db = null;
     var soundMuted = false;
-    var controlType = localStorage.getItem("yoon_control_type") || "joystick"; // "joystick" or "dpad"
+    var controlType = localStorage.getItem("yoon_control_type") || "dpad"; // 기본값을 dpad로 설정
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
@@ -1989,7 +1961,7 @@
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
       if (player) {
-        player.y = canvas.height - player.height - 180;
+        player.y = canvas.height - player.height - 195;
       }
       initStars();
     }
@@ -2037,7 +2009,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 450; // v7.1.0 보스 기본 체력 완화
+    var bossBaseHp = 450;
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -2923,7 +2895,7 @@
       if (!soundMuted) startBGM();
 
       player.x = canvas.width / 2 - player.width / 2;
-      player.y = canvas.height - player.height - 180;
+      player.y = canvas.height - player.height - 195;
       player.lives = 3 + shopHeartBonusLife;
       player.invincibleTimer = 0;
       player.tilt = 0;
@@ -3044,7 +3016,6 @@
     function spawnBoss() {
       triggerWarning("WARNING! BOSS INCOMING!");
       bossSpawnCount++;
-      // v7.1.0 보스 체력 성장 배율 완화 (1.3배 -> 1.2배)
       var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.2, bossSpawnCount - 1));
       
       var bType = (stage >= 10 && Math.random() > 0.5) ? "spinner" : "normal";
@@ -3129,7 +3100,6 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
-      // v7.1.0 보스 탄환 속도 하향 (1.7 -> 1.4, 2.0 -> 1.7 등)
       if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
         var baseAngle = (gameTime * 0.1);
         for (var i = 0; i < 6; i++) {
@@ -3260,7 +3230,7 @@
       player.y += moveY * player.speed;
 
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-      var maxPlayerY = canvas.height - player.height - 180;
+      var maxPlayerY = canvas.height - player.height - 195;
       player.y = Math.max(0, Math.min(maxPlayerY, player.y));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
@@ -3317,7 +3287,6 @@
           }
           boss.y += (boss.targetY - boss.y) * 0.05;
 
-          // v7.1.0 보스 패턴 전환 딜레이(공격 주기) 소폭 여유 있게 증가
           var bossShootInterval = Math.max(65, 120 - (stage - 1) * 4);
           if (gameTime - boss.lastShoot > bossShootInterval) {
             fireBossPattern(boss);
@@ -3329,7 +3298,7 @@
             boss.y += (boss.baseY + Math.sin(gameTime * 0.04) * 10 - boss.y) * 0.1;
             boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.05; 
             
-            if (boss.stateTimer > 110) { // 딜레이 증가
+            if (boss.stateTimer > 110) {
               boss.state = 'dash';
               boss.stateTimer = 0;
               boss.targetDashX = player.x + player.width/2 - boss.width/2;
@@ -3414,7 +3383,6 @@
               var dropX = boss.x + boss.width / 2;
               var dropY = boss.y + boss.height / 2;
 
-              // v7.1.0 체력 회복(하트) 드롭 확률 25%로 상향
               if (Math.random() < 0.25) {
                 spawnItem(dropX, dropY, "heart");
               }
