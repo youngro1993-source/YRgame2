@@ -88,7 +88,12 @@
       margin-bottom: 2px;
     }
 
-    .main-sound-btn {
+    .header-btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .main-sound-btn, .main-setting-btn {
       background: rgba(30, 41, 59, 0.8);
       border: 1px solid rgba(56, 189, 248, 0.5);
       color: #fff;
@@ -708,6 +713,40 @@
       transition: transform 0.05s linear;
     }
 
+    /* 4방향 화살표 패드 스타일 (설정에서 선택 시 표시) */
+    .dpad-container {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 100px;
+      display: none;
+      z-index: 7;
+      pointer-events: auto;
+    }
+    .dpad-btn {
+      position: absolute;
+      background: rgba(30, 41, 59, 0.85);
+      border: 2px solid rgba(56, 189, 248, 0.6);
+      color: #38bdf8;
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      touch-action: none;
+    }
+    .dpad-btn:active, .dpad-btn.pressed {
+      background: rgba(56, 189, 248, 0.4);
+      color: #fff;
+    }
+    #dpadUp { top: 0px; left: 45px; width: 50px; height: 32px; }
+    #dpadDown { bottom: 0px; left: 45px; width: 50px; height: 32px; }
+    #dpadLeft { top: 34px; left: 5px; width: 45px; height: 32px; }
+    #dpadRight { top: 34px; right: 5px; width: 45px; height: 32px; }
+
     #joystickStatusNotice {
       position: absolute;
       top: 8px;
@@ -767,7 +806,10 @@
       <div class="layout-section">
         <div class="top-status-bar">
           <div style="font-size:0.6rem; color:#94a3b8;">은하 수호대 본부</div>
-          <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
+          <div class="header-btn-group">
+            <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
+            <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
+          </div>
         </div>
 
         <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
@@ -812,7 +854,7 @@
             <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기</b>: 관통 빔</span></div>
             <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기</b>: 다단히트 회전탄</span></div>
             <div class="info-item"><span class="badge coin">🪙</span><span><b>보스 처치</b>: 50% 코인 1개 드랍</span></div>
-            <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복</b>: 보스 처치 시 10%</span></div>
+            <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복</b>: 보스 처치 시 25%</span></div>
           </div>
         </div>
 
@@ -842,9 +884,29 @@
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.0.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v7.1.0 업데이트)</button>
       </div>
 
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingModal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3>⚙️ 게임 설정</h3>
+        <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 12px; text-align: left; padding: 0 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.82rem; font-weight: bold; color: #facc15;">사운드 음소거</span>
+            <button class="btn" id="settingSoundToggleBtn" style="padding: 4px 12px; font-size: 0.75rem;" onclick="toggleSoundFromModal()">켜짐</button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.82rem; font-weight: bold; color: #38bdf8;">조작 방식 선택</span>
+            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">조이스틱</button>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('settingModal', false)">확인</button>
+        </div>
+      </div>
     </div>
 
     <!-- 출석 모달 -->
@@ -1054,19 +1116,19 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v7.0.0 (시스템 개편 및 컨텐츠 확장)</div>
+            <div class="version-title">v7.1.0 (보스 난이도 개편 및 조작 설정 추가)</div>
             <ul>
-              <li><b>출석체크 시스템 도입</b>: 매일 접속 시 500코인, 7일 연속 개근 시 1000코인을 특별 지급합니다!</li>
-              <li><b>신규 10스테이지 보스 추가</b>: 10스테이지 이후부터 플레이어를 향해 돌진 후 회전하며 공격하는 새로운 패턴의 보스가 등장합니다.</li>
-              <li><b>초기화권 아이템 추가</b>: 상점에서 2000코인으로 모든 업그레이드 내역을 초기화하고, 여태껏 사용한 코인을 전액 환불받을 수 있는 기능이 추가되었습니다.</li>
-              <li><b>UI/UX 개선</b>: 게임 진행 화면 하단의 조이스틱 및 상태 정보창 텍스트가 겹치지 않도록 높이 비율을 쾌적하게 개선했습니다.</li>
+              <li><b>보스 난이도 완화</b>: 보스의 기본 체력 및 스테이지별 체력 성장 배율이 낮아져 후반부 피로도가 대폭 줄었습니다.</li>
+              <li><b>탄막 및 패턴 밸런스 조정</b>: 보스의 탄환 속도와 밀도가 완화되고, 패턴 전환 딜레이가 늘어나 회피와 공략이 수월해졌습니다.</li>
+              <li><b>체력 회복(하트) 확률 상향</b>: 보스 처치 시 하트 드롭 확률이 25%로 대폭 상향되었습니다.</li>
+              <li><b>메인 화면 설정 메뉴 추가</b>: 설정에서 음소거 설정 및 **조이스틱 / 화살표 4방향 조작** 방식을 직접 선택할 수 있습니다.</li>
             </ul>
           </div>
-          
+
           <div class="version-block">
-            <div class="version-title">v6.9.0 (보조기체 업그레이드 및 UI 개선)</div>
+            <div class="version-title">v7.0.0 (시스템 개편 및 컨텐츠 확장)</div>
             <ul>
-              <li>상점 내 보조기체 데미지, 연사 개별 업그레이드 기능 추가 및 인게임 외형 디테일 개선.</li>
+              <li>출석체크 시스템, 10스테이지 신규 보스 및 업그레이드 초기화권 도입.</li>
             </ul>
           </div>
         </div>
@@ -1159,22 +1221,31 @@
         <span id="hudScore">Score: 0</span><br>
         무기: 기본 탄환 | x1 | DMG: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
       </div>
-      <div id="btnLeft" class="arrow-btn">◀</div>
+      
+      <!-- 조이스틱 영역 -->
       <div id="joystickArea">
         <div id="joystickKnob"></div>
       </div>
-      <div id="btnRight" class="arrow-btn">▶</div>
+
+      <!-- 4방향 화살표 패드 영역 -->
+      <div id="dpadContainer" class="dpad-container">
+        <div id="dpadUp" class="dpad-btn">▲</div>
+        <div id="dpadLeft" class="dpad-btn">◀</div>
+        <div id="dpadRight" class="dpad-btn">▶</div>
+        <div id="dpadDown" class="dpad-btn">▼</div>
+      </div>
     </div>
   </div>
 
   <script>
     var db = null;
     var soundMuted = false;
+    var controlType = localStorage.getItem("yoon_control_type") || "joystick"; // "joystick" or "dpad"
     var isPaused = false;
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v7.0.0";
+    var currentVersionKey = "v7.1.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) {
@@ -1660,6 +1731,58 @@
 
       if (soundMuted) stopBGM();
       else if (!isGameOver && !isPaused && !isCountingDown) startBGM();
+      
+      updateSettingModalUI();
+    }
+
+    function openSettingModal() {
+      initAudio();
+      updateSettingModalUI();
+      toggleModal('settingModal', true);
+    }
+
+    function updateSettingModalUI() {
+      var soundBtn = document.getElementById("settingSoundToggleBtn");
+      if (soundMuted) {
+        soundBtn.textContent = "꺼짐";
+        soundBtn.style.background = "linear-gradient(135deg, #475569, #334155)";
+      } else {
+        soundBtn.textContent = "켜짐";
+        soundBtn.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
+      }
+
+      var controlBtn = document.getElementById("settingControlToggleBtn");
+      if (controlType === "joystick") {
+        controlBtn.textContent = "조이스틱";
+        controlBtn.style.background = "linear-gradient(135deg, #059669, #047857)";
+      } else {
+        controlBtn.textContent = "화살표 4방향";
+        controlBtn.style.background = "linear-gradient(135deg, #d97706, #b45309)";
+      }
+    }
+
+    function toggleSoundFromModal() {
+      toggleSound();
+    }
+
+    function toggleControlTypeFromModal() {
+      initAudio();
+      controlType = (controlType === "joystick") ? "dpad" : "joystick";
+      localStorage.setItem("yoon_control_type", controlType);
+      updateSettingModalUI();
+      applyControlTypeUI();
+    }
+
+    function applyControlTypeUI() {
+      var joystickArea = document.getElementById("joystickArea");
+      var dpadContainer = document.getElementById("dpadContainer");
+      if (controlType === "joystick") {
+        joystickArea.style.display = "flex";
+        dpadContainer.style.display = "none";
+      } else {
+        joystickArea.style.display = "none";
+        dpadContainer.style.display = "block";
+      }
     }
 
     function resumeGameWithCountdown() {
@@ -1914,7 +2037,7 @@
     }
 
     var boss = null;
-    var bossBaseHp = 81 * 7; 
+    var bossBaseHp = 450; // v7.1.0 보스 기본 체력 완화
     var bossSpawnCount = 0;  
     var enemyBullets = [];
     var particles = [];
@@ -1939,11 +2062,13 @@
     var lastShootTime = 0;
     var shootInterval = 100 * 1.35;
 
-    var touchLeftPressed = false;
-    var touchRightPressed = false;
-    
+    // 조작 변수
     var joystickAxisX = 0; 
     var joystickAxisY = 0; 
+    var dpadUpPressed = false;
+    var dpadDownPressed = false;
+    var dpadLeftPressed = false;
+    var dpadRightPressed = false;
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -2240,40 +2365,9 @@
       }
     }
 
-    var btnLeft = document.getElementById("btnLeft");
-    var btnRight = document.getElementById("btnRight");
+    // 조이스틱 터치/마우스 핸들러
     var joystickArea = document.getElementById("joystickArea");
     var joystickKnob = document.getElementById("joystickKnob");
-
-    btnLeft.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      initAudio();
-      touchLeftPressed = true;
-      btnLeft.classList.add("pressed");
-    });
-    btnLeft.addEventListener("touchend", function(e) {
-      e.preventDefault();
-      touchLeftPressed = false;
-      btnLeft.classList.remove("pressed");
-    });
-
-    btnRight.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      initAudio();
-      touchRightPressed = true;
-      btnRight.classList.add("pressed");
-    });
-    btnRight.addEventListener("touchend", function(e) {
-      e.preventDefault();
-      touchRightPressed = false;
-      btnRight.classList.remove("pressed");
-    });
-
-    btnLeft.addEventListener("mousedown", function() { touchLeftPressed = true; btnLeft.classList.add("pressed"); });
-    btnLeft.addEventListener("mouseup", function() { touchLeftPressed = false; btnLeft.classList.remove("pressed"); });
-    btnRight.addEventListener("mousedown", function() { touchRightPressed = true; btnRight.classList.add("pressed"); });
-    btnRight.addEventListener("mouseup", function() { touchRightPressed = false; btnRight.classList.remove("pressed"); });
-
     var joystickTouchId = null;
 
     function handleJoystickMove(clientX, clientY) {
@@ -2334,7 +2428,6 @@
         }
       }
     });
-
     joystickArea.addEventListener("touchcancel", resetJoystick);
 
     var isMouseDownJoystick = false;
@@ -2354,6 +2447,41 @@
         resetJoystick();
       }
     });
+
+    // 4방향 화살표 패드(D-Pad) 이벤트 바인딩
+    function setupDpadButton(btnId, direction) {
+      var btn = document.getElementById(btnId);
+      
+      function pressOn(e) {
+        e.preventDefault();
+        initAudio();
+        btn.classList.add("pressed");
+        if (direction === 'up') dpadUpPressed = true;
+        if (direction === 'down') dpadDownPressed = true;
+        if (direction === 'left') dpadLeftPressed = true;
+        if (direction === 'right') dpadRightPressed = true;
+      }
+
+      function pressOff(e) {
+        e.preventDefault();
+        btn.classList.remove("pressed");
+        if (direction === 'up') dpadUpPressed = false;
+        if (direction === 'down') dpadDownPressed = false;
+        if (direction === 'left') dpadLeftPressed = false;
+        if (direction === 'right') dpadRightPressed = false;
+      }
+
+      btn.addEventListener("touchstart", pressOn);
+      btn.addEventListener("touchend", pressOff);
+      btn.addEventListener("touchcancel", pressOff);
+      btn.addEventListener("mousedown", pressOn);
+      btn.addEventListener("mouseup", pressOff);
+    }
+
+    setupDpadButton("dpadUp", "up");
+    setupDpadButton("dpadDown", "down");
+    setupDpadButton("dpadLeft", "left");
+    setupDpadButton("dpadRight", "right");
 
     document.addEventListener("keydown", function(e) {
       initAudio();
@@ -2784,6 +2912,7 @@
       startScreen.classList.add("hidden");
       rankScreen.classList.add("hidden");
       controlArea.classList.remove("hidden");
+      applyControlTypeUI();
 
       playerQuote = rankingQuoteInput.value.trim();
       localStorage.setItem("yoon_quote", playerQuote);
@@ -2915,7 +3044,8 @@
     function spawnBoss() {
       triggerWarning("WARNING! BOSS INCOMING!");
       bossSpawnCount++;
-      var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.3, bossSpawnCount - 1));
+      // v7.1.0 보스 체력 성장 배율 완화 (1.3배 -> 1.2배)
+      var calculatedHp = Math.floor(bossBaseHp * Math.pow(1.2, bossSpawnCount - 1));
       
       var bType = (stage >= 10 && Math.random() > 0.5) ? "spinner" : "normal";
 
@@ -2999,6 +3129,7 @@
       var originX = boss.x + boss.width / 2;
       var originY = boss.y + boss.height;
 
+      // v7.1.0 보스 탄환 속도 하향 (1.7 -> 1.4, 2.0 -> 1.7 등)
       if (boss.hp / boss.maxHp < 0.5 && boss.patternTimer % 3 === 0) {
         var baseAngle = (gameTime * 0.1);
         for (var i = 0; i < 6; i++) {
@@ -3008,8 +3139,8 @@
             y: originY - 10,
             width: 14,
             height: 14,
-            vx: Math.cos(angle) * 1.7, 
-            vy: Math.sin(angle) * 1.7,
+            vx: Math.cos(angle) * 1.4, 
+            vy: Math.sin(angle) * 1.4,
             isHeavy: true
           });
         }
@@ -3021,8 +3152,8 @@
             y: originY,
             width: 14,
             height: 14,
-            vx: Math.sin(angle) * 2.0,
-            vy: Math.cos(angle) * 2.0,
+            vx: Math.sin(angle) * 1.7,
+            vy: Math.cos(angle) * 1.7,
             isHeavy: true
           });
         });
@@ -3030,7 +3161,7 @@
         var dx = (player.x + player.width / 2) - originX;
         var dy = (player.y + player.height / 2) - originY;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var speed = 2.15; 
+        var speed = 1.8; 
 
         enemyBullets.push({
           x: originX - 7,
@@ -3057,7 +3188,7 @@
 
       for (var i = 0; i < count; i++) {
         var angle = (Math.PI * 2 / count) * i;
-        var speed = 2.0; 
+        var speed = 1.7; 
         enemyBullets.push({
           x: originX - 6,
           y: originY - 6,
@@ -3109,10 +3240,10 @@
       var moveX = 0;
       var moveY = 0;
 
-      if (keys["ArrowLeft"] || keys["KeyA"] || touchLeftPressed) moveX -= 1;
-      if (keys["ArrowRight"] || keys["KeyD"] || touchRightPressed) moveX += 1;
-      if (keys["ArrowUp"] || keys["KeyW"]) moveY -= 1;
-      if (keys["ArrowDown"] || keys["KeyS"]) moveY += 1;
+      if (keys["ArrowLeft"] || keys["KeyA"] || dpadLeftPressed) moveX -= 1;
+      if (keys["ArrowRight"] || keys["KeyD"] || dpadRightPressed) moveX += 1;
+      if (keys["ArrowUp"] || keys["KeyW"] || dpadUpPressed) moveY -= 1;
+      if (keys["ArrowDown"] || keys["KeyS"] || dpadDownPressed) moveY += 1;
 
       if (joystickAxisX !== 0) moveX += joystickAxisX;
       if (joystickAxisY !== 0) moveY += joystickAxisY;
@@ -3186,7 +3317,8 @@
           }
           boss.y += (boss.targetY - boss.y) * 0.05;
 
-          var bossShootInterval = Math.max(50, 100 - (stage - 1) * 4);
+          // v7.1.0 보스 패턴 전환 딜레이(공격 주기) 소폭 여유 있게 증가
+          var bossShootInterval = Math.max(65, 120 - (stage - 1) * 4);
           if (gameTime - boss.lastShoot > bossShootInterval) {
             fireBossPattern(boss);
             boss.lastShoot = gameTime;
@@ -3197,7 +3329,7 @@
             boss.y += (boss.baseY + Math.sin(gameTime * 0.04) * 10 - boss.y) * 0.1;
             boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.05; 
             
-            if (boss.stateTimer > 90) {
+            if (boss.stateTimer > 110) { // 딜레이 증가
               boss.state = 'dash';
               boss.stateTimer = 0;
               boss.targetDashX = player.x + player.width/2 - boss.width/2;
@@ -3229,7 +3361,7 @@
               boss.spinAngle += 0.5;
               enemyBullets.push({
                 x: cx - 6, y: cy - 6, width: 14, height: 14,
-                vx: Math.cos(boss.spinAngle) * 3.5, vy: Math.sin(boss.spinAngle) * 3.5, isHeavy: true
+                vx: Math.cos(boss.spinAngle) * 3.0, vy: Math.sin(boss.spinAngle) * 3.0, isHeavy: true
               });
             }
             if (boss.stateTimer > 80) {
@@ -3245,7 +3377,7 @@
             if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1;
             if (boss.y <= 10 || boss.y + boss.height >= canvas.height * 0.35) boss.vy *= -1;
             
-            var bossWanderShootInterval = Math.max(50, 100 - (stage - 1) * 4);
+            var bossWanderShootInterval = Math.max(65, 120 - (stage - 1) * 4);
             if (gameTime - boss.lastShoot > bossWanderShootInterval) {
               fireBossPattern(boss);
               boss.lastShoot = gameTime;
@@ -3282,7 +3414,8 @@
               var dropX = boss.x + boss.width / 2;
               var dropY = boss.y + boss.height / 2;
 
-              if (Math.random() < 0.10) {
+              // v7.1.0 체력 회복(하트) 드롭 확률 25%로 상향
+              if (Math.random() < 0.25) {
                 spawnItem(dropX, dropY, "heart");
               }
               if (Math.random() < 0.50) {
