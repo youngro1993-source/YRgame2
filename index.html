@@ -157,6 +157,8 @@
       align-items: center;
       margin: 1px auto 2px auto;
       position: relative;
+      width: 100%;
+      max-width: 440px;
     }
 
     .moon-artwork {
@@ -190,35 +192,51 @@
       box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3);
     }
 
-    /* 랭커 3위 말풍선 스타일 */
-    .ranker-speech-bubble {
+    /* 랭커 상시 말풍선 스타일 (슬라이드 캐러셀 or 리스트 형태) */
+    .ranker-bubble-board {
       margin-top: 4px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: center;
+    }
+
+    .ranker-speech-bubble {
       background: rgba(30, 41, 59, 0.9);
       border: 1px solid #facc15;
       border-radius: 6px;
       padding: 3px 8px;
       font-size: 0.55rem;
       color: #facc15;
-      max-width: 220px;
+      max-width: 320px;
+      width: 100%;
       word-break: break-all;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      position: relative;
-      animation: floatBubble 2s infinite ease-in-out;
-    }
-    .ranker-speech-bubble::after {
-      content: '';
-      position: absolute;
-      top: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 0 5px 5px 5px;
-      border-style: solid;
-      border-color: transparent transparent #facc15 transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
     }
 
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
+    .bubble-text-part {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bubble-edit-btn {
+      background: #facc15;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.48rem;
+      font-weight: bold;
+      padding: 2px 5px;
+      cursor: pointer;
+      margin-left: 4px;
+      flex-shrink: 0;
     }
 
     .btn-container {
@@ -790,10 +808,10 @@
 
         <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         
-        <!-- 달 클릭 영역 및 랭커 3위 말풍선 컨테이너 -->
+        <!-- 달 클릭 영역 및 랭커 상시 말풍선 컨테이너 -->
         <div class="moon-container">
           <div class="moon-artwork" onclick="handleMoonClick()"></div>
-          <div id="rankerBubbleContainer" class="hidden"></div>
+          <div id="rankerBubbleBoard" class="ranker-bubble-board"></div>
         </div>
       </div>
 
@@ -867,7 +885,7 @@
       <!-- [3] 하단 영역 -->
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.7.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.8.0 업데이트)</button>
       </div>
 
     </div>
@@ -879,6 +897,19 @@
         <p id="eventMessageText" style="margin: 15px 0; font-size: 0.85rem; line-height: 1.5; color: #facc15; font-weight: bold;"></p>
         <div style="text-align: center; margin-top: 10px;">
           <button class="btn" style="padding: 6px 20px; font-size: 0.85rem;" onclick="toggleModal('eventModal', false)">확인</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 말풍선 수정 모달 창 -->
+    <div id="editQuoteModal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3>💬 랭커 한마디 수정</h3>
+        <p style="margin: 10px 0; font-size: 0.75rem; color: #94a3b8;">TOP 3 랭킹 유지 중입니다. 모두에게 보일 새로운 한마디를 입력하세요!</p>
+        <input type="text" id="modalQuoteInput" placeholder="새로운 한마디 입력" maxlength="25" style="width: 100%; max-width: 280px; margin: 10px auto;" />
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+          <button class="btn" style="padding: 6px 15px; font-size: 0.8rem;" onclick="saveNewQuoteFromModal()">저장하기</button>
+          <button class="btn" style="background: linear-gradient(135deg, #475569, #334155); padding: 6px 15px; font-size: 0.8rem;" onclick="toggleModal('editQuoteModal', false)">취소</button>
         </div>
       </div>
     </div>
@@ -1008,7 +1039,7 @@
           적들의 무자비한 공습을 뚫고, <span class="highlight">'YOON 행성'</span>의 평화를 되찾아주세요!
         </div>
         <div style="text-align: center; margin-bottom: 10px;">
-          <label style="font-size: 0.72rem; color: #facc15; display: block; margin-bottom: 4px;">💬 TOP 3 달성 시 모두에게 보일 한마디 입력</label>
+          <label style="font-size: 0.72rem; color: #facc15; display: block; margin-bottom: 4px;">💬 TOP 3 달성 시 모두에게 보일 한마디 미리 입력</label>
           <input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 은하의 수호자다!" maxlength="25" style="width: 100%; max-width: 280px;" />
         </div>
         <div style="text-align: center;">
@@ -1023,6 +1054,15 @@
         <h3>📜 패치 내역</h3>
         
         <div class="history-scroll-area">
+          <div class="version-block">
+            <div class="version-title">v6.8.0 (상시 랭커 말풍선 및 실시간 수정 기능)</div>
+            <ul>
+              <li><b>상시 랭커 말풍선</b>: 게임 시작 화면의 달 밑에 현재 TOP 3 랭커들의 순위와 말풍선이 상시 노출됩니다.</li>
+              <li><b>말풍선 실시간 수정</b>: 내가 TOP 3 랭커에 포함되어 있을 경우 언제든지 자신의 말풍선을 수정할 수 있는 버튼이 활성화됩니다.</li>
+              <li><b>자동 순위 연동</b>: 3위 밖으로 밀려나면 말풍선 목록에서 자동으로 제외됩니다.</li>
+            </ul>
+          </div>
+
           <div class="version-block">
             <div class="version-title">v6.7.0 (자동 일시정지 및 HUD 깔끔화)</div>
             <ul>
@@ -1151,7 +1191,7 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.7.0";
+    var currentVersionKey = "v6.8.0";
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -1288,7 +1328,6 @@
         toggleModal('updateModal', true);
       }
 
-      // 화면 이탈/백그라운드 전환 시 자동 일시정지 처리 (visibilitychange)
       document.addEventListener("visibilitychange", function() {
         if (document.hidden && !isGameOver && !isPaused && !isCountingDown) {
           triggerAutoPause();
@@ -1447,22 +1486,32 @@
 
           rankings = rankings.slice(0, 10);
 
-          var bubbleContainer = document.getElementById("rankerBubbleContainer");
-          var topRankerWithQuote = null;
+          // 상시 랭커 말풍선 보드 렌더링 (TOP 3)
+          var bubbleBoard = document.getElementById("rankerBubbleBoard");
+          var bubbleHtml = "";
+          var myCurrentNickname = localStorage.getItem("yoon_nickname") || "";
+          var amIInTop3 = false;
+
           for (var i = 0; i < Math.min(3, rankings.length); i++) {
-            if (rankings[i].quote && rankings[i].quote.trim() !== "") {
-              topRankerWithQuote = rankings[i];
-              break;
+            var r = rankings[i];
+            var rankNum = i + 1;
+            var qText = (r.quote && r.quote.trim() !== "") ? r.quote : "(한마디 없음)";
+            
+            var isMe = (r.nickname === myCurrentNickname);
+            if (isMe) amIInTop3 = true;
+
+            bubbleHtml += '<div class="ranker-speech-bubble">' +
+              '<div class="bubble-text-part">👑 [' + rankNum + '위] ' + r.nickname + ': "' + qText + '"</div>';
+            
+            if (isMe) {
+              bubbleHtml += '<button class="bubble-edit-btn" onclick="openEditQuoteModal()">수정</button>';
             }
+            bubbleHtml += '</div>';
           }
 
-          if (topRankerWithQuote) {
-            bubbleContainer.innerHTML = "👑 " + topRankerWithQuote.nickname + ": \"" + topRankerWithQuote.quote + "\"";
-            bubbleContainer.classList.remove("hidden");
-          } else {
-            bubbleContainer.classList.add("hidden");
-          }
+          bubbleBoard.innerHTML = bubbleHtml;
 
+          // 만약 내가 TOP 3 안에 들었는데 로컬 저장된 quote가 없다면 초기화 또는 반영
           var htmlContent = "";
           if (rankings.length === 0) {
             htmlContent = "<tr><td colspan='6'>등록된 기록이 없습니다.</td></tr>";
@@ -1486,6 +1535,32 @@
         .catch(function(error) {
           console.error("랭킹 로딩 실패:", error);
         });
+    }
+
+    function openEditQuoteModal() {
+      initAudio();
+      var currentQuote = localStorage.getItem("yoon_quote") || "";
+      document.getElementById("modalQuoteInput").value = currentQuote;
+      toggleModal("editQuoteModal", true);
+    }
+
+    function saveNewQuoteFromModal() {
+      var newQuote = document.getElementById("modalQuoteInput").value.trim();
+      localStorage.setItem("yoon_quote", newQuote);
+      document.getElementById("rankingQuoteInput").value = newQuote;
+      toggleModal("editQuoteModal", false);
+
+      var myNick = localStorage.getItem("yoon_nickname");
+      if (myNick && db) {
+        db.collection("rankings").where("nickname", "==", myNick).get()
+        .then(function(snapshot) {
+          if (!snapshot.empty) {
+            snapshot.docs[0].ref.update({ quote: newQuote }).then(function() {
+              updateLeaderboardUI();
+            });
+          }
+        });
+      }
     }
 
     document.addEventListener("touchmove", function(e) {
