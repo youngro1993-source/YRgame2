@@ -2619,11 +2619,14 @@
         ctx.translate(cx | 0, cy | 0);
         if (boss.state === 'spin') {
           ctx.rotate(gameTime * 0.2);
-        } else if (boss.state === 'dash' || boss.state === 'wander') {
+        } else if (boss.state === 'dash' || boss.state === 'return') {
           var targetAngle = (boss.state === 'dash') ? 
                             Math.atan2(boss.targetDashY - boss.y, boss.targetDashX - boss.x) :
-                            Math.atan2(boss.vy, boss.vx);
+                            Math.atan2(boss.baseY - boss.y, (canvas.width/2 - boss.width/2) - boss.x);
           ctx.rotate(targetAngle + Math.PI/2);
+        } else if (boss.state === 'wander') {
+          var wanderAngle = Math.atan2(boss.vy, boss.vx);
+          ctx.rotate(wanderAngle + Math.PI/2);
         }
         
         ctx.fillStyle = "#f43f5e";
@@ -3204,7 +3207,17 @@
             boss.x += (boss.targetDashX - boss.x) * 0.12;
             boss.y += (boss.targetDashY - boss.y) * 0.12;
             
-            if (boss.stateTimer > 40) {
+            if (boss.stateTimer > 35) {
+              boss.state = 'return';
+              boss.stateTimer = 0;
+            }
+          } else if (boss.state === 'return') {
+            var targetX = canvas.width / 2 - boss.width / 2;
+            var targetY = boss.baseY;
+            boss.x += (targetX - boss.x) * 0.1;
+            boss.y += (targetY - boss.y) * 0.1;
+
+            if (Math.abs(targetX - boss.x) < 2 && Math.abs(targetY - boss.y) < 2) {
               boss.state = 'spin';
               boss.stateTimer = 0;
               boss.spinAngle = 0;
@@ -3219,18 +3232,18 @@
                 vx: Math.cos(boss.spinAngle) * 3.5, vy: Math.sin(boss.spinAngle) * 3.5, isHeavy: true
               });
             }
-            if (boss.stateTimer > 100) {
+            if (boss.stateTimer > 80) {
               boss.state = 'wander';
               boss.stateTimer = 0;
-              boss.vx = (Math.random() > 0.5 ? 1 : -1) * 2.0;
-              boss.vy = (Math.random() > 0.5 ? 1 : -1) * 1.5;
+              boss.vx = (Math.random() > 0.5 ? 1 : -1) * 1.8;
+              boss.vy = (Math.random() > 0.5 ? 1 : -1) * 1.2;
             }
           } else if (boss.state === 'wander') {
             boss.x += boss.vx;
             boss.y += boss.vy;
             
             if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1;
-            if (boss.y <= 0 || boss.y + boss.height >= canvas.height / 2) boss.vy *= -1;
+            if (boss.y <= 10 || boss.y + boss.height >= canvas.height * 0.35) boss.vy *= -1;
             
             var bossWanderShootInterval = Math.max(50, 100 - (stage - 1) * 4);
             if (gameTime - boss.lastShoot > bossWanderShootInterval) {
