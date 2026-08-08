@@ -313,7 +313,7 @@
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block"><div class="version-title">v7.8.1 (랭킹 안정화 패치)</div><ul><li>랭킹 로딩 지연 및 DOM 에러 원인 완벽 보완</li><li>데이터 연동 실패 시 안내 문구 즉시 출력</li></ul></div>
+          <div class="version-block"><div class="version-title">v7.8.2 (스폰 버그 방지 패치)</div><ul><li>몬스터 사냥 수 목표 도달 시 보스 소환 강제 보정 로직 추가</li><li>화면 밖 비정상 위치 적 자동 정리 및 스폰 멈춤 현상 완벽 방지</li></ul></div>
         </div>
         <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
@@ -360,7 +360,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.8.1";
+    var currentVersionKey = "v7.8.2";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -938,9 +938,17 @@
       gameTime += gameSpeedMultiplier; if (player.invincibleTimer > 0) player.invincibleTimer -= gameSpeedMultiplier; if (warningTimer > 0) warningTimer -= gameSpeedMultiplier;
       var now = Date.now(); if (now - lastShootTime > (shootInterval / gameSpeedMultiplier)) { shoot(); lastShootTime = now; } shootDrones();
 
+      // [버그 방지 보완] 목표 킬 수를 채웠는데 보스가 안 나오거나 몬스터가 멈춘 경우 강제 보정
       if (!boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
+      
       var currentSpawnInterval = Math.max(24, Math.floor(74 / Math.pow(1.2, stage - 1))); 
       if (Math.floor(gameTime) % currentSpawnInterval === 0 && (boss || stageMonsterKills < targetStageKills)) spawnMonster();
+      
+      // [버그 방지 보완] 스테이지 진행 중 몬스터가 모두 비정상 소멸했거나 꼬였을 때를 대비한 안전 장치 (막힘 방지)
+      if (!boss && stageMonsterKills < targetStageKills && monsters.length === 0 && Math.floor(gameTime) % 30 === 0) {
+        spawnMonster();
+      }
+
       if (killCount >= nextEliteKillTarget && !boss && stageMonsterKills < targetStageKills) { spawnEliteMonster(); nextEliteKillTarget += 15; }
 
       var mx = 0, my = 0;
