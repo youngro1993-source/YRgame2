@@ -199,6 +199,8 @@
       flex-direction: column;
       gap: 3px;
       align-items: center;
+      max-height: 120px;
+      overflow-y: auto;
     }
 
     .ranker-speech-bubble {
@@ -810,20 +812,7 @@
 
       <div class="layout-section layout-middle">
         
-        <div class="info-box">
-          <h4>🎁 아이템 드롭 & 재화 정보</h4>
-          <div class="info-grid">
-            <div class="info-item"><span class="badge coin">🪙</span><span><b>100킬당 코인</b>: 10개 획득</span></div>
-            <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가</b>: 탄환 DMG +1</span></div>
-            <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가</b>: 중급 2% 드롭</span></div>
-            <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기</b>: 2연발 방사탄</span></div>
-            <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기</b>: 관통 빔</span></div>
-            <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기</b>: 다단히트 회전탄</span></div>
-            <div class="info-item"><span class="badge coin">🪙</span><span><b>보스 처치</b>: 50% 코인 1개 드랍</span></div>
-            <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복</b>: 보스 처치 시 10%</span></div>
-          </div>
-        </div>
-
+        <!-- 명예의 전당 (위치 교체됨) -->
         <div class="ranking-container">
           <h3>🏆 명예의 전당 (TOP 10)</h3>
           <div class="ranking-sub-notice">※ 닉네임당 최고 점수 1개만 등록됩니다 (매주 토요일 12시 초기화)</div>
@@ -843,6 +832,21 @@
                 <tr><td colspan="6">로딩 중...</td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- 아이템 드롭 & 재화 정보 (위치 교체됨) -->
+        <div class="info-box">
+          <h4>🎁 아이템 드롭 & 재화 정보</h4>
+          <div class="info-grid">
+            <div class="info-item"><span class="badge coin">🪙</span><span><b>100킬당 코인</b>: 10개 획득</span></div>
+            <div class="info-item"><span class="badge damage">D</span><span><b>데미지 증가</b>: 탄환 DMG +1</span></div>
+            <div class="info-item"><span class="badge upgrade">+1</span><span><b>탄환 수 증가</b>: 중급 2% 드롭</span></div>
+            <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건 무기</b>: 2연발 방사탄</span></div>
+            <div class="info-item"><span class="badge laser">L</span><span><b>레이저 무기</b>: 관통 빔</span></div>
+            <div class="info-item"><span class="badge saw">S</span><span><b>톱니바퀴 무기</b>: 다단히트 회전탄</span></div>
+            <div class="info-item"><span class="badge coin">🪙</span><span><b>보스 처치</b>: 50% 코인 1개 드랍</span></div>
+            <div class="info-item"><span class="badge heart">H</span><span><b>체력 회복</b>: 보스 처치 시 10%</span></div>
           </div>
         </div>
 
@@ -890,7 +894,7 @@
     <div id="editQuoteModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>💬 랭커 한마디 수정</h3>
-        <p style="margin: 10px 0; font-size: 0.75rem; color: #94a3b8;">TOP 3 랭킹 유지 중입니다. 모두에게 보일 새로운 한마디를 입력하세요!</p>
+        <p style="margin: 10px 0; font-size: 0.75rem; color: #94a3b8;">TOP 5 랭킹 유지 중입니다. 모두에게 보일 새로운 한마디를 입력하세요!</p>
         <input type="text" id="modalQuoteInput" placeholder="새로운 한마디 입력" maxlength="25" style="width: 100%; max-width: 280px; margin: 10px auto;" />
         <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
           <button class="btn" style="padding: 6px 15px; font-size: 0.8rem;" onclick="saveNewQuoteFromModal()">저장하기</button>
@@ -930,12 +934,13 @@
           </button>
         </div>
 
+        <!-- 하트 과자 -> 과자로 명칭 변경 -->
         <div class="shop-item-card">
           <div class="shop-item-icon">🍪</div>
           <div class="shop-item-info">
-            <div class="shop-item-title">하트 과자 (기본 체력 +1)</div>
-            <div class="shop-item-desc">비행기의 기본 최대 체력을 1 증가시킵니다.</div>
-            <div class="shop-item-status">현재 기본 체력: <span id="shopHeartLife">3</span>개</div>
+            <div class="shop-item-title">과자 (최대 체력 +1)</div>
+            <div class="shop-item-desc">비행기의 최대 체력을 1 증가시킵니다.</div>
+            <div class="shop-item-status">현재 최대 체력: <span id="shopHeartLife">3</span>개</div>
           </div>
           <button class="buy-btn" id="buyHeartBtn" onclick="buyShopItem('heart')">
             <span id="heartCostText">160</span> 코인
@@ -958,11 +963,37 @@
           <div class="shop-item-icon">🛸</div>
           <div class="shop-item-info">
             <div class="shop-item-title">보조기체 장착</div>
-            <div class="shop-item-desc">좌우에 데미지 1짜리 보조기체 2대를 장착합니다.</div>
+            <div class="shop-item-desc">좌우에 보조기체 2대를 장착합니다.</div>
             <div class="shop-item-status">보유 여부: <span id="shopDroneStatus">미장착</span></div>
           </div>
           <button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')">
             <span id="droneCostText">3000</span> 코인
+          </button>
+        </div>
+
+        <!-- 보조기체 데미지 강화 -->
+        <div class="shop-item-card" id="droneDmgCard" style="display: none;">
+          <div class="shop-item-icon">🔋</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title">보조기체 데미지 강화</div>
+            <div class="shop-item-desc">보조기체의 탄환 데미지를 1 증가시킵니다.</div>
+            <div class="shop-item-status">현재 보조 DMG: <span id="shopDroneDmgText">1</span></div>
+          </div>
+          <button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')">
+            <span id="droneDmgCostText">500</span> 코인
+          </button>
+        </div>
+
+        <!-- 보조기체 연사 속도 강화 -->
+        <div class="shop-item-card" id="droneSpeedCard" style="display: none;">
+          <div class="shop-item-icon">⚙️</div>
+          <div class="shop-item-info">
+            <div class="shop-item-title">보조기체 연사 강화</div>
+            <div class="shop-item-desc">보조기체의 발사 속도를 높입니다.</div>
+            <div class="shop-item-status">현재 보조 간격: <span id="shopDroneSpeedText">350</span>ms</div>
+          </div>
+          <button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')">
+            <span id="droneSpeedCostText">500</span> 코인
           </button>
         </div>
 
@@ -1021,7 +1052,7 @@
           적들의 무자비한 공습을 뚫고, <span class="highlight">'YOON 행성'</span>의 평화를 되찾아주세요!
         </div>
         <div style="text-align: center; margin-bottom: 10px;">
-          <label style="font-size: 0.72rem; color: #facc15; display: block; margin-bottom: 4px;">💬 TOP 3 달성 시 모두에게 보일 한마디 미리 입력</label>
+          <label style="font-size: 0.72rem; color: #facc15; display: block; margin-bottom: 4px;">💬 TOP 5 달성 시 모두에게 보일 한마디 미리 입력</label>
           <input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 은하의 수호자다!" maxlength="25" style="width: 100%; max-width: 280px;" />
         </div>
         <div style="text-align: center;">
@@ -1038,9 +1069,9 @@
           <div class="version-block">
             <div class="version-title">v6.8.0 (상시 랭커 말풍선 및 실시간 수정 기능)</div>
             <ul>
-              <li><b>상시 랭커 말풍선</b>: 게임 시작 화면의 달 밑에 현재 TOP 3 랭커들의 순위와 말풍선이 상시 노출됩니다.</li>
-              <li><b>말풍선 실시간 수정</b>: 내가 TOP 3 랭커에 포함되어 있을 경우 언제든지 자신의 말풍선을 수정할 수 있는 버튼이 활성화됩니다.</li>
-              <li><b>자동 순위 연동</b>: 3위 밖으로 밀려나면 말풍선 목록에서 자동으로 제외됩니다.</li>
+              <li><b>상시 랭커 말풍선</b>: 게임 시작 화면의 달 밑에 현재 TOP 5 랭커들의 순위와 말풍선이 상시 노출됩니다.</li>
+              <li><b>말풍선 실시간 수정</b>: 내가 TOP 5 랭커에 포함되어 있을 경우 언제든지 자신의 말풍선을 수정할 수 있는 버튼이 활성화됩니다.</li>
+              <li><b>자동 순위 연동</b>: 5위 밖으로 밀려나면 말풍선 목록에서 자동으로 제외됩니다.</li>
             </ul>
           </div>
 
@@ -1058,7 +1089,6 @@
               <li><b>UI 최적화</b>: 생명력(하트) 5개 이상 획득 시 숫자로 간략히 표기되어 깔끔한 UI를 제공합니다.</li>
               <li><b>피격 판정 개선</b>: 미사일이 비행기 주변을 스치기만 해도 죽던 현상을 개선하여 실제 기체 크기에 맞게 히트박스를 완화했습니다.</li>
               <li><b>명예의 전당 개선</b>: 닉네임당 최고 기록 1개만 남도록 중복을 방지하며, 컬럼명이 '최고점수'로 변경되었습니다.</li>
-              <li><b>랭커 혜택 추가 (NEW!)</b>: TOP 3 랭커에게는 달 그림 아래에 모든 유저가 볼 수 있는 말풍선 한마디 권한이 부여됩니다.</li>
               <li><b>적 탄환 시인성 강화</b>: 적이 발사하는 탄환의 가시성과 크기를 개선하여 회피하기 쉽게 조정했습니다.</li>
             </ul>
           </div>
@@ -1187,8 +1217,12 @@
     var shopCandyCount = parseInt(localStorage.getItem("yoon_candy_count") || "0");
 
     var hasDrone = localStorage.getItem("yoon_has_drone") === "true";
+    var droneDmgBonus = parseInt(localStorage.getItem("yoon_drone_dmg_bonus") || "0");
+    var droneSpeedCount = parseInt(localStorage.getItem("yoon_drone_speed_count") || "0");
+    var droneDmgCost = parseFloat(localStorage.getItem("yoon_drone_dmg_cost") || "500");
+    var droneSpeedCost = parseFloat(localStorage.getItem("yoon_drone_speed_cost") || "500");
+
     var droneLastShootTime = 0;
-    var droneShootInterval = 350; 
 
     var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
     var moonReward30Claimed = localStorage.getItem("yoon_moon_reward_30") === "true";
@@ -1221,6 +1255,10 @@
       localStorage.setItem("yoon_candy_cost", shopCandyCost);
       localStorage.setItem("yoon_candy_count", shopCandyCount);
       localStorage.setItem("yoon_has_drone", hasDrone);
+      localStorage.setItem("yoon_drone_dmg_bonus", droneDmgBonus);
+      localStorage.setItem("yoon_drone_speed_count", droneSpeedCount);
+      localStorage.setItem("yoon_drone_dmg_cost", droneDmgCost);
+      localStorage.setItem("yoon_drone_speed_cost", droneSpeedCost);
 
       localStorage.setItem("yoon_moon_clicks", moonClickCount);
       localStorage.setItem("yoon_moon_reward_30", moonReward30Claimed);
@@ -1379,6 +1417,8 @@
 
     function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db) return;
+      if (nickname.trim() === "test123") return;
+
       db.collection("rankings").where("nickname", "==", nickname).get()
       .then(function(querySnapshot) {
         if (querySnapshot.empty) {
@@ -1463,6 +1503,11 @@
             var data = doc.data();
             var nick = data.nickname || "익명";
             
+            if (nick === "test123") {
+              doc.ref.delete().catch(function(e){});
+              return;
+            }
+
             if (!seenNicknames[nick]) {
               seenNicknames[nick] = true;
               rankings.push(data);
@@ -1476,15 +1521,15 @@
           var bubbleBoard = document.getElementById("rankerBubbleBoard");
           var bubbleHtml = "";
           var myCurrentNickname = localStorage.getItem("yoon_nickname") || "";
-          var amIInTop3 = false;
+          var amIInTop5 = false;
 
-          for (var i = 0; i < Math.min(3, rankings.length); i++) {
+          for (var i = 0; i < Math.min(5, rankings.length); i++) {
             var r = rankings[i];
             var rankNum = i + 1;
             var qText = (r.quote && r.quote.trim() !== "") ? r.quote : "(한마디 없음)";
             
             var isMe = (r.nickname === myCurrentNickname);
-            if (isMe) amIInTop3 = true;
+            if (isMe) amIInTop5 = true;
 
             bubbleHtml += '<div class="ranker-speech-bubble">' +
               '<div class="bubble-text-part">👑 [' + rankNum + '위] ' + r.nickname + ': "' + qText + '"</div>';
@@ -1889,14 +1934,35 @@
 
       var droneStatusEl = document.getElementById('shopDroneStatus');
       var buyDroneBtn = document.getElementById('buyDroneBtn');
+      var droneDmgCard = document.getElementById('droneDmgCard');
+      var droneSpeedCard = document.getElementById('droneSpeedCard');
+
       if (hasDrone) {
         droneStatusEl.innerText = "장착 완료";
         buyDroneBtn.innerText = "보유중";
         buyDroneBtn.disabled = true;
+        droneDmgCard.style.display = "flex";
+        droneSpeedCard.style.display = "flex";
+
+        var currentDroneDmg = 1 + droneDmgBonus;
+        var currentDroneInterval = Math.max(120, 350 - droneSpeedCount * 30);
+
+        document.getElementById('shopDroneDmgText').innerText = currentDroneDmg;
+        document.getElementById('droneDmgCostText').innerText = Math.floor(droneDmgCost);
+        document.getElementById('buyDroneDmgBtn').disabled = userCoins < droneDmgCost;
+
+        document.getElementById('shopDroneSpeedText').innerText = currentDroneInterval;
+        document.getElementById('droneSpeedCostText').innerText = Math.floor(droneSpeedCost);
+        document.getElementById('buyDroneSpeedBtn').disabled = userCoins < droneSpeedCost || currentDroneInterval <= 120;
+        if (currentDroneInterval <= 120) {
+          document.getElementById('droneSpeedCostText').innerText = "MAX";
+        }
       } else {
         droneStatusEl.innerText = "미장착";
         buyDroneBtn.innerHTML = '<span id="droneCostText">3000</span> 코인';
         buyDroneBtn.disabled = userCoins < 3000;
+        droneDmgCard.style.display = "none";
+        droneSpeedCard.style.display = "none";
       }
     }
 
@@ -2003,6 +2069,19 @@
         userCoins -= 3000;
         hasDrone = true;
         shopPurchaseCount++;
+      } else if (type === 'drone_dmg' && hasDrone && userCoins >= droneDmgCost) {
+        userCoins -= Math.floor(droneDmgCost);
+        droneDmgBonus += 1;
+        droneDmgCost *= 1.25;
+        shopPurchaseCount++;
+      } else if (type === 'drone_speed' && hasDrone && userCoins >= droneSpeedCost) {
+        var currentDroneInterval = Math.max(120, 350 - droneSpeedCount * 30);
+        if (currentDroneInterval > 120) {
+          userCoins -= Math.floor(droneSpeedCost);
+          droneSpeedCount += 1;
+          droneSpeedCost *= 1.25;
+          shopPurchaseCount++;
+        }
       }
       saveShopData();
       updateShopUI();
@@ -2248,19 +2327,21 @@
     function shootDrones() {
       if (!hasDrone) return;
       var now = Date.now();
-      if (now - droneLastShootTime > droneShootInterval) {
+      var dynamicDroneInterval = Math.max(120, 350 - droneSpeedCount * 30);
+      if (now - droneLastShootTime > dynamicDroneInterval) {
         droneLastShootTime = now;
         var droneLeftX = player.x - 12;
         var droneRightX = player.x + player.width + 2;
         var droneY = player.y + 6;
+        var actualDroneDmg = 1 + droneDmgBonus;
 
         bullets.push({
           x: droneLeftX, y: droneY, width: 5, height: 10,
-          type: "normal", vx: 0, vy: -4.5, damage: 1
+          type: "normal", vx: 0, vy: -4.5, damage: actualDroneDmg
         });
         bullets.push({
           x: droneRightX, y: droneY, width: 5, height: 10,
-          type: "normal", vx: 0, vy: -4.5, damage: 1
+          type: "normal", vx: 0, vy: -4.5, damage: actualDroneDmg
         });
       }
     }
