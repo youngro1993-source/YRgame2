@@ -641,7 +641,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 180px; /* HUD 겹침 방지를 위해 높이 확장 */
+      height: 180px; 
       background: rgba(15, 23, 42, 0.92);
       border-top: 2px solid rgba(56, 189, 248, 0.5);
       backdrop-filter: blur(8px);
@@ -651,7 +651,7 @@
 
     .arrow-btn {
       position: absolute;
-      bottom: 55px; /* 높이 확장에 맞춰 버튼 위젯 상승 */
+      bottom: 55px; 
       width: 75px;
       height: 75px;
       background: rgba(30, 41, 59, 0.8);
@@ -681,7 +681,7 @@
 
     #joystickArea {
       position: absolute;
-      bottom: 40px; /* 높이 확장에 맞춰 조이스틱 상승 */
+      bottom: 40px; 
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -1210,6 +1210,8 @@
     var moonReward30Claimed = localStorage.getItem("yoon_moon_reward_30") === "true";
     var moonReward300Claimed = localStorage.getItem("yoon_moon_reward_300") === "true";
     var moonReward400Claimed = localStorage.getItem("yoon_moon_reward_400") === "true";
+    var moonReward500Claimed = localStorage.getItem("yoon_moon_reward_500") === "true";
+    var moonReward1000Claimed = localStorage.getItem("yoon_moon_reward_1000") === "true";
 
     var totalMonsterKills = parseInt(localStorage.getItem("yoon_total_kills") || "0");
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
@@ -1246,6 +1248,8 @@
       localStorage.setItem("yoon_moon_reward_30", moonReward30Claimed);
       localStorage.setItem("yoon_moon_reward_300", moonReward300Claimed);
       localStorage.setItem("yoon_moon_reward_400", moonReward400Claimed);
+      localStorage.setItem("yoon_moon_reward_500", moonReward500Claimed);
+      localStorage.setItem("yoon_moon_reward_1000", moonReward1000Claimed);
 
       localStorage.setItem("yoon_total_kills", totalMonsterKills);
       localStorage.setItem("yoon_total_boss_kills", totalBossKills);
@@ -1315,19 +1319,35 @@
         toggleModal("eventModal", true);
       } else if (moonClickCount === 300 && !moonReward300Claimed) {
         moonReward300Claimed = true;
-        userCoins += 1000;
+        userCoins += 3000;
         saveShopData();
         updateShopUI();
         playSound('item');
-        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 1000개를 지급합니다.\n-YOON행성 관리자-";
+        document.getElementById("eventMessageText").textContent = "당신의 손길에 감동받아 코인 3000개를 지급합니다.\n-YOON행성 관리자-";
         toggleModal("eventModal", true);
       } else if (moonClickCount === 400 && !moonReward400Claimed) {
         moonReward400Claimed = true;
+        userCoins += 4000;
+        saveShopData();
+        updateShopUI();
+        playSound('item');
+        document.getElementById("eventMessageText").textContent = "당신의 끝없는 손길에 감동받아 코인 4000개를 지급합니다.\n-YOON행성 관리자-";
+        toggleModal("eventModal", true);
+      } else if (moonClickCount === 500 && !moonReward500Claimed) {
+        moonReward500Claimed = true;
+        userCoins += 5000;
+        saveShopData();
+        updateShopUI();
+        playSound('item');
+        document.getElementById("eventMessageText").textContent = "당신의 엄청난 끈기에 감동받아 코인 5000개를 지급합니다.\n(마지막 코인 지급입니다!)\n-YOON행성 관리자-";
+        toggleModal("eventModal", true);
+      } else if (moonClickCount === 1000 && !moonReward1000Claimed) {
+        moonReward1000Claimed = true;
         userCoins += 100000;
         saveShopData();
         updateShopUI();
         playSound('item');
-        document.getElementById("eventMessageText").textContent = "당신의 끝없는 손길에 감동받아 코인 100,000개를 지급합니다.\n-YOON행성 관리자-";
+        document.getElementById("eventMessageText").textContent = "경이로운 손길에 경의를 표하며 코인 100,000개를 지급합니다.\n-YOON행성 관리자-";
         toggleModal("eventModal", true);
       }
     }
@@ -2594,14 +2614,16 @@
       var cx = boss.x + boss.width / 2;
       var cy = boss.y + boss.height / 2;
 
-      if (boss.designType === 4) { // 신규 Spinner 보스
+      if (boss.designType === 4) { 
         ctx.save();
         ctx.translate(cx | 0, cy | 0);
         if (boss.state === 'spin') {
           ctx.rotate(gameTime * 0.2);
-        } else if (boss.state === 'dash') {
-          var angle = Math.atan2(boss.targetDashY - boss.y, boss.targetDashX - boss.x);
-          ctx.rotate(angle + Math.PI/2);
+        } else if (boss.state === 'dash' || boss.state === 'wander') {
+          var targetAngle = (boss.state === 'dash') ? 
+                            Math.atan2(boss.targetDashY - boss.y, boss.targetDashX - boss.x) :
+                            Math.atan2(boss.vy, boss.vx);
+          ctx.rotate(targetAngle + Math.PI/2);
         }
         
         ctx.fillStyle = "#f43f5e";
@@ -2825,6 +2847,7 @@
       var width = 32;
       var height = 32;
       var x = Math.random() * (canvas.width - width);
+      x = Math.max(0, Math.min(canvas.width - width, x)); 
       
       var type = "normal";
       var speed = 0.65; 
@@ -2868,6 +2891,7 @@
       var width = 40;
       var height = 40;
       var x = Math.random() * (canvas.width - width);
+      x = Math.max(0, Math.min(canvas.width - width, x)); 
       var hp = 6 + (stage - 1) * 2;
 
       monsters.push({
@@ -2913,7 +2937,9 @@
         stateTimer: 0,
         targetDashX: 0,
         targetDashY: 0,
-        spinAngle: 0
+        spinAngle: 0,
+        vx: 0,
+        vy: 0
       };
     }
 
@@ -3194,15 +3220,22 @@
               });
             }
             if (boss.stateTimer > 100) {
-              boss.state = 'return';
+              boss.state = 'wander';
               boss.stateTimer = 0;
+              boss.vx = (Math.random() > 0.5 ? 1 : -1) * 2.0;
+              boss.vy = (Math.random() > 0.5 ? 1 : -1) * 1.5;
             }
-          } else if (boss.state === 'return') {
-            boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.06;
-            boss.y += (boss.baseY - boss.y) * 0.06;
-            if (boss.stateTimer > 60) {
-              boss.state = 'idle';
-              boss.stateTimer = 0;
+          } else if (boss.state === 'wander') {
+            boss.x += boss.vx;
+            boss.y += boss.vy;
+            
+            if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1;
+            if (boss.y <= 0 || boss.y + boss.height >= canvas.height / 2) boss.vy *= -1;
+            
+            var bossWanderShootInterval = Math.max(50, 100 - (stage - 1) * 4);
+            if (gameTime - boss.lastShoot > bossWanderShootInterval) {
+              fireBossPattern(boss);
+              boss.lastShoot = gameTime;
             }
           }
         }
@@ -3273,6 +3306,7 @@
 
       for (var i = items.length - 1; i >= 0; i--) {
         items[i].y += items[i].speed;
+        items[i].x = Math.max(0, Math.min(canvas.width - items[i].width, items[i].x));
 
         if (checkCollision(player, items[i])) {
           playSound('item');
@@ -3310,6 +3344,8 @@
         if (m.type === "zigzag") {
           m.x = m.startX + Math.sin(m.y * 0.025) * 35;
         }
+
+        m.x = Math.max(0, Math.min(canvas.width - m.width, m.x));
 
         var shooterInterval = Math.max(140, 200 - (stage - 1) * 5);
         var bulletSpeed = 1.42 + (stage - 1) * 0.1; 
