@@ -728,31 +728,6 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    .game-hud-bar {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 0.75rem;
-      font-weight: bold;
-      backdrop-filter: blur(4px);
-      z-index: 8;
-      pointer-events: none;
-    }
-
-    .game-hud-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
     .result-card-box {
       width: 100%;
       max-width: 400px;
@@ -787,13 +762,6 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
 
-    <div id="gameHudBar" class="game-hud-bar hidden">
-      <div class="game-hud-item" id="hudStage">Stage 1</div>
-      <div class="game-hud-item" id="hudLife">❤️ x3</div>
-      <div class="game-hud-item" id="hudCoins">🪙 0</div>
-      <div class="game-hud-item" id="hudScore">Score: 0</div>
-    </div>
-
     <div id="startScreen" class="screen">
       
       <div class="layout-section">
@@ -812,7 +780,6 @@
 
       <div class="layout-section layout-middle">
         
-        <!-- 명예의 전당 (위치 교체됨) -->
         <div class="ranking-container">
           <h3>🏆 명예의 전당 (TOP 10)</h3>
           <div class="ranking-sub-notice">※ 닉네임당 최고 점수 1개만 등록됩니다 (매주 토요일 12시 초기화)</div>
@@ -835,7 +802,6 @@
           </div>
         </div>
 
-        <!-- 아이템 드롭 & 재화 정보 (위치 교체됨) -->
         <div class="info-box">
           <h4>🎁 아이템 드롭 & 재화 정보</h4>
           <div class="info-grid">
@@ -876,7 +842,7 @@
 
       <div class="layout-section">
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.8.0 업데이트)</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기 (v6.9.0 업데이트)</button>
       </div>
 
     </div>
@@ -934,7 +900,6 @@
           </button>
         </div>
 
-        <!-- 하트 과자 -> 과자로 명칭 변경 -->
         <div class="shop-item-card">
           <div class="shop-item-icon">🍪</div>
           <div class="shop-item-info">
@@ -971,7 +936,6 @@
           </button>
         </div>
 
-        <!-- 보조기체 데미지 강화 -->
         <div class="shop-item-card" id="droneDmgCard" style="display: none;">
           <div class="shop-item-icon">🔋</div>
           <div class="shop-item-info">
@@ -984,7 +948,6 @@
           </button>
         </div>
 
-        <!-- 보조기체 연사 속도 강화 -->
         <div class="shop-item-card" id="droneSpeedCard" style="display: none;">
           <div class="shop-item-icon">⚙️</div>
           <div class="shop-item-info">
@@ -1067,29 +1030,20 @@
         
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v6.9.0 (보조기체 업그레이드 및 UI 개선)</div>
+            <ul>
+              <li><b>보조기체 스탯 강화 시스템</b>: 상점에서 보조기체 장착 후 데미지와 연사 속도를 개별적으로 업그레이드할 수 있습니다.</li>
+              <li><b>보조기체 디자인 개선</b>: 전투 화면 내 보조기체의 외형 디테일과 시인성이 대폭 업그레이드되었습니다.</li>
+              <li><b>상태정보창 재배치</b>: 게임 진행 시 기존 상단에 있던 스테이지·체력·코인·점수 HUD 정보를 하단 무기 현황(조이스틱 상단) 바와 통합하여 깔끔하게 배치했습니다.</li>
+              <li><b>기체 데미지 표기</b>: 현재 내 비행기의 기본 데미지 옆에 보조기체 데미지가 함께 표시됩니다.</li>
+            </ul>
+          </div>
+
+          <div class="version-block">
             <div class="version-title">v6.8.0 (상시 랭커 말풍선 및 실시간 수정 기능)</div>
             <ul>
               <li><b>상시 랭커 말풍선</b>: 게임 시작 화면의 달 밑에 현재 TOP 5 랭커들의 순위와 말풍선이 상시 노출됩니다.</li>
               <li><b>말풍선 실시간 수정</b>: 내가 TOP 5 랭커에 포함되어 있을 경우 언제든지 자신의 말풍선을 수정할 수 있는 버튼이 활성화됩니다.</li>
-              <li><b>자동 순위 연동</b>: 5위 밖으로 밀려나면 말풍선 목록에서 자동으로 제외됩니다.</li>
-            </ul>
-          </div>
-
-          <div class="version-block">
-            <div class="version-title">v6.7.0 (자동 일시정지 및 HUD 깔끔화)</div>
-            <ul>
-              <li><b>UI 깔끔화</b>: 게임 화면 상단에 있던 정지 및 음소거 버튼을 제거하여 완전히 몰입할 수 있도록 시야를 넓혔습니다.</li>
-              <li><b>자동 일시정지</b>: 화면을 벗어나거나 백그라운드로 전환될 경우(visibilitychange 이벤트) 자동으로 일시정지 모드가 작동합니다.</li>
-            </ul>
-          </div>
-
-          <div class="version-block">
-            <div class="version-title">v6.6.0 (최적화 및 랭킹 시스템 개편)</div>
-            <ul>
-              <li><b>UI 최적화</b>: 생명력(하트) 5개 이상 획득 시 숫자로 간략히 표기되어 깔끔한 UI를 제공합니다.</li>
-              <li><b>피격 판정 개선</b>: 미사일이 비행기 주변을 스치기만 해도 죽던 현상을 개선하여 실제 기체 크기에 맞게 히트박스를 완화했습니다.</li>
-              <li><b>명예의 전당 개선</b>: 닉네임당 최고 기록 1개만 남도록 중복을 방지하며, 컬럼명이 '최고점수'로 변경되었습니다.</li>
-              <li><b>적 탄환 시인성 강화</b>: 적이 발사하는 탄환의 가시성과 크기를 개선하여 회피하기 쉽게 조정했습니다.</li>
             </ul>
           </div>
           
@@ -1182,7 +1136,13 @@
     </div>
 
     <div id="controlArea" class="hidden">
-      <div id="joystickStatusNotice">무기: 기본 탄환 | 탄환 x1 | 데미지: 1</div>
+      <div id="joystickStatusNotice">
+        <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | 
+        <span id="hudLife">❤️ x3</span> | 
+        <span id="hudCoins">🪙 0</span> | 
+        <span id="hudScore">Score: 0</span><br>
+        무기: 기본 탄환 | x1 | DMG: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
+      </div>
       <div id="btnLeft" class="arrow-btn">◀</div>
       <div id="joystickArea">
         <div id="joystickKnob"></div>
@@ -1198,7 +1158,13 @@
     var isCountingDown = false;
     var lastSoundTime = 0;
 
-    var currentVersionKey = "v6.8.0";
+    var currentVersionKey = "v6.9.0";
+
+    var deviceId = localStorage.getItem("yoon_device_id");
+    if (!deviceId) {
+      deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+      localStorage.setItem("yoon_device_id", deviceId);
+    }
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     
@@ -1428,6 +1394,7 @@
             monsterKills: monsterKills || 0,
             bossKills: bossKills || 0,
             quote: quote || "",
+            deviceId: deviceId,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           }).then(function() { updateLeaderboardUI(); });
         } else {
@@ -1448,6 +1415,7 @@
               monsterKills: monsterKills || 0,
               bossKills: bossKills || 0,
               quote: quote || "",
+              deviceId: deviceId,
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(function() {
               var batch = db.batch();
@@ -1520,21 +1488,18 @@
 
           var bubbleBoard = document.getElementById("rankerBubbleBoard");
           var bubbleHtml = "";
-          var myCurrentNickname = localStorage.getItem("yoon_nickname") || "";
-          var amIInTop5 = false;
 
           for (var i = 0; i < Math.min(5, rankings.length); i++) {
             var r = rankings[i];
             var rankNum = i + 1;
             var qText = (r.quote && r.quote.trim() !== "") ? r.quote : "(한마디 없음)";
             
-            var isMe = (r.nickname === myCurrentNickname);
-            if (isMe) amIInTop5 = true;
+            var isMyDevice = (r.deviceId && r.deviceId === deviceId);
 
             bubbleHtml += '<div class="ranker-speech-bubble">' +
               '<div class="bubble-text-part">👑 [' + rankNum + '위] ' + r.nickname + ': "' + qText + '"</div>';
             
-            if (isMe) {
+            if (isMyDevice) {
               bubbleHtml += '<button class="bubble-edit-btn" onclick="openEditQuoteModal()">수정</button>';
             }
             bubbleHtml += '</div>';
@@ -1580,9 +1545,8 @@
       document.getElementById("rankingQuoteInput").value = newQuote;
       toggleModal("editQuoteModal", false);
 
-      var myNick = localStorage.getItem("yoon_nickname");
-      if (myNick && db) {
-        db.collection("rankings").where("nickname", "==", myNick).get()
+      if (db) {
+        db.collection("rankings").where("deviceId", "==", deviceId).get()
         .then(function(snapshot) {
           if (!snapshot.empty) {
             snapshot.docs[0].ref.update({ quote: newQuote }).then(function() {
@@ -1775,7 +1739,6 @@
     var storyModal = document.getElementById("storyModal");
     var shopModal = document.getElementById("shopModal");
     var missionModal = document.getElementById("missionModal");
-    var gameHudBar = document.getElementById("gameHudBar");
 
     var storyPilotName = document.getElementById("storyPilotName");
     var nicknameInput = document.getElementById("nicknameInput");
@@ -1786,6 +1749,8 @@
     var hudLife = document.getElementById("hudLife");
     var hudCoins = document.getElementById("hudCoins");
     var hudScore = document.getElementById("hudScore");
+    var hudDmgNotice = document.getElementById("hudDmgNotice");
+    var hudDroneDmgNotice = document.getElementById("hudDroneDmgNotice");
 
     var stars = [];
     function initStars() {
@@ -1858,7 +1823,15 @@
     };
 
     function updateStatusDisplay() {
-      joystickStatusNotice.textContent = "무기: " + weaponNames[currentWeapon] + " | 탄환 x" + bulletCount + " | 데미지: " + playerDamage;
+      var actualDroneDmg = 1 + droneDmgBonus;
+      hudDmgNotice.textContent = playerDamage;
+      hudDroneDmgNotice.textContent = actualDroneDmg;
+      joystickStatusNotice.innerHTML = 
+        '<span id="hudStage" style="color:#38bdf8;">Stage ' + stage + '</span> | ' +
+        '<span id="hudLife">' + (player.lives >= 5 ? ("❤️ x" + player.lives) : "❤️".repeat(Math.max(0, player.lives))) + '</span> | ' +
+        '<span id="hudCoins">🪙 ' + userCoins + '</span> | ' +
+        '<span id="hudScore">Score: ' + score + '</span><br>' +
+        '무기: ' + weaponNames[currentWeapon] + ' | x' + bulletCount + ' | DMG: <span id="hudDmgNotice">' + playerDamage + '</span> (보조: <span id="hudDroneDmgNotice">' + actualDroneDmg + '</span>)';
     }
 
     var boss = null;
@@ -2330,18 +2303,18 @@
       var dynamicDroneInterval = Math.max(120, 350 - droneSpeedCount * 30);
       if (now - droneLastShootTime > dynamicDroneInterval) {
         droneLastShootTime = now;
-        var droneLeftX = player.x - 12;
+        var droneLeftX = player.x - 14;
         var droneRightX = player.x + player.width + 2;
-        var droneY = player.y + 6;
+        var droneY = player.y + 8;
         var actualDroneDmg = 1 + droneDmgBonus;
 
         bullets.push({
-          x: droneLeftX, y: droneY, width: 5, height: 10,
-          type: "normal", vx: 0, vy: -4.5, damage: actualDroneDmg
+          x: droneLeftX, y: droneY, width: 6, height: 12,
+          type: "normal", vx: 0, vy: -5.0, damage: actualDroneDmg
         });
         bullets.push({
-          x: droneRightX, y: droneY, width: 5, height: 10,
-          type: "normal", vx: 0, vy: -4.5, damage: actualDroneDmg
+          x: droneRightX, y: droneY, width: 6, height: 12,
+          type: "normal", vx: 0, vy: -5.0, damage: actualDroneDmg
         });
       }
     }
@@ -2409,9 +2382,29 @@
       ctx.fillRect((x + width - 2) | 0, (y + height - 5) | 0, 2, 3);
 
       if (hasDrone) {
-        ctx.fillStyle = "#facc15";
-        ctx.fillRect((x - 12) | 0, (y + 8) | 0, 8, 12);
-        ctx.fillRect((x + width + 4) | 0, (y + 8) | 0, 8, 12);
+        var leftDroneX = x - 14;
+        var rightDroneX = x + width + 2;
+        var droneY = y + 6;
+
+        ctx.fillStyle = "#0f172a";
+        ctx.strokeStyle = "#facc15";
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(leftDroneX, droneY, 12, 16);
+        ctx.strokeRect(leftDroneX, droneY, 12, 16);
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillRect(leftDroneX + 3, droneY + 4, 6, 8);
+        ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#facc15";
+        ctx.fillRect(leftDroneX + 4, droneY + 16, 4, 4);
+
+        ctx.fillStyle = "#0f172a";
+        ctx.strokeStyle = "#facc15";
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(rightDroneX, droneY, 12, 16);
+        ctx.strokeRect(rightDroneX, droneY, 12, 16);
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillRect(rightDroneX + 3, droneY + 4, 6, 8);
+        ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#facc15";
+        ctx.fillRect(rightDroneX + 4, droneY + 16, 4, 4);
       }
 
       ctx.restore();
@@ -2648,7 +2641,6 @@
       startScreen.classList.add("hidden");
       rankScreen.classList.add("hidden");
       controlArea.classList.remove("hidden");
-      gameHudBar.classList.remove("hidden");
 
       playerQuote = rankingQuoteInput.value.trim();
       localStorage.setItem("yoon_quote", playerQuote);
@@ -2704,7 +2696,6 @@
       stopBGM();
       rankScreen.classList.add("hidden");
       controlArea.classList.add("hidden");
-      gameHudBar.classList.add("hidden");
       startScreen.classList.remove("hidden");
       updateShopUI();
       updateMissionUI();
@@ -3259,23 +3250,7 @@
         if (m && m.y > canvas.height) monsters.splice(i, 1);
       }
 
-      updateGameHudBar();
-    }
-
-    function updateGameHudBar() {
-      hudStage.textContent = "Stage " + stage;
-      
-      var heartsStr = "";
-      if (player.lives >= 5) {
-        heartsStr = "❤️ x" + player.lives;
-      } else {
-        for (var h = 0; h < player.lives; h++) {
-          heartsStr += "❤️";
-        }
-      }
-      hudLife.textContent = heartsStr;
-      hudCoins.textContent = "🪙 " + userCoins;
-      hudScore.textContent = "Score: " + score;
+      updateStatusDisplay();
     }
 
     function draw() {
@@ -3376,7 +3351,6 @@
       cancelAnimationFrame(gameAnimationId);
 
       controlArea.classList.add("hidden");
-      gameHudBar.classList.add("hidden");
       rankScreen.classList.remove("hidden");
 
       document.getElementById("resPilotName").textContent = playerNickname;
