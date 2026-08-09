@@ -297,13 +297,19 @@
           <div class="shop-item-card"><div class="shop-item-icon">🍎</div><div class="shop-item-title">사과 (연사 증가)</div><div class="shop-item-status">현재: <span id="shopAppleSpeed">135</span>ms</div><button class="buy-btn" id="buyAppleBtn" onclick="buyShopItem('apple')"><span id="appleCostText">160</span> 코인</button></div>
           <div class="shop-item-card"><div class="shop-item-icon">🍪</div><div class="shop-item-title">과자 (최대체력 +1)</div><div class="shop-item-status">현재: <span id="shopHeartLife">3</span></div><button class="buy-btn" id="buyHeartBtn" onclick="buyShopItem('heart')"><span id="heartCostText">160</span> 코인</button></div>
           <div class="shop-item-card"><div class="shop-item-icon">🍬</div><div class="shop-item-title">사탕 (기체속도 +0.2)</div><div class="shop-item-status">현재: <span id="shopCandySpeed">2.0</span></div><button class="buy-btn" id="buyCandyBtn" onclick="buyShopItem('candy')"><span id="candyCostText">160</span> 코인</button></div>
-          <div class="shop-item-card"><div class="shop-item-icon">🧲</div><div class="shop-item-title">자석 (범위 30증가)</div><div class="shop-item-status">현재 범위: <span id="shopMagnetRangeText">0</span></div><button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button></div>
+          <div class="shop-item-card">
+            <div class="shop-item-icon">🧲</div>
+            <div class="shop-item-title">자석 (범위 15증가)</div>
+            <div style="font-size:0.5rem; color:#94a3b8; font-weight:bold;">*무기 아이템 제외</div>
+            <div class="shop-item-status" style="margin-top: 2px;">현재 범위: <span id="shopMagnetRangeText">0</span></div>
+            <button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button>
+          </div>
           
           <div class="shop-item-card shop-full-width"><div class="shop-item-icon">🛸</div><div class="shop-item-info"><div class="shop-item-title">보조기체 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">좌우 보조기체 2대 추가</div></div><button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button></div>
-          <div class="shop-item-card" id="droneDmgCard" style="display: none;"><div class="shop-item-icon">🔋</div><div class="shop-item-title">보조 데미지 +1</div><div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div><button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button></div>
-          <div class="shop-item-card" id="droneSpeedCard" style="display: none;"><div class="shop-item-icon">⚙️</div><div class="shop-item-title">보조 연사 강화</div><div class="shop-item-status">현재: <span id="shopDroneSpeedText">350</span>ms</div><button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button></div>
+          <div class="shop-item-card shop-full-width" id="droneHomingCard" style="display: none;"><div class="shop-item-icon">🚀</div><div class="shop-item-info"><div class="shop-item-title">보조기체 유도탄 무기 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">보조기체 탄환이 적을 추적합니다</div></div><button class="buy-btn" id="buyDroneHomingBtn" onclick="buyShopItem('drone_homing')">3000 코인</button></div>
           
-          <div class="shop-item-card shop-full-width" id="droneHomingCard" style="display: none;"><div class="shop-item-icon">🚀</div><div class="shop-item-info"><div class="shop-item-title">보조 유도탄 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">보조기체 탄환이 적을 추적합니다</div></div><button class="buy-btn" id="buyDroneHomingBtn" onclick="buyShopItem('drone_homing')">3000 코인</button></div>
+          <div class="shop-item-card" id="droneDmgCard" style="display: none;"><div class="shop-item-icon">🔋</div><div class="shop-item-title">보조 데미지 +1</div><div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div><button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button></div>
+          <div class="shop-item-card" id="droneSpeedCard" style="display: none;"><div class="shop-item-icon">⚙️</div><div class="shop-item-title">보조 연사 강화</div><div class="shop-item-status">현재: <span id="shopDroneSpeedText">450</span>ms</div><button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button></div>
 
           <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);"><div class="shop-item-icon">🔄</div><div class="shop-item-info"><div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div><div class="shop-item-status" style="color:#facc15; margin:0;">환불예상: <span id="shopRefundExpected">0</span> 코인</div></div><button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff; width:auto; padding:6px 12px;" onclick="buyShopItem('reset')">2000 코인</button></div>
         </div>
@@ -334,7 +340,14 @@
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block"><div class="version-title">v7.8.6 (인게임 UI 슬림화 & 중급 코인몬스터 추가)</div><ul><li>인게임 조작부 영역 경계선 및 여백 축소로 전투 시야 대폭 확장</li><li>플레이어 비행기 및 보조기체 그래픽 세련되게 리뉴얼</li><li>유도탄 2발을 발사하고 무조건 코인을 드랍하는 신규 중급 코인몬스터 추가</li></ul></div>
+          <div class="version-block">
+            <div class="version-title">v7.9.0 (자석/보조기체 밸런스 패치)</div>
+            <ul>
+              <li>자석 아이템이 무기(레이저, 샷건 등)는 끌어당기지 않도록 변경 및 업그레이드 범위 증가량 대폭 축소</li>
+              <li>상점 내 보조기체 유도탄 장착 메뉴 위치 및 이름 변경 ('보조기체 유도탄 무기 장착')</li>
+              <li>보조기체 연사 강화 최대 속도 하향 (너무 빠른 연사속도 조정 및 밸런스 패치)</li>
+            </ul>
+          </div>
         </div>
         <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
@@ -381,7 +394,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.8.6";
+    var currentVersionKey = "v7.9.0"; // 패치 내역 버전 업데이트
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -403,7 +416,7 @@
     var droneSpeedCount = parseInt(localStorage.getItem("yoon_drone_speed_count") || "0");
     var droneDmgCost = parseFloat(localStorage.getItem("yoon_drone_dmg_cost") || "500");
     var droneSpeedCost = parseFloat(localStorage.getItem("yoon_drone_speed_cost") || "500");
-    var droneHasHoming = localStorage.getItem("yoon_drone_homing") === "true"; // 보조기체 유도탄 여부
+    var droneHasHoming = localStorage.getItem("yoon_drone_homing") === "true"; 
     var droneLastShootTime = 0;
 
     var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
@@ -501,7 +514,7 @@
       var currentInterval = Math.round((100 * 1.35) * Math.pow(0.9, shopAppleCount));
       var currentTotalLife = 3 + shopHeartBonusLife;
       var currentSpeed = (2.0 + shopCandyCount * 0.2).toFixed(1);
-      var currentMagnetRange = shopMagnetLevel * 30;
+      var currentMagnetRange = shopMagnetLevel * 15; // 자석 증가범위 15로 하향
 
       document.getElementById('mainCoinDisplay').innerText = userCoins;
       document.getElementById('mainDmgDisplay').innerText = currentBaseDmg;
@@ -540,10 +553,11 @@
         document.getElementById('droneDmgCostText').innerText = Math.floor(droneDmgCost);
         document.getElementById('buyDroneDmgBtn').disabled = userCoins < droneDmgCost;
         
-        var cdInterval = Math.max(120, 350 - droneSpeedCount * 30);
+        // 보조기체 연사 밸런스 패치 (기본 450, 최대 200)
+        var cdInterval = Math.max(200, 450 - droneSpeedCount * 25);
         document.getElementById('shopDroneSpeedText').innerText = cdInterval;
-        document.getElementById('droneSpeedCostText').innerText = cdInterval <= 120 ? "MAX" : Math.floor(droneSpeedCost);
-        document.getElementById('buyDroneSpeedBtn').disabled = userCoins < droneSpeedCost || cdInterval <= 120;
+        document.getElementById('droneSpeedCostText').innerText = cdInterval <= 200 ? "MAX" : Math.floor(droneSpeedCost);
+        document.getElementById('buyDroneSpeedBtn').disabled = userCoins < droneSpeedCost || cdInterval <= 200;
 
         var homingBtn = document.getElementById('buyDroneHomingBtn');
         if (droneHasHoming) {
@@ -918,7 +932,6 @@
 
     function shoot() {
       playSound(currentWeapon);
-      // 총알 사이즈가 화면을 다 가리지 않게 크기 증가 상한선(Limit) 부여
       var lv = Math.min(bulletCount, 6), sizeBonus = Math.min(12, (playerDamage - 1) * 0.8);
       var offsets = {1:[0], 2:[-10,10], 3:[-16,0,16], 4:[-24,-8,8,24], 5:[-32,-16,0,16,32], 6:[-40,-24,-8,8,24,40]}[lv];
       offsets.forEach(function(off) {
@@ -932,7 +945,7 @@
     
     function shootDrones() {
       if (!hasDrone) return; 
-      var now = Date.now(), intv = Math.max(120, 350 - droneSpeedCount * 30);
+      var now = Date.now(), intv = Math.max(200, 450 - droneSpeedCount * 25);
       if (now - droneLastShootTime > intv) {
         droneLastShootTime = now; var lx = player.x - 14, rx = player.x + player.width + 2, dy = player.y + 8, dDmg = 1 + droneDmgBonus;
         if (droneHasHoming) {
@@ -1016,7 +1029,6 @@
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i];
         
-        // 보조기체 유도탄 추적 로직
         if (b.isPlayerHoming && b.homingTimer > 0) {
           b.homingTimer -= gameSpeedMultiplier;
           var target = null;
@@ -1047,13 +1059,18 @@
       for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx * gameSpeedMultiplier; p.y += p.vy * gameSpeedMultiplier; p.alpha -= p.decay * gameSpeedMultiplier; if (p.alpha <= 0) particles.splice(i, 1); }
       for (var i = damageTexts.length - 1; i >= 0; i--) { var dt = damageTexts[i]; dt.y += dt.vy * gameSpeedMultiplier; dt.alpha -= 0.03 * gameSpeedMultiplier; if (dt.alpha <= 0) damageTexts.splice(i, 1); }
 
-      var magR = shopMagnetLevel * 30;
+      // 자석 무기 끌어당김 방지 및 범위 조정 반영
+      var magR = shopMagnetLevel * 15;
       for (var i = items.length - 1; i >= 0; i--) {
         var it = items[i];
-        if (magR > 0) {
+        var isWeapon = (it.type === "laser" || it.type === "saw" || it.type === "shotgun");
+        
+        if (magR > 0 && !isWeapon) {
           var dx = (player.x + player.width/2) - (it.x + it.width/2), dy = (player.y + player.height/2) - (it.y + it.height/2), dist = Math.sqrt(dx*dx + dy*dy);
           if (dist < magR) { it.x += (dx/dist)*4*gameSpeedMultiplier; it.y += (dy/dist)*4*gameSpeedMultiplier; } else it.y += it.speed * gameSpeedMultiplier;
-        } else it.y += it.speed * gameSpeedMultiplier;
+        } else {
+          it.y += it.speed * gameSpeedMultiplier;
+        }
         
         if (checkPlayerHitbox(player, it)) {
           playSound('item');
@@ -1250,7 +1267,7 @@
         else if (b.type === "drone_homing") { 
           ctx.translate((b.x+b.width/2)|0, (b.y+b.height/2)|0);
           if (b.angle) ctx.rotate(b.angle);
-          ctx.fillStyle = "#06b6d4"; // 유도탄은 눈에 띄는 시안색(Cyan)으로 표시
+          ctx.fillStyle = "#06b6d4"; 
           ctx.fillRect((-b.width/2)|0, (-b.height/2)|0, b.width|0, b.height|0);
         }
         else { ctx.fillStyle = "#facc15"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); } ctx.restore();
