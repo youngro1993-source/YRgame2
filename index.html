@@ -10,7 +10,7 @@
     #gameContainer { position: relative; width: 100%; height: 100%; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
-    /* 메인 화면 레이아웃 (답답하지 않도록 적당한 숨통과 여백 부여) */
+    /* 메인 화면 레이아웃 */
     .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
@@ -44,7 +44,7 @@
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
     .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; cursor: pointer; margin-left: 6px; flex-shrink: 0; }
 
-    /* 명예의 전당 (시인성 강화) */
+    /* 명예의 전당 */
     .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 6px; }
     .ranking-container h3 { font-size: 0.68rem; color: #f87171; margin-bottom: 2px; }
     .ranking-sub-notice { font-size: 0.52rem; color: #cbd5e1; margin-bottom: 4px; font-weight: bold; text-align: center; }
@@ -55,7 +55,7 @@
     th, td { padding: 3px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    /* 아이템 정보 (높낮이 슬림하게 압축) */
+    /* 아이템 정보 */
     .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 5px 8px; font-size: 0.55rem; text-align: left; }
     .info-box h4 { color: #facc15; margin-bottom: 3px; text-align: center; font-size: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; }
@@ -126,20 +126,20 @@
     .history-scroll-area li { margin-bottom: 4px; position: relative; padding-left: 12px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    /* 인게임 하단 조작 영역 (최하단으로 바짝 내림 & 전투 시야 확보) */
-    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 180px; background: rgba(15, 23, 42, 0.95); border-top: 2px solid rgba(56, 189, 248, 0.4); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
-    #joystickArea { position: absolute; bottom: calc(25px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 75px; height: 75px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
-    #joystickKnob { width: 34px; height: 34px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
+    /* 인게임 하단 조작 영역 (경계선을 바짝 내리고 슬림하게 최적화) */
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 130px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+    #joystickArea { position: absolute; bottom: calc(10px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 66px; height: 66px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #joystickKnob { width: 30px; height: 30px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
 
-    .dpad-container { position: absolute; bottom: calc(6px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 80px; display: block; z-index: 6; pointer-events: none; }
-    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 12px; pointer-events: auto; }
+    .dpad-container { position: absolute; bottom: calc(4px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 65px; display: block; z-index: 6; pointer-events: none; }
+    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 10px; pointer-events: auto; }
     .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
-    #dpadLeft { bottom: 6px; left: 12px; width: 100px; height: 55px; font-size: 1.8rem; }
-    #dpadRight { bottom: 6px; right: 12px; width: 100px; height: 55px; font-size: 1.8rem; }
-    #dpadUp { bottom: 40px; left: 50%; transform: translateX(-50%); width: 60px; height: 32px; font-size: 1rem; }
-    #dpadDown { bottom: 4px; left: 50%; transform: translateX(-50%); width: 60px; height: 32px; font-size: 1rem; }
+    #dpadLeft { bottom: 4px; left: 10px; width: 85px; height: 46px; font-size: 1.5rem; }
+    #dpadRight { bottom: 4px; right: 10px; width: 85px; height: 46px; font-size: 1.5rem; }
+    #dpadUp { bottom: 28px; left: 50%; transform: translateX(-50%); width: 52px; height: 24px; font-size: 0.85rem; }
+    #dpadDown { bottom: 2px; left: 50%; transform: translateX(-50%); width: 52px; height: 24px; font-size: 0.85rem; }
 
-    #joystickStatusNotice { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 94%; padding: 3px 6px; background: rgba(2, 6, 23, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; text-align: center; font-size: 0.68rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.35; }
+    #joystickStatusNotice { position: absolute; top: 3px; left: 50%; transform: translateX(-50%); width: 96%; padding: 2px 4px; background: rgba(2, 6, 23, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; text-align: center; font-size: 0.65rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.2; }
 
     .result-card-box { width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; margin: 8px 0; text-align: left; }
     .result-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
@@ -170,7 +170,7 @@
         <h1>은하 수호대<br><span style="font-size:0.62rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
       </div>
 
-      <!-- 중앙 스크롤 영역 (여유롭고 깔끔하게 배치) -->
+      <!-- 중앙 스크롤 영역 -->
       <div class="layout-section layout-middle">
         
         <div class="moon-container">
@@ -330,7 +330,7 @@
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block"><div class="version-title">v7.8.5 (전투 시야 & 메인 레이아웃 최적화)</div><ul><li>조이스틱 및 컨트롤러 영역 최하단 배치 및 전투 시야 공간 대폭 확보</li><li>플레이어 및 몬스터 크기 소폭 축소로 회피 및 플레이 쾌적성 향상</li><li>메인 화면 랭킹 및 랭커 한마디 시인성 강화 및 여백 밸런스 조정</li></ul></div>
+          <div class="version-block"><div class="version-title">v7.8.6 (인게임 UI 슬림화 & 중급 코인몬스터 추가)</div><ul><li>인게임 조작부 영역 경계선 및 여백 축소로 전투 시야 대폭 확장</li><li>플레이어 비행기 및 보조기체 그래픽 세련되게 리뉴얼</li><li>유도탄 2발을 발사하고 무조건 코인을 드랍하는 신규 중급 코인몬스터 추가</li></ul></div>
         </div>
         <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
@@ -377,7 +377,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.8.5";
+    var currentVersionKey = "v7.8.6";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -791,7 +791,7 @@
 
     function resizeCanvas() {
       canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
-      if (player) player.y = Math.min(player.y, canvas.height - player.height - 180);
+      if (player) player.y = Math.min(player.y, canvas.height - player.height - 130);
       initStars();
     }
     window.addEventListener('resize', resizeCanvas);
@@ -810,7 +810,7 @@
     }
 
     var playerNickname = "", playerQuote = "";
-    var player = { x: 0, y: 0, width: 24, height: 24, speed: 2.0, tilt: 0, maxTilt: 0.35, lives: 3, invincibleTimer: 0 }; // 비행기 크기 소폭 축소
+    var player = { x: 0, y: 0, width: 24, height: 24, speed: 2.0, tilt: 0, maxTilt: 0.35, lives: 3, invincibleTimer: 0 };
     var bullets = [], monsters = [], items = [], enemyBullets = [], particles = [], damageTexts = [];
     var keys = {}, isGameOver = false, isPaused = false, isCountingDown = false, gameAnimationId;
     var score = 0, bestScore = parseInt(localStorage.getItem("yoon_space_best") || "0"), stage = 1;
@@ -869,7 +869,7 @@
       isPaused = false; isCountingDown = false; gameSpeedMultiplier = 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ 1.0x";
       if (!soundMuted) startBGM();
       
-      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 180; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
+      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 130; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
       player.speed = 2.0 + (shopCandyCount * 0.2); playerDamage = 1 + shopMeatBonusDmg; shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
       
       score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0;
@@ -918,8 +918,15 @@
     }
 
     function spawnMonster() {
-      var w = 26, h = 26, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), r = Math.random(), type = "normal", speed = 0.65, hp = 1; // 몬스터 크기 소폭 축소
-      if (r < 0.25) { type = "fast"; speed = 1.25; } else if (r < 0.45) { type = "shooter"; speed = 0.42; hp = 10; } else if (r < 0.65) { type = "zigzag"; speed = 0.75; } else if (r < 0.72) { type = "coin_monster"; speed = 1.5; }
+      var r = Math.random(), w = 26, h = 26, type = "normal", speed = 0.65, hp = 1;
+      if (r < 0.22) { type = "fast"; speed = 1.25; } 
+      else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
+      else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
+      else if (r < 0.70) { 
+        // 신규 중급 코인 몬스터 (코인 무조건 드랍 + 유도탄 2발 발사)
+        type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; 
+      }
+      var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
     }
     function spawnEliteMonster() {
@@ -972,7 +979,7 @@
       if (controlType === "integrated") { mx += joystickAxisX; my += joystickAxisY; }
       if (mx < 0) player.tilt = Math.max(player.tilt - 0.05, -player.maxTilt); else if (mx > 0) player.tilt = Math.min(player.tilt + 0.05, player.maxTilt); else player.tilt *= 0.8;
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x + mx * player.speed * gameSpeedMultiplier));
-      player.y = Math.max(0, Math.min(canvas.height - player.height - 180, player.y + my * player.speed * gameSpeedMultiplier));
+      player.y = Math.max(0, Math.min(canvas.height - player.height - 130, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i]; b.x += (b.vx||0) * gameSpeedMultiplier; b.y += (b.vy !== undefined ? b.vy : -b.speed) * gameSpeedMultiplier;
@@ -1001,7 +1008,15 @@
       }
 
       for (var i = enemyBullets.length - 1; i >= 0; i--) {
-        var eb = enemyBullets[i]; eb.x += eb.vx * gameSpeedMultiplier; eb.y += eb.vy * gameSpeedMultiplier;
+        var eb = enemyBullets[i];
+        if (eb.isHoming) {
+          var tx = player.x + player.width/2, ty = player.y + player.height/2;
+          var angle = Math.atan2(ty - eb.y, tx - eb.x);
+          var hSpeed = 1.8;
+          eb.vx = Math.cos(angle) * hSpeed;
+          eb.vy = Math.sin(angle) * hSpeed;
+        }
+        eb.x += eb.vx * gameSpeedMultiplier; eb.y += eb.vy * gameSpeedMultiplier;
         if (checkPlayerHitbox(player, eb)) { handlePlayerHit(); enemyBullets.splice(i, 1); continue; }
         if (eb.y > canvas.height + 20 || eb.y < -20 || eb.x < -20 || eb.x > canvas.width + 20) enemyBullets.splice(i, 1);
       }
@@ -1070,7 +1085,16 @@
         if (m.type === "zigzag") m.x = m.startX + Math.sin(m.y * 0.025) * 35;
         m.x = Math.max(0, Math.min(canvas.width - m.width, m.x));
 
-        if (m.type === "shooter" && gameTime - m.lastShoot > Math.max(140, 200 - (stage - 1) * 5)) { enemyBullets.push({ x: m.x+m.width/2-5, y: m.y+m.height, width: 10, height: 10, vx: 0, vy: 1.42+(stage-1)*0.1, isHeavy: false }); m.lastShoot = gameTime; }
+        if (m.type === "shooter" && gameTime - m.lastShoot > Math.max(140, 200 - (stage - 1) * 5)) {
+          enemyBullets.push({ x: m.x+m.width/2-5, y: m.y+m.height, width: 10, height: 10, vx: 0, vy: 1.42+(stage-1)*0.1, isHeavy: false }); m.lastShoot = gameTime;
+        }
+        if (m.type === "coin_monster" && gameTime - m.lastShoot > 120) {
+          // 유도탄 2발 발사
+          [-0.2, 0.2].forEach(function(ang){
+            enemyBullets.push({ x: m.x+m.width/2-6, y: m.y+m.height, width: 12, height: 12, vx: Math.sin(ang)*1.2, vy: Math.cos(ang)*1.2, isHoming: true, isHeavy: true });
+          });
+          m.lastShoot = gameTime;
+        }
         if (m.type === "elite" && gameTime - m.lastShoot > 100) { var dx = (player.x+player.width/2)-(m.x+m.width/2), dy = (player.y+player.height/2)-(m.y+m.height), dist = Math.sqrt(dx*dx+dy*dy); enemyBullets.push({ x: m.x+m.width/2-6, y: m.y+m.height, width: 12, height: 12, vx: (dx/dist)*1.8, vy: (dy/dist)*1.8, isHeavy: true }); m.lastShoot = gameTime; }
         if (checkPlayerHitbox(player, m)) handlePlayerHit();
 
@@ -1081,12 +1105,21 @@
             if (b.pierce) { if (!b.hitEnemies.has(m.id)) { b.hitEnemies.add(m.id); m.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); } }
             else { m.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); bullets.splice(j, 1); }
             if (m.hp <= 0) {
-              playSound('explosion'); createExplosion(m.x+m.width/2, m.y+m.height/2, m.type==="elite"?"#0284c7":"#f97316", m.type==="elite"?20:10);
+              playSound('explosion'); createExplosion(m.x+m.width/2, m.y+m.height/2, m.type==="coin_monster"?"#facc15":(m.type==="elite"?"#0284c7":"#f97316"), m.type==="elite"?20:10);
               killCount++; totalMonsterKills++; stageMonsterKills++;
               if (killCount > 0 && killCount % 100 === 0) { userCoins += 10; sessionCoinsEarned += 10; addDamageText(m.x, m.y, "+10 COINS!", true); }
-              var mScore = 100; if(m.type==="fast") mScore=150; else if(m.type==="shooter") mScore=200; else if(m.type==="elite") mScore=500; else if(m.type==="coin_monster") { mScore=300; userCoins+=5; sessionCoinsEarned+=5; addDamageText(m.x, m.y, "+5 COINS!", true); }
+              var mScore = 100; if(m.type==="fast") mScore=150; else if(m.type==="shooter") mScore=200; else if(m.type==="elite") mScore=500; else if(m.type==="coin_monster") { mScore=350; }
               score += mScore; if (score > bestScore) { bestScore = score; localStorage.setItem("yoon_space_best", bestScore); }
-              var r = Math.random(); if (r < 0.03) spawnItem(m.x, m.y, "damage"); else if (m.type === "elite" || (m.type === "shooter" && r < 0.02)) spawnItem(m.x, m.y, "upgrade"); else if (r < 0.155) spawnItem(m.x, m.y);
+              
+              // 아이템 드랍 로직 (코인 몬스터는 무조건 코인 드랍!)
+              if (m.type === "coin_monster") {
+                spawnItem(m.x+m.width/2-11, m.y+m.height/2-11, "coin");
+              } else {
+                var r = Math.random();
+                if (r < 0.03) spawnItem(m.x, m.y, "damage"); 
+                else if (m.type === "elite" || (m.type === "shooter" && r < 0.02)) spawnItem(m.x, m.y, "upgrade"); 
+                else if (r < 0.155) spawnItem(m.x, m.y);
+              }
               monsters.splice(i, 1); break;
             }
           }
@@ -1097,20 +1130,48 @@
     }
 
     function drawPixelMonster(ctx, x, y, w, h, col, shape) { ctx.fillStyle = col; var u = w / 8; for(var r=0; r<shape.length; r++) { for(var c=0; c<shape[r].length; c++) { if (shape[r][c]===1) ctx.fillRect((x+c*u)|0, (y+r*u)|0, u|0, u|0); } } }
+    
+    /* 세련되게 리뉴얼된 플레이어 & 보조기체 그래픽 */
     function drawPlayer(ctx, x, y, w, h) {
       ctx.save(); var cx = x + w/2, cy = y + h/2; ctx.translate(cx|0, cy|0); ctx.rotate(player.tilt); ctx.translate(-(cx|0), -(cy|0));
       if (player.invincibleTimer > 0) { ctx.save(); ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx|0, (y+h/2)|0, w+4, 0, Math.PI*2); ctx.stroke(); ctx.restore(); if (Math.floor(gameTime / 4) % 2 === 0) { ctx.restore(); return; } }
-      ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444"; ctx.beginPath(); ctx.moveTo((cx-3)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h+7+(Math.random()*3))|0); ctx.lineTo((cx+3)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.moveTo((cx)|0, (y+2)|0); ctx.lineTo((x+w)|0, (y+h-3)|0); ctx.lineTo((x+w-3)|0, (y+h)|0); ctx.lineTo((cx)|0, (y+h-5)|0); ctx.lineTo((x+3)|0, (y+h)|0); ctx.lineTo((x)|0, (y+h-3)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#3b82f6"; ctx.beginPath(); ctx.moveTo((cx)|0, (y)|0); ctx.lineTo((cx+5)|0, (y+9)|0); ctx.lineTo((cx+3)|0, (y+h-3)|0); ctx.lineTo((cx-3)|0, (y+h-3)|0); ctx.lineTo((cx-5)|0, (y+9)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.ellipse((cx)|0, (y+9)|0, 2, 4, 0, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "#38bdf8"; ctx.fillRect((x)|0, (y+h-4)|0, 2, 2); ctx.fillRect((x+w-2)|0, (y+h-4)|0, 2, 2);
+      
+      // 엔진 제트 화염 (더 샤프하고 화려하게)
+      ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#fbbf24";
+      ctx.beginPath(); ctx.moveTo((cx-3)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h+10+(Math.random()*4))|0); ctx.lineTo((cx+3)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
+
+      // 메인 기체 동체 (세련된 다크 블루 & 네온 사이언 엣지)
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath(); ctx.moveTo((cx)|0, (y)|0); ctx.lineTo((x+w)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h-5)|0); ctx.lineTo((x)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
+      
+      // 날개 및 에너지 라인
+      ctx.fillStyle = "#2563eb";
+      ctx.beginPath(); ctx.moveTo((cx)|0, (y+4)|0); ctx.lineTo((x+w+2)|0, (y+h)|0); ctx.lineTo((cx)|0, (y+h-8)|0); ctx.lineTo((x-2)|0, (y+h)|0); ctx.closePath(); ctx.fill();
+
+      // 조종석 캐노피 (네온 글로우)
+      ctx.fillStyle = "#38bdf8";
+      ctx.beginPath(); ctx.ellipse((cx)|0, (y+10)|0, 2.5, 6, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = "#e0f2fe";
+      ctx.beginPath(); ctx.ellipse((cx)|0, (y+9)|0, 1, 3, 0, 0, Math.PI*2); ctx.fill();
+
+      // 무기 포신 포인트
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect((x+2)|0, (y+h-6)|0, 2, 4); ctx.fillRect((x+w-4)|0, (y+h-6)|0, 2, 4);
+
+      // 세련된 보조기체 (드론)
       if (hasDrone) {
-        var lx = x - 12, rx = x + w + 2, dy = y + 5;
-        [lx, rx].forEach(function(dx) { ctx.fillStyle = "#0f172a"; ctx.strokeStyle = "#facc15"; ctx.lineWidth = 1.5; ctx.fillRect(dx, dy, 10, 14); ctx.strokeRect(dx, dy, 10, 14); ctx.fillStyle = "#38bdf8"; ctx.fillRect(dx+2, dy+3, 6, 7); ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#facc15"; ctx.fillRect(dx+3, dy+14, 4, 3); });
+        var lx = x - 13, rx = x + w + 3, dy = y + 5;
+        [lx, rx].forEach(function(dx) {
+          ctx.fillStyle = "#1e293b"; ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc((dx+5)|0, (dy+6)|0, 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = "#facc15"; ctx.fillRect((dx+4)|0, (dy+4)|0, 3, 4);
+          ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#38bdf8";
+          ctx.fillRect((dx+4)|0, (dy+12)|0, 3, 2);
+        });
       }
       ctx.restore();
     }
+
     function drawBoss(ctx, b) {
       ctx.save(); var cx = b.x + b.width/2, cy = b.y + b.height/2;
       if (b.designType === 4 || b.type === "spinner") {
@@ -1150,7 +1211,12 @@
         if (m.type === "fast") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#ef4444", [[0,0,0,1,1,0,0,0],[0,0,1,1,1,1,0,0],[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[0,1,0,1,1,0,1,0],[1,0,1,0,0,1,0,1]]);
         else if (m.type === "shooter") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#22c55e", [[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,1,1,1,1,1],[0,1,1,0,0,1,1,0],[0,0,1,1,1,1,0,0],[0,0,0,1,1,0,0,0]]);
         else if (m.type === "zigzag") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#f97316", [[0,1,0,0,0,0,1,0],[1,1,1,0,0,1,1,1],[1,0,1,1,1,1,0,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0],[0,1,0,0,0,0,1,0]]);
-        else if (m.type === "coin_monster") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#facc15", [[0,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[0,1,1,1,1,1,1,0]]);
+        else if (m.type === "coin_monster") {
+          // 중급 코인 몬스터 외형 (황금빛 코인 패턴)
+          drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#eab308", [[0,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,1,0,0,0,0,1,1],[0,1,1,1,1,1,1,0]]);
+          ctx.fillStyle="rgba(0,0,0,0.5)"; ctx.fillRect(m.x|0, (m.y-7)|0, m.width|0, 3);
+          ctx.fillStyle="#facc15"; ctx.fillRect(m.x|0, (m.y-7)|0, (m.width*(m.hp/m.maxHp))|0, 3);
+        }
         else if (m.type === "elite") { drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#0284c7", [[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,0,0,1,1,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0]]); ctx.fillStyle="rgba(0,0,0,0.5)"; ctx.fillRect(m.x|0, (m.y-7)|0, m.width|0, 3); ctx.fillStyle="#38bdf8"; ctx.fillRect(m.x|0, (m.y-7)|0, (m.width*(m.hp/m.maxHp))|0, 3); }
         else drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#a855f7", [[0,0,1,0,0,1,0,0],[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,0,1,0,0,1,0,1],[0,0,0,1,1,0,0,0]]);
       });
