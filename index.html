@@ -75,17 +75,19 @@
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
     .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
-    /* 하단 고정 버튼 */
+    /* 하단 고정 버튼 및 알림 마크 */
     .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 4px; }
-    button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4); }
+    button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4); position: relative; }
     button.btn:active { transform: scale(0.95); }
     .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
     .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
     @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+    
+    .alert-dot { position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; border: 2px solid #0f172a; box-shadow: 0 0 4px #ef4444; }
 
     .credits { margin-top: 1px; font-size: 0.48rem; color: #64748b; letter-spacing: 1px; }
-    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.52rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; }
+    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.52rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; position: relative; }
 
     /* 인게임 상단 메뉴 */
     .in-game-top-btns { position: absolute; top: max(12px, env(safe-area-inset-top)); left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 14px; z-index: 9; pointer-events: none; }
@@ -234,11 +236,13 @@
       <div class="layout-section">
         <div class="btn-container">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
-          <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
+          <button class="btn btn-mission" onclick="openMissionModal()">📋 미션<span id="missionAlertDot" class="alert-dot hidden"></span></button>
           <button class="btn btn-pulse" onclick="openStoryScreen()">🚀 출격하기</button>
         </div>
         <div class="credits">[만든이 : YYR]</div>
-        <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기</button>
+        <button class="btn-update" onclick="toggleModal('updateModal', true); checkAlerts();">
+          📜 패치 내역 보기 <span id="updateNewMark" class="hidden" style="color:#ef4444; font-weight:bold; font-size:0.55rem; padding-left:2px;">[N]</span>
+        </button>
       </div>
     </div>
 
@@ -342,7 +346,7 @@
     <div id="storyModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3>🌌 윤(YOON) 행성의 위기</h3>
-        <div class="story-card">서기 2140년, <span class="highlight">'YOON(윤)'</span> 행성에 외계 함대가 침공했습니다.<br><br>유일한 희망인 <span class="highlight" id="storyPilotName">Pilot</span> 파일럿!<br>적들의 공습을 뚫고 행성의 평화를 되찾아주세요!</div>
+        <div class="story-card">서기 2140년, <span class="highlight">'YOON(윤)'</span> 행성에 외계 함 침공했습니다.<br><br>유일한 희망인 <span class="highlight" id="storyPilotName">Pilot</span> 파일럿!<br>적들의 공습을 뚫고 행성의 평화를 되찾아주세요!</div>
         <div style="text-align: center; margin-bottom: 10px;"><label style="font-size: 0.65rem; color: #facc15;">💬 TOP 10 달성 시 보일 한마디 미리 입력</label><input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 수호자다!" maxlength="25" style="width: 100%; max-width: 280px; margin-top: 4px;" /></div>
         <button class="btn btn-pulse" onclick="startGame()">🚀 전투 개시!</button>
       </div>
@@ -355,6 +359,8 @@
           <div class="version-block">
             <div class="version-title">v8.0.0 (보조기체 밸런스 및 UI 개편)</div>
             <ul>
+              <li>미션 달성 시 🔴 <b>알림 점(배지) 기능</b> 추가 및 클릭 버그 수정</li>
+              <li>안 읽은 패치 내역이 있을 경우 버튼에 <b style="color:#ef4444;">[N] 마크</b> 표시 및 팝업 겹침 해결</li>
               <li>상점 내 아이템들의 가독성 강화를 위해 [카테고리]별로 보기 쉽게 UI 개편</li>
               <li>보조기체 데미지 가격은 유지하고, 레벨업 시 데미지 상승량을 기존 +1에서 <b style="color:#ef4444;">+2</b>로 상향</li>
               <li>상점 내 보조기체 <b>'폭발(스플래쉬) 탄환 장착'</b> 아이템 추가 (성장형/중복가능)</li>
@@ -474,8 +480,7 @@
       var savedQuote = localStorage.getItem("yoon_quote") || "";
       if (savedQuote) document.getElementById("rankingQuoteInput").value = savedQuote;
 
-      updateShopUI(); updateMissionUI(); checkDailyAttendance();
-      if (localStorage.getItem("yoon_dismissed_update_version") !== currentVersionKey) toggleModal('updateModal', true);
+      updateShopUI(); updateMissionUI(); checkDailyAttendance(); checkAlerts();
 
       document.addEventListener("visibilitychange", function() {
         if (document.hidden && !isGameOver && !isPaused && !isCountingDown) triggerAutoPause();
@@ -492,6 +497,19 @@
     function toggleModal(id, show) {
       var target = document.getElementById(id);
       if (show) target.classList.remove("hidden"); else target.classList.add("hidden");
+    }
+
+    // 알림 마크 체크 로직
+    function checkAlerts() {
+      var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop);
+      if (canClaim) document.getElementById('missionAlertDot').classList.remove('hidden');
+      else document.getElementById('missionAlertDot').classList.add('hidden');
+
+      if (localStorage.getItem("yoon_dismissed_update_version") !== currentVersionKey) {
+        document.getElementById('updateNewMark').classList.remove('hidden');
+      } else {
+        document.getElementById('updateNewMark').classList.add('hidden');
+      }
     }
 
     function saveShopData() {
@@ -621,7 +639,35 @@
       else if (type === 'drone_speed' && hasDrone && userCoins >= droneSpeedCost) { userCoins -= Math.floor(droneSpeedCost); droneSpeedCount++; droneSpeedCost *= 1.25; shopPurchaseCount++; }
       else if (type === 'drone_homing' && hasDrone && !droneHasHoming && userCoins >= 3000) { userCoins -= 3000; droneHasHoming = true; shopPurchaseCount++; }
       else if (type === 'drone_splash' && hasDrone && userCoins >= droneSplashCost) { userCoins -= Math.floor(droneSplashCost); droneSplashLevel++; droneSplashCost *= 1.25; shopPurchaseCount++; }
-      saveShopData(); updateShopUI(); updateMissionUI();
+      saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
+    }
+
+    // 미션 UI 업데이트 오류 방지용 안정성 강화 (try-catch 적용)
+    function updateMissionUI() {
+      try {
+        document.getElementById('mTargetKillText').innerText = missionTargetKill;
+        document.getElementById('mTargetKillSub').innerText = missionTargetKill;
+        document.getElementById('mRewardKillText').innerText = missionRewardKill;
+        document.getElementById('missionKillProgress').innerText = Math.min(missionTargetKill, totalMonsterKills);
+        var claimKillBtn = document.getElementById('claimKillBtn');
+        if (totalMonsterKills >= missionTargetKill) { claimKillBtn.innerText = "보상 받기"; claimKillBtn.disabled = false; } else { claimKillBtn.innerText = "진행중"; claimKillBtn.disabled = true; }
+
+        document.getElementById('mTargetBossText').innerText = missionTargetBoss;
+        document.getElementById('mTargetBossSub').innerText = missionTargetBoss;
+        document.getElementById('mRewardBossText').innerText = missionRewardBoss;
+        document.getElementById('missionBossProgress').innerText = Math.min(missionTargetBoss, totalBossKills);
+        var claimBossBtn = document.getElementById('claimBossBtn');
+        if (totalBossKills >= missionTargetBoss) { claimBossBtn.innerText = "보상 받기"; claimBossBtn.disabled = false; } else { claimBossBtn.innerText = "진행중"; claimBossBtn.disabled = true; }
+
+        document.getElementById('mTargetShopText').innerText = missionTargetShop;
+        document.getElementById('mTargetShopSub').innerText = missionTargetShop;
+        document.getElementById('mRewardShopText').innerText = missionRewardShop;
+        document.getElementById('missionShopProgress').innerText = Math.min(missionTargetShop, shopPurchaseCount);
+        var claimShopBtn = document.getElementById('claimShopBtn');
+        if (shopPurchaseCount >= missionTargetShop) { claimShopBtn.innerText = "보상 받기"; claimShopBtn.disabled = false; } else { claimShopBtn.innerText = "진행중"; claimShopBtn.disabled = true; }
+      } catch (e) {
+        console.error("Mission UI Update Error:", e);
+      }
     }
 
     function claimMission(type) {
@@ -629,7 +675,7 @@
       if (type === 'kill' && totalMonsterKills >= missionTargetKill) { userCoins += missionRewardKill; missionTargetKill *= 2; missionRewardKill *= 2; }
       else if (type === 'boss' && totalBossKills >= missionTargetBoss) { userCoins += missionRewardBoss; missionTargetBoss *= 2; missionRewardBoss *= 2; }
       else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) { userCoins += missionRewardShop; missionTargetShop *= 2; missionRewardShop *= 2; }
-      saveShopData(); updateShopUI(); updateMissionUI();
+      saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
     }
 
     function openShopModal() { initAudio(); updateShopUI(); toggleModal('shopModal', true); }
@@ -758,6 +804,7 @@
     function closeUpdateModalWithCheck() {
       if (document.getElementById("dontShowUpdateCheck").checked) localStorage.setItem("yoon_dismissed_update_version", currentVersionKey);
       toggleModal('updateModal', false);
+      checkAlerts();
     }
     function openEditQuoteModal() { initAudio(); document.getElementById("modalQuoteInput").value = localStorage.getItem("yoon_quote") || ""; toggleModal("editQuoteModal", true); }
     function saveNewQuoteFromModal() {
@@ -927,7 +974,7 @@
     }
     function quitGame() { isPaused = false; isCountingDown = false; toggleModal("pauseModal", false); gameOver(); }
     function toggleGameSpeed() { initAudio(); gameSpeedMultiplier = (gameSpeedMultiplier === 1.0) ? 1.5 : 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ " + gameSpeedMultiplier + "x"; }
-    function goToMainScreen() { stopBGM(); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden"); document.getElementById("controlArea").classList.add("hidden"); document.getElementById("startScreen").classList.remove("hidden"); updateShopUI(); updateMissionUI(); checkAndResetWeeklyRanking(); }
+    function goToMainScreen() { stopBGM(); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden"); document.getElementById("controlArea").classList.add("hidden"); document.getElementById("startScreen").classList.remove("hidden"); updateShopUI(); updateMissionUI(); checkAlerts(); checkAndResetWeeklyRanking(); }
 
     function triggerScreenShake(d) { shakeTimer = d; }
     function triggerWarning(txt) { warningTimer = 90; warningTextStr = txt; }
@@ -1358,7 +1405,7 @@
       document.getElementById("resPilotName").textContent = playerNickname; document.getElementById("resScore").textContent = score + "점" + (score >= bestScore && score > 0 ? " (NEW BEST!)" : "");
       document.getElementById("resStage").textContent = "Stage " + stage; document.getElementById("resKills").textContent = killCount + "마리";
       document.getElementById("resBossKills").textContent = bossKillCount + "마리"; document.getElementById("resCoins").textContent = "🪙 " + sessionCoinsEarned + "개";
-      saveScore(playerNickname, score, killCount, bossKillCount, playerQuote); saveShopData();
+      saveScore(playerNickname, score, killCount, bossKillCount, playerQuote); saveShopData(); checkAlerts();
     }
   </script>
 </body>
