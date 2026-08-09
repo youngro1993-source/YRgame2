@@ -10,25 +10,25 @@
     #gameContainer { position: relative; width: 100%; height: 100%; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
-    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: 16px 16px 14px 16px; text-align: center; overflow: hidden; }
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: 10px 12px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
-    .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
-    .layout-middle { flex: 1; justify-content: center; overflow-y: auto; margin: 2px 0; gap: 6px; }
+    .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .layout-middle { flex: 1; justify-content: space-evenly; overflow-y: auto; width: 100%; max-width: 440px; margin: 2px 0; padding: 0 2px; }
 
-    .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+    .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1px; }
     .header-btn-group { display: flex; gap: 6px; }
-    .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 26px; height: 26px; font-size: 0.8rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+    .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 24px; height: 24px; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    .pilot-status-title { width: 100%; max-width: 440px; text-align: left; font-size: 0.65rem; font-weight: bold; color: #38bdf8; padding-left: 4px; margin-top: 4px; margin-bottom: 2px; }
-    .pilot-status-card { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 6px 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.58rem; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5); }
+    .pilot-status-title { width: 100%; max-width: 440px; text-align: left; font-size: 0.6rem; font-weight: bold; color: #38bdf8; padding-left: 2px; margin-top: 2px; margin-bottom: 1px; }
+    .pilot-status-card { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 6px; padding: 4px 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.55rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
     .pilot-status-row { display: flex; justify-content: space-between; align-items: center; }
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
-    .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 5px; }
+    .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
-    h1 { font-size: 0.95rem; margin-top: 1px; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    h1 { font-size: 0.85rem; margin-top: 0; margin-bottom: 1px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
-    .moon-container { display: flex; flex-direction: column; align-items: center; margin: 1px auto 2px auto; position: relative; width: 100%; max-width: 440px; }
+    .moon-container { display: flex; flex-direction: column; align-items: center; margin: 0 auto; position: relative; width: 100%; max-width: 440px; }
     @keyframes heartbeat {
       0% { transform: scale(1); }
       15% { transform: scale(1.08); }
@@ -37,46 +37,46 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-    .moon-artwork { width: 40px; height: 40px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 12px rgba(250, 204, 21, 0.4), inset -5px -5px 10px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
+    .moon-artwork { width: 34px; height: 34px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4), inset -4px -4px 8px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
-    .moon-artwork::before { content: ""; position: absolute; top: 8px; left: 8px; width: 9px; height: 9px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3); }
+    .moon-artwork::before { content: ""; position: absolute; top: 6px; left: 6px; width: 7px; height: 7px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 12px 6px 0 2px rgba(161, 98, 7, 0.25), 4px 14px 0 -2px rgba(161, 98, 7, 0.3); }
 
-    .ranker-bubble-board { margin-top: 4px; width: 100%; display: flex; flex-direction: column; gap: 3px; align-items: center; max-height: 120px; overflow-y: auto; }
-    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.9); border: 1px solid #facc15; border-radius: 6px; padding: 3px 8px; font-size: 0.55rem; color: #facc15; max-width: 320px; width: 100%; word-break: break-all; box-shadow: 0 2px 8px rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center; text-align: left; }
+    .ranker-bubble-board { margin-top: 2px; width: 100%; display: flex; flex-direction: column; gap: 2px; align-items: center; max-height: 95px; overflow-y: auto; }
+    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.9); border: 1px solid #facc15; border-radius: 5px; padding: 2px 6px; font-size: 0.52rem; color: #facc15; max-width: 320px; width: 100%; word-break: break-all; box-shadow: 0 2px 6px rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center; text-align: left; }
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.48rem; font-weight: bold; padding: 2px 5px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
+    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.45rem; font-weight: bold; padding: 1px 4px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
-    .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; }
-    button.btn { flex: 1; padding: 7px 10px; font-size: 0.78rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); }
+    .btn-container { display: flex; gap: 6px; justify-content: center; width: 100%; max-width: 380px; }
+    button.btn { flex: 1; padding: 6px 8px; font-size: 0.75rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4); }
     button.btn:active { transform: scale(0.95); }
     .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
     .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
     @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 4px 8px; font-size: 0.53rem; text-align: left; }
-    .info-box h4 { color: #facc15; margin-bottom: 2px; text-align: center; font-size: 0.58rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 6px; }
-    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.15; font-size: 0.5rem; }
-    .badge { display: inline-block; width: 12px; height: 12px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 12px; font-size: 0.45rem; margin-right: 4px; flex-shrink: 0; }
+    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 3px 6px; font-size: 0.5rem; text-align: left; }
+    .info-box h4 { color: #facc15; margin-bottom: 1px; text-align: center; font-size: 0.55rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px 4px; }
+    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.1; font-size: 0.48rem; }
+    .badge { display: inline-block; width: 10px; height: 10px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 10px; font-size: 0.4rem; margin-right: 3px; flex-shrink: 0; }
     .badge.upgrade { background: #eab308; } .badge.damage { background: #ef4444; color: #fff; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
-    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.6); border-radius: 6px; padding: 3px 6px; }
-    .ranking-container h3 { font-size: 0.6rem; color: #f87171; margin-bottom: 1px; }
-    .ranking-sub-notice { font-size: 0.48rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; }
-    .ranking-scroll-box { max-height: 90px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.6); border-radius: 6px; padding: 2px 4px; }
+    .ranking-container h3 { font-size: 0.55rem; color: #f87171; margin-bottom: 1px; }
+    .ranking-sub-notice { font-size: 0.45rem; color: #cbd5e1; margin-bottom: 2px; font-weight: bold; text-align: center; }
+    .ranking-scroll-box { max-height: 75px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
     .ranking-scroll-box::-webkit-scrollbar { width: 3px; }
     .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.48rem; }
     th, td { padding: 1px 2px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 2px solid #38bdf8; border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-    .welcome-text { color: #facc15; font-size: 0.62rem; font-weight: bold; min-height: 1em; }
-    input[type="text"] { width: 85%; max-width: 200px; padding: 3px 6px; border: 2px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.72rem; text-align: center; outline: none; }
-    .warning-text { color: #f87171; font-size: 0.55rem; min-height: 0.7em; font-weight: 600; }
-    .credits { margin-top: 1px; font-size: 0.5rem; color: #64748b; letter-spacing: 1px; }
-    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.53rem !important; text-decoration: underline; cursor: pointer; }
+    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 6px; padding: 3px 6px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .welcome-text { color: #facc15; font-size: 0.58rem; font-weight: bold; min-height: 1em; }
+    input[type="text"] { width: 85%; max-width: 180px; padding: 2px 4px; border: 1.5px solid #60a5fa; border-radius: 5px; background: #0f172a; color: #fff; font-size: 0.65rem; text-align: center; outline: none; }
+    .warning-text { color: #f87171; font-size: 0.5rem; min-height: 0.6em; font-weight: 600; }
+    .credits { margin-top: 0; font-size: 0.48rem; color: #64748b; letter-spacing: 1px; }
+    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.5rem !important; text-decoration: underline; cursor: pointer; }
 
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 15px; }
     .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; overflow-y: auto; }
@@ -148,14 +148,14 @@
     <div id="startScreen" class="screen">
       <div class="layout-section">
         <div class="top-status-bar">
-          <div style="font-size:0.6rem; color:#94a3b8;">은하 수호대 본부</div>
+          <div style="font-size:0.55rem; color:#94a3b8;">은하 수호대 본부</div>
           <div class="header-btn-group">
             <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
             <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
           </div>
         </div>
 
-        <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
+        <h1>은하 수호대<br><span style="font-size:0.58rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
         
         <div class="moon-container">
           <div class="moon-artwork" onclick="handleMoonClick()"></div>
@@ -205,19 +205,18 @@
             <div class="pilot-status-right">🪙 <span id="mainCoinDisplay">0</span></div>
           </div>
           <div class="pilot-status-row">
-            <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.52rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
-            <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.52rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
+            <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.5rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
+            <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.5rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
           </div>
-        </div>
-
-        <div class="btn-container" style="margin-top: 6px; margin-bottom: 2px;">
-          <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
-          <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
-          <button class="btn btn-pulse" onclick="openStoryScreen()">🚀 출격하기</button>
         </div>
       </div>
 
       <div class="layout-section">
+        <div class="btn-container" style="margin-bottom: 2px;">
+          <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
+          <button class="btn btn-mission" onclick="openMissionModal()">📋 미션</button>
+          <button class="btn btn-pulse" onclick="openStoryScreen()">🚀 출격하기</button>
+        </div>
         <div class="credits">[만든이 : YYR]</div>
         <button class="btn-update" onclick="toggleModal('updateModal', true)">📜 패치 내역 보기</button>
       </div>
@@ -313,7 +312,7 @@
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block"><div class="version-title">v7.8.2 (스폰 버그 방지 패치)</div><ul><li>몬스터 사냥 수 목표 도달 시 보스 소환 강제 보정 로직 추가</li><li>화면 밖 비정상 위치 적 자동 정리 및 스폰 멈춤 현상 완벽 방지</li></ul></div>
+          <div class="version-block"><div class="version-title">v7.8.3 (UI 반응형 정렬 패치)</div><ul><li>모든 휴대폰 화면 높이에 맞춰 UI 컴포넌트 자동 압축 및 정렬 기능 강화</li></ul></div>
         </div>
         <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
@@ -360,7 +359,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.8.2";
+    var currentVersionKey = "v7.8.3";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -938,13 +937,11 @@
       gameTime += gameSpeedMultiplier; if (player.invincibleTimer > 0) player.invincibleTimer -= gameSpeedMultiplier; if (warningTimer > 0) warningTimer -= gameSpeedMultiplier;
       var now = Date.now(); if (now - lastShootTime > (shootInterval / gameSpeedMultiplier)) { shoot(); lastShootTime = now; } shootDrones();
 
-      // [버그 방지 보완] 목표 킬 수를 채웠는데 보스가 안 나오거나 몬스터가 멈춘 경우 강제 보정
       if (!boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
       
       var currentSpawnInterval = Math.max(24, Math.floor(74 / Math.pow(1.2, stage - 1))); 
       if (Math.floor(gameTime) % currentSpawnInterval === 0 && (boss || stageMonsterKills < targetStageKills)) spawnMonster();
       
-      // [버그 방지 보완] 스테이지 진행 중 몬스터가 모두 비정상 소멸했거나 꼬였을 때를 대비한 안전 장치 (막힘 방지)
       if (!boss && stageMonsterKills < targetStageKills && monsters.length === 0 && Math.floor(gameTime) % 30 === 0) {
         spawnMonster();
       }
