@@ -11,11 +11,11 @@
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
     /* 메인 화면 레이아웃 */
-    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(8px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom)) 10px; text-align: center; overflow: hidden; }
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(6px, env(safe-area-inset-top)) 10px max(6px, env(safe-area-inset-bottom)) 10px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
     .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 4px 0; padding: 2px; gap: 6px; }
+    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 3px 0; padding: 2px; gap: 5px; }
     .layout-middle::-webkit-scrollbar { width: 4px; }
     .layout-middle::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 2px; }
 
@@ -23,9 +23,9 @@
     .header-btn-group { display: flex; gap: 6px; }
     .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 26px; height: 26px; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    h1 { font-size: 0.9rem; margin-top: 0; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    h1 { font-size: 0.88rem; margin-top: 0; margin-bottom: 1px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
-    /* 달 및 랭커 한마디 (5위까지 한눈에) */
+    /* 달 및 랭커들의 한마디 통합 박스 */
     .moon-container { display: flex; flex-direction: column; align-items: center; margin: 0 auto; position: relative; width: 100%; max-width: 440px; }
     @keyframes heartbeat {
       0% { transform: scale(1); }
@@ -35,27 +35,29 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-    .moon-artwork { width: 32px; height: 32px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
+    .moon-artwork { width: 28px; height: 28px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; margin-bottom: 3px; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
-    .moon-artwork::before { content: ""; position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 10px 5px 0 2px rgba(161, 98, 7, 0.25), 3px 12px 0 -2px rgba(161, 98, 7, 0.3); }
+    .moon-artwork::before { content: ""; position: absolute; top: 4px; left: 4px; width: 5px; height: 5px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 8px 4px 0 2px rgba(161, 98, 7, 0.25), 2px 10px 0 -2px rgba(161, 98, 7, 0.3); }
 
-    .ranker-bubble-board { margin-top: 3px; width: 100%; display: flex; flex-direction: column; gap: 2px; align-items: center; }
-    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1.5px solid #facc15; border-radius: 5px; padding: 3px 8px; font-size: 0.55rem; color: #facc15; max-width: 340px; width: 100%; word-break: break-all; box-shadow: 0 2px 6px rgba(0,0,0,0.6); display: flex; justify-content: space-between; align-items: center; text-align: left; }
+    .ranker-group-box { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid #facc15; border-radius: 8px; padding: 4px 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    .ranker-group-title { font-size: 0.6rem; color: #facc15; font-weight: bold; margin-bottom: 3px; text-align: center; border-bottom: 1px dashed rgba(250,204,21,0.3); padding-bottom: 2px; }
+    .ranker-bubble-board { width: 100%; display: flex; flex-direction: column; gap: 2px; align-items: center; }
+    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(250, 204, 21, 0.5); border-radius: 4px; padding: 2px 6px; font-size: 0.52rem; color: #facc15; width: 100%; word-break: break-all; display: flex; justify-content: space-between; align-items: center; text-align: left; }
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
-    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.48rem; font-weight: bold; padding: 1px 5px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
+    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.45rem; font-weight: bold; padding: 1px 4px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
-    /* 명예의 전당 */
+    /* 명예의 전당 (여백 채우기 위해 높이 및 스크롤 확장) */
     .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 5px; }
     .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; }
-    .ranking-sub-notice { font-size: 0.5rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; }
-    .ranking-scroll-box { max-height: 90px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    .ranking-sub-notice { font-size: 0.48rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; }
+    .ranking-scroll-box { max-height: 155px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
     .ranking-scroll-box::-webkit-scrollbar { width: 3px; }
     .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.52rem; }
     th, td { padding: 2px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    /* 아이템 정보 (확률 추가 및 2줄 정렬, 높낮이 축소) */
+    /* 아이템 정보창 */
     .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 5px 8px; font-size: 0.52rem; text-align: left; }
     .info-box h4 { color: #facc15; margin-bottom: 3px; text-align: center; font-size: 0.58rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; }
@@ -68,7 +70,8 @@
     input[type="text"] { width: 85%; max-width: 200px; padding: 2px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.68rem; text-align: center; outline: none; }
     .warning-text { color: #f87171; font-size: 0.48rem; min-height: 0.5em; font-weight: 600; }
 
-    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; }
+    /* 비행기 현재상태 (출격하기 위쪽 배치) */
+    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 2px; }
     .pilot-status-title { text-align: left; font-size: 0.58rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
     .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 4px 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.55rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
     .pilot-status-row { display: flex; justify-content: space-between; align-items: center; }
@@ -130,7 +133,7 @@
     .history-scroll-area li { margin-bottom: 3px; position: relative; padding-left: 10px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    /* 인게임 하단 조작 영역 */
+    /* 인게임 하단 조작 영역 (좌우 화살표 경계선에 딱 맞춤) */
     #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
     #joystickArea { position: absolute; bottom: calc(8px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
     #joystickKnob { width: 26px; height: 26px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
@@ -138,8 +141,8 @@
     .dpad-container { position: absolute; bottom: calc(4px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 60px; display: block; z-index: 6; pointer-events: none; }
     .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 8px; pointer-events: auto; }
     .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
-    #dpadLeft { bottom: 4px; left: 10px; width: 80px; height: 42px; font-size: 1.3rem; }
-    #dpadRight { bottom: 4px; right: 10px; width: 80px; height: 42px; font-size: 1.3rem; }
+    #dpadLeft { bottom: 4px; left: 0px; width: 95px; height: 42px; font-size: 1.3rem; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+    #dpadRight { bottom: 4px; right: 0px; width: 95px; height: 42px; font-size: 1.3rem; border-top-right-radius: 0; border-bottom-right-radius: 0; }
     #dpadUp { bottom: 26px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
     #dpadDown { bottom: 2px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
 
@@ -179,7 +182,10 @@
         
         <div class="moon-container">
           <div class="moon-artwork" onclick="handleMoonClick()"></div>
-          <div id="rankerBubbleBoard" class="ranker-bubble-board"></div>
+          <div class="ranker-group-box">
+            <div class="ranker-group-title">👑 랭커들의 한마디</div>
+            <div id="rankerBubbleBoard" class="ranker-bubble-board"></div>
+          </div>
         </div>
 
         <div class="ranking-container">
@@ -216,6 +222,10 @@
           <div id="nicknameWarning" class="warning-text"></div>
         </div>
 
+      </div>
+
+      <!-- 하단 고정 버튼 영역 (출격하기 바로 위쪽에 비행기 현재상태 배치) -->
+      <div class="layout-section">
         <div class="pilot-status-wrapper">
           <div class="pilot-status-title">✈️ 내 비행기 현재상태</div>
           <div class="pilot-status-card">
@@ -230,10 +240,6 @@
           </div>
         </div>
 
-      </div>
-
-      <!-- 하단 고정 버튼 -->
-      <div class="layout-section">
         <div class="btn-container">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
           <button class="btn btn-mission" onclick="openMissionModal()">📋 미션<span id="missionAlertDot" class="alert-dot hidden"></span></button>
@@ -354,12 +360,12 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v8.1.0 (UI 및 밸런스 최적화)</div>
+            <div class="version-title">v8.2.0 (레이아웃 및 UI 재배치)</div>
             <ul>
-              <li>아이템 정보창에 <b>드랍 확률 및 획득 조건</b> 추가 명시</li>
-              <li>아이템 정보창을 무기와 소모품으로 분류하고 2열 정렬로 높낮이 축소</li>
-              <li>메인 화면 랭커 한마디를 <b>5위까지 한눈에</b> 볼 수 있도록 최적화</li>
-              <li>랭킹 데이터 갱신 시 <b>말풍선 수정 버그(문서 중복 및 타겟팅 오류)</b> 해결</li>
+              <li>인게임 좌우 조작 버튼을 <b>화면 경계선에 딱 맞춰</b> 확장</li>
+              <li>내 비행기 현재상태 카드를 하단 출격하기 버튼 위쪽으로 이동</li>
+              <li>달 밑 상단에 <b>'👑 랭커들의 한마디' 통합 박스</b>를 생성하여 1~5위 말풍선 묶음 배치</li>
+              <li>남은 여백을 채우기 위해 <b>명예의 전당(TOP 10) 창의 높이와 스크롤 영역을 확대</b></li>
             </ul>
           </div>
         </div>
@@ -408,7 +414,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.1.0";
+    var currentVersionKey = "v8.2.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
