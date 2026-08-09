@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>은하 수호대: YOON 행성을 지켜라</title>
+  <title>은하 수호대: YOON 행성을 지켜라 (v8.1.3)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body, html { width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; background-color: #050515; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
@@ -98,7 +98,7 @@
     .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; overflow-y: auto; }
     .modal-content h3 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 6px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
-    /* 상점 UI 개편 스타일 */
+    /* 상점 UI 스타일 */
     .shop-category { grid-column: span 2; font-size: 0.75rem; color: #38bdf8; font-weight: bold; margin-top: 10px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px dashed rgba(56,189,248,0.4); text-align: left; }
     .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
@@ -166,7 +166,7 @@
     <div id="startScreen" class="screen">
       <div class="layout-section">
         <div class="top-status-bar">
-          <div style="font-size:0.58rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
+          <div style="font-size:0.58rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부 (v8.1.3)</div>
           <div class="header-btn-group">
             <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
             <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
@@ -378,10 +378,10 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v8.1.2 (긴급 패치: 일반 게임 스폰 및 광부 미션 수정)</div>
+            <div class="version-title">v8.1.3 (일반 게임 스폰 완벽 격리 패치)</div>
             <ul>
-              <li>일반 게임 몬스터 생성 로직(`spawnMonster`) 완전 분리 (코인 몹 과다 출현 버그 원인 완전히 제거)</li>
-              <li>성실한 우주 광부 미션 보상 2000 코인으로 정확히 강제 초기화 및 반영</li>
+              <li>일반 게임 모드와 광산 던전 모드의 몬스터 스폰 함수명을 완전히 분리 (`spawnMonster` vs `spawnDungeonMonster`)</li>
+              <li>일반 게임에서는 코인 몹 출현 확률이 정상적으로 12%만 적용되도록 수정 완료</li>
             </ul>
           </div>
         </div>
@@ -430,7 +430,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.1.2";
+    var currentVersionKey = "v8.1.3";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -478,12 +478,10 @@
     var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
     var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
     var missionTargetDungeon = parseInt(localStorage.getItem("yoon_m_target_dungeon") || "3");
-    
-    // 강제로 2000코인으로 고정 반영 (이전 저장된 500원 데이터 덮어쓰기)
     var missionRewardDungeon = 2000;
     localStorage.setItem("yoon_m_reward_dungeon", 2000);
 
-    function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
+    function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
     window.addEventListener('DOMContentLoaded', function() {
       loadScript("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js", function() {
@@ -497,10 +495,7 @@
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
             checkAndResetWeeklyRanking();
-          } catch(e) {
-            console.error(e);
-            updateLeaderboardUI(true);
-          }
+          } catch(e) { updateLeaderboardUI(true); }
         });
       });
       var savedNick = localStorage.getItem("yoon_nickname") || "";
@@ -702,13 +697,11 @@
 
         document.getElementById('mTargetDungeonText').innerText = missionTargetDungeon;
         document.getElementById('mTargetDungeonSub').innerText = missionTargetDungeon;
-        document.getElementById('mRewardDungeonText').innerText = missionRewardDungeon; // 2000코인 정확히 반영
+        document.getElementById('mRewardDungeonText').innerText = missionRewardDungeon;
         document.getElementById('missionDungeonProgress').innerText = Math.min(missionTargetDungeon, dungeonPlayCount);
         var claimDungeonBtn = document.getElementById('claimDungeonBtn');
         if (dungeonPlayCount >= missionTargetDungeon) { claimDungeonBtn.innerText = "보상 받기"; claimDungeonBtn.disabled = false; } else { claimDungeonBtn.innerText = "진행중"; claimDungeonBtn.disabled = true; }
-      } catch (e) {
-        console.error("Mission UI Update Error:", e);
-      }
+      } catch (e) {}
     }
 
     function claimMission(type) {
@@ -816,8 +809,7 @@
         }
         bodyEl.innerHTML = htmlContent;
       }).catch(function(err) {
-        console.error("랭킹 조회 실패:", err);
-        bodyEl.innerHTML = "<tr><td colspan='6'>랭킹 데이터 오류 (권한 확인)</td></tr>";
+        bodyEl.innerHTML = "<tr><td colspan='6'>랭킹 데이터 오류</td></tr>";
       });
     }
 
@@ -836,7 +828,7 @@
             });
           }
         }
-      }).catch(function(e){ console.error("점수 저장 실패", e); });
+      }).catch(function(e){});
     }
 
     function checkNicknameInput(val) {
@@ -947,9 +939,8 @@
     var bulletCount = 1, playerDamage = 1, currentWeapon = "normal", boss = null, bossSpawnCount = 0, lastShootTime = 0, shootInterval = 100 * 1.35;
     var weaponNames = { "normal": "기본 탄환", "laser": "레이저 (L)", "saw": "톱니 (S)", "shotgun": "샷건 (G)" };
 
-    // 코인 던전 전용 변수
     var isDungeonMode = false;
-    var dungeonTimeLeft = 180; // 3분 (180초)
+    var dungeonTimeLeft = 180;
     var dungeonTimerInterval = null;
 
     var joystickAxisX = 0, joystickAxisY = 0, joystickTouchId = null;
@@ -1033,13 +1024,13 @@
       boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
 
       if (isDungeonMode) {
-        bulletCount = 6; // 풀파워 MAX
-        shopMagnetLevel = Math.max(shopMagnetLevel, 5); // 자석 범위 확보
+        bulletCount = 6;
+        shopMagnetLevel = Math.max(shopMagnetLevel, 5);
         dungeonTimeLeft = 180;
         if (dungeonTimerInterval) clearInterval(dungeonTimerInterval);
         dungeonTimerInterval = setInterval(function() {
           if (!isPaused && !isCountingDown && !isGameOver) {
-            dungeonTimeLeft -= gameSpeedMultiplier; // 배속 연동
+            dungeonTimeLeft -= gameSpeedMultiplier;
             if (dungeonTimeLeft <= 120 && dungeonTimeLeft > 119) { spawnDungeonBoss(); }
             else if (dungeonTimeLeft <= 60 && dungeonTimeLeft > 59) { spawnDungeonBoss(); }
             
@@ -1104,24 +1095,21 @@
       }
     }
 
-    function spawnMonster() {
+    // 완전히 격리된 몬스터 스폰 함수들
+    function spawnStandardMonster() {
       var r = Math.random(), w = 26, h = 26, type = "normal", speed = 0.65, hp = 1;
-      
-      // [긴급 수정] 일반 게임과 광산 던전의 몬스터 확률 분리를 완전히 명확하게 격리
-      if (isDungeonMode) {
-        if (r < 0.70) {
-          type = "coin_monster"; speed = 0.8; w = 34; h = 34; hp = 6;
-        } else {
-          type = "fast"; speed = 1.1;
-        }
-      } else {
-        // 일반 게임 전용 몬스터 확률표 (코인 몹은 12%만 등장하도록 정상 복구)
-        if (r < 0.22) { type = "fast"; speed = 1.25; } 
-        else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
-        else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
-        else if (r < 0.70) { type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; }
-        else { type = "normal"; speed = 0.65; }
-      }
+      if (r < 0.22) { type = "fast"; speed = 1.25; } 
+      else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
+      else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
+      else if (r < 0.70) { type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; }
+      else { type = "normal"; speed = 0.65; }
+      var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
+      monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
+    }
+
+    function spawnDungeonMonster() {
+      var r = Math.random(), w = 34, h = 34, type = "coin_monster", speed = 0.8, hp = 6;
+      if (r >= 0.70) { type = "fast"; speed = 1.1; w = 26; h = 26; hp = 1; }
       var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
     }
@@ -1172,12 +1160,13 @@
       spawnTimer += gameSpeedMultiplier;
       var currentSpawnInterval = isDungeonMode ? 12 : Math.max(20, Math.floor(65 / Math.pow(1.15, stage - 1))); 
       if (spawnTimer >= currentSpawnInterval && (boss || isDungeonMode || stageMonsterKills < targetStageKills)) {
-        spawnMonster();
+        if (isDungeonMode) spawnDungeonMonster();
+        else spawnStandardMonster();
         spawnTimer = 0;
       }
       
       if (!isDungeonMode && !boss && stageMonsterKills < targetStageKills && monsters.length === 0) {
-        spawnMonster();
+        spawnStandardMonster();
         spawnTimer = 0;
       }
 
@@ -1193,11 +1182,9 @@
 
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i];
-        
         if (b.type === "drone_homing" && b.homingTimer > 0) {
           b.homingTimer -= gameSpeedMultiplier;
-          var target = null;
-          var minDist = Infinity;
+          var target = null, minDist = Infinity;
           if (boss) {
             var dx = (boss.x + boss.width/2) - b.x; var dy = (boss.y + boss.height/2) - b.y;
             var dist = dx*dx + dy*dy; if (dist < minDist) { minDist = dist; target = boss; }
@@ -1209,14 +1196,9 @@
           if (target) {
             var angle = Math.atan2((target.y + target.height/2) - b.y, (target.x + target.width/2) - b.x);
             var hSpeed = b.speed || 6.0;
-            b.vx = Math.cos(angle) * hSpeed;
-            b.vy = Math.sin(angle) * hSpeed;
-            b.angle = angle + Math.PI/2;
-          } else if (b.vx !== 0 || b.vy !== 0) {
-            b.angle = Math.atan2(b.vy, b.vx) + Math.PI/2;
-          }
+            b.vx = Math.cos(angle) * hSpeed; b.vy = Math.sin(angle) * hSpeed; b.angle = angle + Math.PI/2;
+          } else if (b.vx !== 0 || b.vy !== 0) { b.angle = Math.atan2(b.vy, b.vx) + Math.PI/2; }
         }
-        
         b.x += (b.vx||0) * gameSpeedMultiplier; b.y += (b.vy !== undefined ? b.vy : -b.speed) * gameSpeedMultiplier;
         if (b.type === "saw") b.angle = (b.angle||0) + 0.18 * gameSpeedMultiplier;
         if (b.y < -30 || b.y > canvas.height + 30 || b.x < -30 || b.x > canvas.width + 30) bullets.splice(i, 1);
@@ -1228,13 +1210,10 @@
       for (var i = items.length - 1; i >= 0; i--) {
         var it = items[i];
         var isWeapon = (it.type === "laser" || it.type === "saw" || it.type === "shotgun");
-        
         if (magR > 0 && !isWeapon) {
           var dx = (player.x + player.width/2) - (it.x + it.width/2), dy = (player.y + player.height/2) - (it.y + it.height/2), dist = Math.sqrt(dx*dx + dy*dy);
           if (dist < magR) { it.x += (dx/dist)*6*gameSpeedMultiplier; it.y += (dy/dist)*6*gameSpeedMultiplier; } else it.y += it.speed * gameSpeedMultiplier;
-        } else {
-          it.y += it.speed * gameSpeedMultiplier;
-        }
+        } else { it.y += it.speed * gameSpeedMultiplier; }
         
         if (checkPlayerHitbox(player, it)) {
           playSound('item');
@@ -1252,9 +1231,7 @@
           eb.homingTimer -= gameSpeedMultiplier;
           var tx = player.x + player.width/2, ty = player.y + player.height/2;
           var angle = Math.atan2(ty - eb.y, tx - eb.x);
-          var hSpeed = 1.8;
-          eb.vx = Math.cos(angle) * hSpeed;
-          eb.vy = Math.sin(angle) * hSpeed;
+          eb.vx = Math.cos(angle) * 1.8; eb.vy = Math.sin(angle) * 1.8;
         }
         eb.x += eb.vx * gameSpeedMultiplier; eb.y += eb.vy * gameSpeedMultiplier;
         if (checkPlayerHitbox(player, eb)) { handlePlayerHit(); enemyBullets.splice(i, 1); continue; }
@@ -1321,20 +1298,13 @@
             else { 
               boss.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); 
               createExplosion(b.x, b.y, "#facc15", 4); 
-              
-              if (boss.type === "dungeon_boss" && Math.random() < 0.3) {
-                spawnItem(b.x, b.y, "coin");
-              }
-
+              if (boss.type === "dungeon_boss" && Math.random() < 0.3) { spawnItem(b.x, b.y, "coin"); }
               if (b.isDrone && droneSplashLevel > 0) {
-                var sRad = 30 + droneSplashLevel * 10;
-                var sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
+                var sRad = 30 + droneSplashLevel * 10, sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
                 createExplosion(b.x, b.y, "#22d3ee", 15);
                 monsters.forEach(function(sm) {
                   var dx = (sm.x+sm.width/2)-(b.x+b.width/2), dy = (sm.y+sm.height/2)-(b.y+b.height/2);
-                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + sm.width/2) {
-                    sm.hp -= sDmg; addDamageText(sm.x+sm.width/2, sm.y+sm.height/2, "-" + Math.floor(sDmg), false);
-                  }
+                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + sm.width/2) { sm.hp -= sDmg; addDamageText(sm.x+sm.width/2, sm.y+sm.height/2, "-" + Math.floor(sDmg), false); }
                 });
               }
               bullets.splice(j, 1); 
@@ -1384,23 +1354,17 @@
             if (b.pierce) { if (!b.hitEnemies.has(m.id)) { b.hitEnemies.add(m.id); m.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); } }
             else { 
               m.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); 
-              
               if (b.isDrone && droneSplashLevel > 0) {
-                var sRad = 30 + droneSplashLevel * 10;
-                var sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
+                var sRad = 30 + droneSplashLevel * 10, sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
                 createExplosion(b.x, b.y, "#22d3ee", 15);
                 monsters.forEach(function(sm) {
                   if (sm === m) return;
                   var dx = (sm.x+sm.width/2)-(b.x+b.width/2), dy = (sm.y+sm.height/2)-(b.y+b.height/2);
-                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + sm.width/2) {
-                    sm.hp -= sDmg; addDamageText(sm.x+sm.width/2, sm.y+sm.height/2, "-" + Math.floor(sDmg), false);
-                  }
+                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + sm.width/2) { sm.hp -= sDmg; addDamageText(sm.x+sm.width/2, sm.y+sm.height/2, "-" + Math.floor(sDmg), false); }
                 });
                 if (boss) {
                   var dx = (boss.x+boss.width/2)-(b.x+b.width/2), dy = (boss.y+boss.height/2)-(b.y+b.height/2);
-                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + boss.width/2) {
-                    boss.hp -= sDmg; addDamageText(boss.x+boss.width/2, boss.y+boss.height/2, "-" + Math.floor(sDmg), false);
-                  }
+                  if (Math.sqrt(dx*dx+dy*dy) <= sRad + boss.width/2) { boss.hp -= sDmg; addDamageText(boss.x+boss.width/2, boss.y+boss.height/2, "-" + Math.floor(sDmg), false); }
                 }
               }
               bullets.splice(j, 1); 
@@ -1492,10 +1456,8 @@
           ctx.translate((b.x+b.width/2)|0, (b.y+b.height/2)|0);
           if (b.angle) ctx.rotate(b.angle);
           ctx.shadowColor = "#00ffff"; ctx.shadowBlur = 8;
-          ctx.fillStyle = "#22d3ee"; 
-          ctx.fillRect((-b.width/2)|0, (-b.height/2)|0, b.width|0, b.height|0);
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect((-b.width/4)|0, (-b.height/4)|0, (b.width/2)|0, (b.height/2)|0);
+          ctx.fillStyle = "#22d3ee"; ctx.fillRect((-b.width/2)|0, (-b.height/2)|0, b.width|0, b.height|0);
+          ctx.fillStyle = "#ffffff"; ctx.fillRect((-b.width/4)|0, (-b.height/4)|0, (b.width/2)|0, (b.height/2)|0);
           ctx.shadowBlur = 0;
         }
         else { ctx.fillStyle = "#facc15"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); } ctx.restore();
