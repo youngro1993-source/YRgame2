@@ -298,9 +298,13 @@
           <div class="shop-item-card"><div class="shop-item-icon">🍪</div><div class="shop-item-title">과자 (최대체력 +1)</div><div class="shop-item-status">현재: <span id="shopHeartLife">3</span></div><button class="buy-btn" id="buyHeartBtn" onclick="buyShopItem('heart')"><span id="heartCostText">160</span> 코인</button></div>
           <div class="shop-item-card"><div class="shop-item-icon">🍬</div><div class="shop-item-title">사탕 (기체속도 +0.2)</div><div class="shop-item-status">현재: <span id="shopCandySpeed">2.0</span></div><button class="buy-btn" id="buyCandyBtn" onclick="buyShopItem('candy')"><span id="candyCostText">160</span> 코인</button></div>
           <div class="shop-item-card"><div class="shop-item-icon">🧲</div><div class="shop-item-title">자석 (범위 30증가)</div><div class="shop-item-status">현재 범위: <span id="shopMagnetRangeText">0</span></div><button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button></div>
+          
           <div class="shop-item-card shop-full-width"><div class="shop-item-icon">🛸</div><div class="shop-item-info"><div class="shop-item-title">보조기체 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">좌우 보조기체 2대 추가</div></div><button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button></div>
           <div class="shop-item-card" id="droneDmgCard" style="display: none;"><div class="shop-item-icon">🔋</div><div class="shop-item-title">보조 데미지 +1</div><div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div><button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button></div>
           <div class="shop-item-card" id="droneSpeedCard" style="display: none;"><div class="shop-item-icon">⚙️</div><div class="shop-item-title">보조 연사 강화</div><div class="shop-item-status">현재: <span id="shopDroneSpeedText">350</span>ms</div><button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button></div>
+          
+          <div class="shop-item-card shop-full-width" id="droneHomingCard" style="display: none;"><div class="shop-item-icon">🚀</div><div class="shop-item-info"><div class="shop-item-title">보조 유도탄 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">보조기체 탄환이 적을 추적합니다</div></div><button class="buy-btn" id="buyDroneHomingBtn" onclick="buyShopItem('drone_homing')">3000 코인</button></div>
+
           <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);"><div class="shop-item-icon">🔄</div><div class="shop-item-info"><div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div><div class="shop-item-status" style="color:#facc15; margin:0;">환불예상: <span id="shopRefundExpected">0</span> 코인</div></div><button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff; width:auto; padding:6px 12px;" onclick="buyShopItem('reset')">2000 코인</button></div>
         </div>
         <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; width: 100%; margin-top: auto;" onclick="toggleModal('shopModal', false)">닫기</button>
@@ -399,6 +403,7 @@
     var droneSpeedCount = parseInt(localStorage.getItem("yoon_drone_speed_count") || "0");
     var droneDmgCost = parseFloat(localStorage.getItem("yoon_drone_dmg_cost") || "500");
     var droneSpeedCost = parseFloat(localStorage.getItem("yoon_drone_speed_cost") || "500");
+    var droneHasHoming = localStorage.getItem("yoon_drone_homing") === "true"; // 보조기체 유도탄 여부
     var droneLastShootTime = 0;
 
     var moonClickCount = parseInt(localStorage.getItem("yoon_moon_clicks") || "0");
@@ -471,6 +476,7 @@
       localStorage.setItem("yoon_has_drone", hasDrone); localStorage.setItem("yoon_drone_dmg_bonus", droneDmgBonus);
       localStorage.setItem("yoon_drone_speed_count", droneSpeedCount); localStorage.setItem("yoon_drone_dmg_cost", droneDmgCost);
       localStorage.setItem("yoon_drone_speed_cost", droneSpeedCost);
+      localStorage.setItem("yoon_drone_homing", droneHasHoming);
       localStorage.setItem("yoon_moon_clicks", moonClickCount);
       [30, 300, 400, 500, 1000].forEach(k => localStorage.setItem("yoon_moon_reward_" + k, moonRewardClaimed[k]));
       localStorage.setItem("yoon_total_kills", totalMonsterKills); localStorage.setItem("yoon_total_boss_kills", totalBossKills);
@@ -486,6 +492,7 @@
       refund += sumCost(160, 1.2, shopMeatBonusDmg) + sumCost(160, 1.2, shopAppleCount) + sumCost(160, 1.2, shopHeartBonusLife) + sumCost(160, 1.2, shopCandyCount);
       refund += sumCost(300, 1.5, shopMagnetLevel);
       if (hasDrone) { refund += 3000 + sumCost(500, 1.25, droneDmgBonus) + sumCost(500, 1.25, droneSpeedCount); }
+      if (droneHasHoming) refund += 3000;
       return refund;
     }
 
@@ -523,21 +530,33 @@
 
       var buyDroneBtn = document.getElementById('buyDroneBtn');
       if (hasDrone) {
-        document.getElementById('mainDroneStatus').innerText = "장착완료 (DMG:" + (1+droneDmgBonus) + ")";
+        document.getElementById('mainDroneStatus').innerText = "장착완료 (DMG:" + (1+droneDmgBonus) + (droneHasHoming ? ", 유도" : "") + ")";
         buyDroneBtn.innerText = "보유중"; buyDroneBtn.disabled = true;
         document.getElementById('droneDmgCard').style.display = "flex";
         document.getElementById('droneSpeedCard').style.display = "flex";
+        document.getElementById('droneHomingCard').style.display = "flex";
+
         document.getElementById('shopDroneDmgText').innerText = 1 + droneDmgBonus;
         document.getElementById('droneDmgCostText').innerText = Math.floor(droneDmgCost);
         document.getElementById('buyDroneDmgBtn').disabled = userCoins < droneDmgCost;
+        
         var cdInterval = Math.max(120, 350 - droneSpeedCount * 30);
         document.getElementById('shopDroneSpeedText').innerText = cdInterval;
         document.getElementById('droneSpeedCostText').innerText = cdInterval <= 120 ? "MAX" : Math.floor(droneSpeedCost);
         document.getElementById('buyDroneSpeedBtn').disabled = userCoins < droneSpeedCost || cdInterval <= 120;
+
+        var homingBtn = document.getElementById('buyDroneHomingBtn');
+        if (droneHasHoming) {
+            homingBtn.innerText = "장착완료"; homingBtn.disabled = true;
+        } else {
+            homingBtn.innerText = "3000 코인"; homingBtn.disabled = userCoins < 3000;
+        }
+
       } else {
         document.getElementById('mainDroneStatus').innerText = "미장착";
         buyDroneBtn.innerHTML = '<span id="droneCostText">3000</span> 코인'; buyDroneBtn.disabled = userCoins < 3000;
         document.getElementById('droneDmgCard').style.display = "none"; document.getElementById('droneSpeedCard').style.display = "none";
+        document.getElementById('droneHomingCard').style.display = "none";
       }
 
       document.getElementById('shopRefundExpected').innerText = calculateRefund();
@@ -573,7 +592,7 @@
         shopMeatBonusDmg = 0; shopMeatCost = 160; shopAppleCount = 0; shopAppleCost = 160;
         shopHeartBonusLife = 0; shopHeartCost = 160; shopCandyCount = 0; shopCandyCost = 160;
         shopMagnetLevel = 0; shopMagnetCost = 300;
-        hasDrone = false; droneDmgBonus = 0; droneDmgCost = 500; droneSpeedCount = 0; droneSpeedCost = 500;
+        hasDrone = false; droneDmgBonus = 0; droneDmgCost = 500; droneSpeedCount = 0; droneSpeedCost = 500; droneHasHoming = false;
         shopPurchaseCount++;
       } else if (type === 'meat' && userCoins >= shopMeatCost) { userCoins -= Math.floor(shopMeatCost); shopMeatBonusDmg++; shopMeatCost *= 1.2; shopPurchaseCount++; }
       else if (type === 'apple' && userCoins >= shopAppleCost) { userCoins -= Math.floor(shopAppleCost); shopAppleCount++; shopAppleCost *= 1.2; shopPurchaseCount++; }
@@ -583,6 +602,7 @@
       else if (type === 'drone' && !hasDrone && userCoins >= 3000) { userCoins -= 3000; hasDrone = true; shopPurchaseCount++; }
       else if (type === 'drone_dmg' && hasDrone && userCoins >= droneDmgCost) { userCoins -= Math.floor(droneDmgCost); droneDmgBonus++; droneDmgCost *= 1.25; shopPurchaseCount++; }
       else if (type === 'drone_speed' && hasDrone && userCoins >= droneSpeedCost) { userCoins -= Math.floor(droneSpeedCost); droneSpeedCount++; droneSpeedCost *= 1.25; shopPurchaseCount++; }
+      else if (type === 'drone_homing' && hasDrone && !droneHasHoming && userCoins >= 3000) { userCoins -= 3000; droneHasHoming = true; shopPurchaseCount++; }
       saveShopData(); updateShopUI(); updateMissionUI();
     }
 
@@ -898,7 +918,8 @@
 
     function shoot() {
       playSound(currentWeapon);
-      var lv = Math.min(bulletCount, 6), sizeBonus = (playerDamage - 1) * 0.8;
+      // 총알 사이즈가 화면을 다 가리지 않게 크기 증가 상한선(Limit) 부여
+      var lv = Math.min(bulletCount, 6), sizeBonus = Math.min(12, (playerDamage - 1) * 0.8);
       var offsets = {1:[0], 2:[-10,10], 3:[-16,0,16], 4:[-24,-8,8,24], 5:[-32,-16,0,16,32], 6:[-40,-24,-8,8,24,40]}[lv];
       offsets.forEach(function(off) {
         var sx = player.x + player.width/2 + off, sy = player.y;
@@ -908,12 +929,19 @@
         else bullets.push({ x: sx-(3+sizeBonus*0.5), y: sy, width: 6+sizeBonus, height: 14+sizeBonus*1.2, type: "normal", vx: 0, vy: -7.1, damage: playerDamage });
       });
     }
+    
     function shootDrones() {
-      if (!hasDrone) return; var now = Date.now(), intv = Math.max(120, 350 - droneSpeedCount * 30);
+      if (!hasDrone) return; 
+      var now = Date.now(), intv = Math.max(120, 350 - droneSpeedCount * 30);
       if (now - droneLastShootTime > intv) {
         droneLastShootTime = now; var lx = player.x - 14, rx = player.x + player.width + 2, dy = player.y + 8, dDmg = 1 + droneDmgBonus;
-        bullets.push({ x: lx, y: dy, width: 6, height: 12, type: "normal", vx: 0, vy: -5.0, damage: dDmg });
-        bullets.push({ x: rx, y: dy, width: 6, height: 12, type: "normal", vx: 0, vy: -5.0, damage: dDmg });
+        if (droneHasHoming) {
+          bullets.push({ x: lx, y: dy, width: 6, height: 12, type: "drone_homing", isPlayerHoming: true, homingTimer: 60, vx: -1.0, vy: -6.0, speed: 6.0, damage: dDmg });
+          bullets.push({ x: rx, y: dy, width: 6, height: 12, type: "drone_homing", isPlayerHoming: true, homingTimer: 60, vx: 1.0, vy: -6.0, speed: 6.0, damage: dDmg });
+        } else {
+          bullets.push({ x: lx, y: dy, width: 6, height: 12, type: "normal", vx: 0, vy: -5.0, damage: dDmg });
+          bullets.push({ x: rx, y: dy, width: 6, height: 12, type: "normal", vx: 0, vy: -5.0, damage: dDmg });
+        }
       }
     }
 
@@ -963,7 +991,6 @@
 
       if (!boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
       
-      // 독립형 누적 타이머(spawnTimer)를 사용하여 배속(1.5x)에서도 스폰 누락 없이 안정적으로 작동하도록 개선
       spawnTimer += gameSpeedMultiplier;
       var currentSpawnInterval = Math.max(20, Math.floor(65 / Math.pow(1.15, stage - 1))); 
       if (spawnTimer >= currentSpawnInterval && (boss || stageMonsterKills < targetStageKills)) {
@@ -987,7 +1014,33 @@
       player.y = Math.max(0, Math.min(canvas.height - player.height - 130, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
-        var b = bullets[i]; b.x += (b.vx||0) * gameSpeedMultiplier; b.y += (b.vy !== undefined ? b.vy : -b.speed) * gameSpeedMultiplier;
+        var b = bullets[i];
+        
+        // 보조기체 유도탄 추적 로직
+        if (b.isPlayerHoming && b.homingTimer > 0) {
+          b.homingTimer -= gameSpeedMultiplier;
+          var target = null;
+          var minDist = Infinity;
+          if (boss) {
+            var dx = (boss.x + boss.width/2) - b.x; var dy = (boss.y + boss.height/2) - b.y;
+            var dist = dx*dx + dy*dy; if (dist < minDist) { minDist = dist; target = boss; }
+          }
+          for (var k = 0; k < monsters.length; k++) {
+            var m = monsters[k]; var dx = (m.x + m.width/2) - b.x; var dy = (m.y + m.height/2) - b.y;
+            var dist = dx*dx + dy*dy; if (dist < minDist) { minDist = dist; target = m; }
+          }
+          if (target) {
+            var angle = Math.atan2((target.y + target.height/2) - b.y, (target.x + target.width/2) - b.x);
+            var hSpeed = b.speed || 6.0;
+            b.vx = Math.cos(angle) * hSpeed;
+            b.vy = Math.sin(angle) * hSpeed;
+            b.angle = angle + Math.PI/2;
+          } else if (b.vx !== 0 || b.vy !== 0) {
+            b.angle = Math.atan2(b.vy, b.vx) + Math.PI/2;
+          }
+        }
+        
+        b.x += (b.vx||0) * gameSpeedMultiplier; b.y += (b.vy !== undefined ? b.vy : -b.speed) * gameSpeedMultiplier;
         if (b.type === "saw") b.angle = (b.angle||0) + 0.18 * gameSpeedMultiplier;
         if (b.y < -30 || b.y > canvas.height + 30 || b.x < -30 || b.x > canvas.width + 30) bullets.splice(i, 1);
       }
@@ -1194,6 +1247,12 @@
         if (b.type === "laser") { ctx.fillStyle = "#4ade80"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); }
         else if (b.type === "saw") { ctx.translate((b.x+b.width/2)|0, (b.y+b.height/2)|0); ctx.rotate(b.angle||0); ctx.fillStyle = "#a855f7"; ctx.fillRect((-b.width/2)|0, (-b.height/2)|0, b.width|0, b.height|0); ctx.fillStyle = "#e9d5ff"; ctx.fillRect((-b.width/4)|0, (-b.height/4)|0, (b.width/2)|0, (b.height/2)|0); }
         else if (b.type === "shotgun") { ctx.fillStyle = "#fb923c"; ctx.beginPath(); ctx.arc((b.x+b.width/2)|0, (b.y+b.height/2)|0, b.width/2, 0, Math.PI*2); ctx.fill(); }
+        else if (b.type === "drone_homing") { 
+          ctx.translate((b.x+b.width/2)|0, (b.y+b.height/2)|0);
+          if (b.angle) ctx.rotate(b.angle);
+          ctx.fillStyle = "#06b6d4"; // 유도탄은 눈에 띄는 시안색(Cyan)으로 표시
+          ctx.fillRect((-b.width/2)|0, (-b.height/2)|0, b.width|0, b.height|0);
+        }
         else { ctx.fillStyle = "#facc15"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); } ctx.restore();
       });
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
