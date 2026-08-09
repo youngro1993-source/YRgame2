@@ -1115,13 +1115,13 @@
     function spawnMonster() {
       var r = Math.random(), w = 26, h = 26, type = "normal", speed = 0.65, hp = 1;
       if (isDungeonMode) {
-        // 광산던전 중급몹 확률 대폭 상향 (70% 확률로 코인 몬스터 출현)
         if (r < 0.70) {
           type = "coin_monster"; speed = 0.8; w = 34; h = 34; hp = 6;
         } else {
           type = "fast"; speed = 1.1;
         }
       } else {
+        // 일반 게임 몬스터 확률 복구
         if (r < 0.22) { type = "fast"; speed = 1.25; } 
         else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
         else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
