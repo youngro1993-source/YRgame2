@@ -814,7 +814,7 @@
     var bullets = [], monsters = [], items = [], enemyBullets = [], particles = [], damageTexts = [];
     var keys = {}, isGameOver = false, isPaused = false, isCountingDown = false, gameAnimationId;
     var score = 0, bestScore = parseInt(localStorage.getItem("yoon_space_best") || "0"), stage = 1;
-    var killCount = 0, bossKillCount = 0, sessionCoinsEarned = 0, gameTime = 0, warningTimer = 0, warningTextStr = "", shakeTimer = 0;
+    var killCount = 0, bossKillCount = 0, sessionCoinsEarned = 0, gameTime = 0, spawnTimer = 0, warningTimer = 0, warningTextStr = "", shakeTimer = 0;
     var stageMonsterKills = 0, targetStageKills = 30, nextEliteKillTarget = 15;
     var bulletCount = 1, playerDamage = 1, currentWeapon = "normal", boss = null, bossSpawnCount = 0, lastShootTime = 0, shootInterval = 100 * 1.35;
     var weaponNames = { "normal": "기본 탄환", "laser": "레이저 (L)", "saw": "톱니 (S)", "shotgun": "샷건 (G)" };
@@ -873,7 +873,7 @@
       player.speed = 2.0 + (shopCandyCount * 0.2); playerDamage = 1 + shopMeatBonusDmg; shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
       
       score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0;
-      stageMonsterKills = 0; targetStageKills = 30; nextEliteKillTarget = 15; bulletCount = 1; gameTime = 0; bossSpawnCount = 0; currentWeapon = "normal"; warningTimer = 0;
+      stageMonsterKills = 0; targetStageKills = 30; nextEliteKillTarget = 15; bulletCount = 1; gameTime = 0; spawnTimer = 0; bossSpawnCount = 0; currentWeapon = "normal"; warningTimer = 0;
       boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
       resetJoystick(); updateStatusDisplay(); isGameOver = false;
       
@@ -963,11 +963,17 @@
 
       if (!boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
       
-      var currentSpawnInterval = Math.max(24, Math.floor(74 / Math.pow(1.2, stage - 1))); 
-      if (Math.floor(gameTime) % currentSpawnInterval === 0 && (boss || stageMonsterKills < targetStageKills)) spawnMonster();
-      
-      if (!boss && stageMonsterKills < targetStageKills && monsters.length === 0 && Math.floor(gameTime) % 30 === 0) {
+      // 독립형 누적 타이머(spawnTimer)를 사용하여 배속(1.5x)에서도 스폰 누락 없이 안정적으로 작동하도록 개선
+      spawnTimer += gameSpeedMultiplier;
+      var currentSpawnInterval = Math.max(20, Math.floor(65 / Math.pow(1.15, stage - 1))); 
+      if (spawnTimer >= currentSpawnInterval && (boss || stageMonsterKills < targetStageKills)) {
         spawnMonster();
+        spawnTimer = 0;
+      }
+      
+      if (!boss && stageMonsterKills < targetStageKills && monsters.length === 0) {
+        spawnMonster();
+        spawnTimer = 0;
       }
 
       if (killCount >= nextEliteKillTarget && !boss && stageMonsterKills < targetStageKills) { spawnEliteMonster(); nextEliteKillTarget += 15; }
@@ -1008,7 +1014,6 @@
 
       for (var i = enemyBullets.length - 1; i >= 0; i--) {
         var eb = enemyBullets[i];
-        // 유도탄 일정 시간(homingTimer) 동안만 추적 후 직진하도록 변경
         if (eb.isHoming && eb.homingTimer > 0) {
           eb.homingTimer -= gameSpeedMultiplier;
           var tx = player.x + player.width/2, ty = player.y + player.height/2;
@@ -1074,7 +1079,7 @@
               var cnt = 6 + Math.min(2, Math.floor((stage - 1) / 2));
               for(var k=0; k<cnt; k++) { var ang = (Math.PI*2/cnt)*k; enemyBullets.push({ x: boss.x+boss.width/2-6, y: boss.y+boss.height/2-6, width: 14, height: 14, vx: Math.cos(ang)*1.5, vy: Math.sin(ang)*1.5, isHeavy: true }); }
               if (Math.random() < 0.25) spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "heart"); if (Math.random() < 0.50) spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "coin");
-              boss = null; stage++; stageMonsterKills = 0; targetStageKills = 30; break;
+              boss = null; stage++; stageMonsterKills = 0; targetStageKills = 30; spawnTimer = 0; break;
             }
           }
         }
@@ -1090,7 +1095,6 @@
           enemyBullets.push({ x: m.x+m.width/2-5, y: m.y+m.height, width: 10, height: 10, vx: 0, vy: 1.42+(stage-1)*0.1, isHeavy: false }); m.lastShoot = gameTime;
         }
         if (m.type === "coin_monster" && gameTime - m.lastShoot > 120) {
-          // 유도탄 2발 발사 (약 45프레임 동안만 추적 후 직진)
           [-0.2, 0.2].forEach(function(ang){
             enemyBullets.push({ x: m.x+m.width/2-6, y: m.y+m.height, width: 12, height: 12, vx: Math.sin(ang)*1.2, vy: Math.cos(ang)*1.2, isHoming: true, isHeavy: true, homingTimer: 45 });
           });
