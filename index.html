@@ -359,7 +359,7 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div><div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div></div><button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
-        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">성실한 우주 광부 (목표: <span id="mTargetDungeonText">3</span>회)</div><div class="mission-item-desc">보상: <span id="mRewardDungeonText" class="highlight-reward">500</span> 코인</div><div class="mission-item-status">진행: <span id="missionDungeonProgress">0</span> / <span id="mTargetDungeonSub">3</span></div></div><button class="claim-btn" id="claimDungeonBtn" onclick="claimMission('dungeon')" disabled>보상 받기</button></div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">성실한 우주 광부 (목표: <span id="mTargetDungeonText">3</span>회)</div><div class="mission-item-desc">보상: <span id="mRewardDungeonText" class="highlight-reward">2000</span> 코인</div><div class="mission-item-status">진행: <span id="missionDungeonProgress">0</span> / <span id="mTargetDungeonSub">3</span></div></div><button class="claim-btn" id="claimDungeonBtn" onclick="claimMission('dungeon')" disabled>보상 받기</button></div>
         <button class="btn" style="margin-top: 8px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
     </div>
@@ -468,7 +468,6 @@
     var droneSplashCost = parseFloat(localStorage.getItem("yoon_drone_splash_cost") || "3000");
     var droneLastShootTime = 0;
 
-    // 던전 입장 횟수 관리 (일일 초기화)
     var dungeonDate = localStorage.getItem("yoon_dungeon_date") || "";
     var dungeonRemainingCount = parseInt(localStorage.getItem("yoon_dungeon_count") || "5");
     var todayStr = new Date().toDateString();
@@ -490,7 +489,7 @@
     var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
     var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
     var missionTargetDungeon = parseInt(localStorage.getItem("yoon_m_target_dungeon") || "3");
-    var missionRewardDungeon = parseInt(localStorage.getItem("yoon_m_reward_dungeon") || "500");
+    var missionRewardDungeon = parseInt(localStorage.getItem("yoon_m_reward_dungeon") || "2000");
 
     function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
@@ -1015,7 +1014,7 @@
     function startDungeonGame() {
       var nick = document.getElementById("nicknameInput").value.trim();
       if (!nick) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); toggleModal("dungeonModal", false); return; }
-      if (dungeonRemainingCount <= 500 && dungeonRemainingCount <= 0) { alert("오늘의 채굴 횟수를 모두 소모했습니다! (내일 자정 충전)"); return; }
+      if (dungeonRemainingCount <= 0) { alert("오늘의 채굴 횟수를 모두 소모했습니다! (내일 자정 충전)"); return; }
       playerNickname = nick;
       toggleModal("dungeonModal", false);
       dungeonRemainingCount--;
@@ -1048,10 +1047,10 @@
         if (dungeonTimerInterval) clearInterval(dungeonTimerInterval);
         dungeonTimerInterval = setInterval(function() {
           if (!isPaused && !isCountingDown && !isGameOver) {
-            dungeonTimeLeft--;
-            if (dungeonTimeLeft === 120 || dungeonTimeLeft === 60) {
-              spawnDungeonBoss();
-            }
+            dungeonTimeLeft -= gameSpeedMultiplier; // 배속 연동
+            if (dungeonTimeLeft <= 120 && dungeonTimeLeft > 119) { spawnDungeonBoss(); }
+            else if (dungeonTimeLeft <= 60 && dungeonTimeLeft > 59) { spawnDungeonBoss(); }
+            
             if (dungeonTimeLeft <= 0) {
               clearInterval(dungeonTimerInterval);
               endDungeonVictory();
@@ -1116,7 +1115,12 @@
     function spawnMonster() {
       var r = Math.random(), w = 26, h = 26, type = "normal", speed = 0.65, hp = 1;
       if (isDungeonMode) {
-        type = "coin_monster"; speed = 0.8; w = 34; h = 34; hp = 6;
+        // 광산던전 중급몹 확률 대폭 상향 (70% 확률로 코인 몬스터 출현)
+        if (r < 0.70) {
+          type = "coin_monster"; speed = 0.8; w = 34; h = 34; hp = 6;
+        } else {
+          type = "fast"; speed = 1.1;
+        }
       } else {
         if (r < 0.22) { type = "fast"; speed = 1.25; } 
         else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
@@ -1171,7 +1175,7 @@
       if (!isDungeonMode && !boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
       
       spawnTimer += gameSpeedMultiplier;
-      var currentSpawnInterval = isDungeonMode ? 18 : Math.max(20, Math.floor(65 / Math.pow(1.15, stage - 1))); 
+      var currentSpawnInterval = isDungeonMode ? 12 : Math.max(20, Math.floor(65 / Math.pow(1.15, stage - 1))); 
       if (spawnTimer >= currentSpawnInterval && (boss || isDungeonMode || stageMonsterKills < targetStageKills)) {
         spawnMonster();
         spawnTimer = 0;
