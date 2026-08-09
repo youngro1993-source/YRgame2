@@ -10,23 +10,22 @@
     #gameContainer { position: relative; width: 100%; height: 100%; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
-    /* 노치(Notch) 디자인 및 상하단 짤림 방지를 위한 safe-area 적용 */
-    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(16px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom)) 12px; text-align: center; overflow: hidden; }
+    /* 메인 화면 레이아웃 (답답하지 않도록 적당한 숨통과 여백 부여) */
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
-    /* 레이아웃 정돈 */
     .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 10px 0; padding: 4px; gap: 10px; }
+    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 6px 0; padding: 4px; gap: 8px; }
     .layout-middle::-webkit-scrollbar { width: 4px; }
     .layout-middle::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 2px; }
 
-    .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
     .header-btn-group { display: flex; gap: 8px; }
     .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 28px; height: 28px; font-size: 0.8rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    h1 { font-size: 1rem; margin-top: 0; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    h1 { font-size: 0.95rem; margin-top: 0; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
-    /* 중앙 스크롤 영역에 들어갈 컴포넌트들 */
+    /* 달 및 랭커 한마디 */
     .moon-container { display: flex; flex-direction: column; align-items: center; margin: 0 auto; position: relative; width: 100%; max-width: 440px; }
     @keyframes heartbeat {
       0% { transform: scale(1); }
@@ -36,63 +35,65 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-    .moon-artwork { width: 40px; height: 40px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4), inset -4px -4px 8px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
+    .moon-artwork { width: 36px; height: 36px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4), inset -4px -4px 8px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
-    .moon-artwork::before { content: ""; position: absolute; top: 7px; left: 7px; width: 8px; height: 8px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 14px 7px 0 2px rgba(161, 98, 7, 0.25), 5px 16px 0 -2px rgba(161, 98, 7, 0.3); }
+    .moon-artwork::before { content: ""; position: absolute; top: 6px; left: 6px; width: 7px; height: 7px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 12px 6px 0 2px rgba(161, 98, 7, 0.25), 4px 14px 0 -2px rgba(161, 98, 7, 0.3); }
 
-    .ranker-bubble-board { margin-top: 6px; width: 100%; display: flex; flex-direction: column; gap: 3px; align-items: center; max-height: 100px; overflow-y: auto; }
-    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.9); border: 1px solid #facc15; border-radius: 5px; padding: 4px 8px; font-size: 0.55rem; color: #facc15; max-width: 320px; width: 100%; word-break: break-all; box-shadow: 0 2px 6px rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center; text-align: left; }
-    .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.48rem; font-weight: bold; padding: 2px 6px; cursor: pointer; margin-left: 6px; flex-shrink: 0; }
+    .ranker-bubble-board { margin-top: 4px; width: 100%; display: flex; flex-direction: column; gap: 3px; align-items: center; max-height: 110px; overflow-y: auto; }
+    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1.5px solid #facc15; border-radius: 6px; padding: 5px 10px; font-size: 0.58rem; color: #facc15; max-width: 340px; width: 100%; word-break: break-all; box-shadow: 0 2px 8px rgba(0,0,0,0.6); display: flex; justify-content: space-between; align-items: center; text-align: left; }
+    .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
+    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; cursor: pointer; margin-left: 6px; flex-shrink: 0; }
 
-    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 6px; }
-    .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; }
-    .ranking-sub-notice { font-size: 0.5rem; color: #cbd5e1; margin-bottom: 4px; font-weight: bold; text-align: center; }
-    .ranking-scroll-box { max-height: 90px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    /* 명예의 전당 (시인성 강화) */
+    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 6px; }
+    .ranking-container h3 { font-size: 0.68rem; color: #f87171; margin-bottom: 2px; }
+    .ranking-sub-notice { font-size: 0.52rem; color: #cbd5e1; margin-bottom: 4px; font-weight: bold; text-align: center; }
+    .ranking-scroll-box { max-height: 100px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
     .ranking-scroll-box::-webkit-scrollbar { width: 3px; }
     .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.52rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.55rem; }
     th, td { padding: 3px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 6px 8px; font-size: 0.55rem; text-align: left; }
-    .info-box h4 { color: #facc15; margin-bottom: 4px; text-align: center; font-size: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 6px; }
-    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.2; font-size: 0.52rem; }
-    .badge { display: inline-block; width: 12px; height: 12px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 12px; font-size: 0.45rem; margin-right: 4px; flex-shrink: 0; }
+    /* 아이템 정보 (높낮이 슬림하게 압축) */
+    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 5px 8px; font-size: 0.55rem; text-align: left; }
+    .info-box h4 { color: #facc15; margin-bottom: 3px; text-align: center; font-size: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; }
+    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.15; font-size: 0.52rem; }
+    .badge { display: inline-block; width: 11px; height: 11px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 11px; font-size: 0.42rem; margin-right: 4px; flex-shrink: 0; }
     .badge.upgrade { background: #eab308; } .badge.damage { background: #ef4444; color: #fff; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
-    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 5px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .welcome-text { color: #facc15; font-size: 0.62rem; font-weight: bold; min-height: 1em; }
-    input[type="text"] { width: 85%; max-width: 200px; padding: 4px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.75rem; text-align: center; outline: none; }
-    .warning-text { color: #f87171; font-size: 0.55rem; min-height: 0.8em; font-weight: 600; }
+    input[type="text"] { width: 85%; max-width: 200px; padding: 3px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.72rem; text-align: center; outline: none; }
+    .warning-text { color: #f87171; font-size: 0.52rem; min-height: 0.6em; font-weight: 600; }
 
-    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 4px; }
-    .pilot-status-title { text-align: left; font-size: 0.65rem; font-weight: bold; color: #38bdf8; padding-left: 4px; }
-    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 6px 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.6rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 3px; }
+    .pilot-status-title { text-align: left; font-size: 0.62rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
+    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.58rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
     .pilot-status-row { display: flex; justify-content: space-between; align-items: center; }
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
     .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
-    /* 하단 버튼 및 크레딧 */
-    .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 6px; }
-    button.btn { flex: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); }
+    /* 하단 고정 버튼 */
+    .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 4px; }
+    button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4); }
     button.btn:active { transform: scale(0.95); }
     .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
     .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
     @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-    .credits { margin-top: 2px; font-size: 0.5rem; color: #64748b; letter-spacing: 1px; }
-    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.55rem !important; text-decoration: underline; cursor: pointer; margin-top: 2px; }
+    .credits { margin-top: 1px; font-size: 0.48rem; color: #64748b; letter-spacing: 1px; }
+    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.52rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; }
 
-    /* 인게임 화면 요소들 */
-    .in-game-top-btns { position: absolute; top: max(16px, env(safe-area-inset-top)); left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 16px; z-index: 9; pointer-events: none; }
-    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.75rem; font-weight: bold; padding: 6px 12px; border-radius: 8px; pointer-events: auto; }
+    /* 인게임 상단 메뉴 */
+    .in-game-top-btns { position: absolute; top: max(12px, env(safe-area-inset-top)); left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 14px; z-index: 9; pointer-events: none; }
+    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.7rem; font-weight: bold; padding: 5px 10px; border-radius: 6px; pointer-events: auto; }
 
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 15px; }
     .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; overflow-y: auto; }
-    .modal-content h3 { color: #38bdf8; font-size: 1rem; margin-bottom: 8px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+    .modal-content h3 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 6px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
     .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
@@ -125,19 +126,20 @@
     .history-scroll-area li { margin-bottom: 4px; position: relative; padding-left: 12px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 205px; background: rgba(15, 23, 42, 0.95); border-top: 2px solid rgba(56, 189, 248, 0.4); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
-    #joystickArea { position: absolute; bottom: calc(40px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 85px; height: 85px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
-    #joystickKnob { width: 38px; height: 38px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
+    /* 인게임 하단 조작 영역 (최하단으로 바짝 내림 & 전투 시야 확보) */
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 180px; background: rgba(15, 23, 42, 0.95); border-top: 2px solid rgba(56, 189, 248, 0.4); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+    #joystickArea { position: absolute; bottom: calc(25px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 75px; height: 75px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #joystickKnob { width: 34px; height: 34px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
 
-    .dpad-container { position: absolute; bottom: calc(10px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 90px; display: block; z-index: 6; pointer-events: none; }
-    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 14px; pointer-events: auto; }
+    .dpad-container { position: absolute; bottom: calc(6px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 80px; display: block; z-index: 6; pointer-events: none; }
+    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 12px; pointer-events: auto; }
     .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
-    #dpadLeft { bottom: 10px; left: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
-    #dpadRight { bottom: 10px; right: 15px; width: 110px; height: 62px; font-size: 2.1rem; }
-    #dpadUp { bottom: 46px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
-    #dpadDown { bottom: 4px; left: 50%; transform: translateX(-50%); width: 68px; height: 36px; font-size: 1.1rem; }
+    #dpadLeft { bottom: 6px; left: 12px; width: 100px; height: 55px; font-size: 1.8rem; }
+    #dpadRight { bottom: 6px; right: 12px; width: 100px; height: 55px; font-size: 1.8rem; }
+    #dpadUp { bottom: 40px; left: 50%; transform: translateX(-50%); width: 60px; height: 32px; font-size: 1rem; }
+    #dpadDown { bottom: 4px; left: 50%; transform: translateX(-50%); width: 60px; height: 32px; font-size: 1rem; }
 
-    #joystickStatusNotice { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 94%; padding: 4px 8px; background: rgba(2, 6, 23, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; text-align: center; font-size: 0.72rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.4; }
+    #joystickStatusNotice { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 94%; padding: 3px 6px; background: rgba(2, 6, 23, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; text-align: center; font-size: 0.68rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.35; }
 
     .result-card-box { width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; margin: 8px 0; text-align: left; }
     .result-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
@@ -157,19 +159,18 @@
 
     <!-- 메인 화면 -->
     <div id="startScreen" class="screen">
-      <!-- 1. 고정 상단 헤더 -->
       <div class="layout-section">
         <div class="top-status-bar">
-          <div style="font-size:0.6rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
+          <div style="font-size:0.58rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
           <div class="header-btn-group">
             <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
             <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
           </div>
         </div>
-        <h1>은하 수호대<br><span style="font-size:0.65rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
+        <h1>은하 수호대<br><span style="font-size:0.62rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
       </div>
 
-      <!-- 2. 중앙 스크롤 가능 구역 (화면이 작아도 잘리지 않음) -->
+      <!-- 중앙 스크롤 영역 (여유롭고 깔끔하게 배치) -->
       <div class="layout-section layout-middle">
         
         <div class="moon-container">
@@ -219,15 +220,15 @@
               <div class="pilot-status-right">🪙 <span id="mainCoinDisplay">0</span></div>
             </div>
             <div class="pilot-status-row">
-              <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.55rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
-              <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.55rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
+              <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.52rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
+              <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.52rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
             </div>
           </div>
         </div>
 
       </div>
 
-      <!-- 3. 고정 하단 버튼 및 크레딧 -->
+      <!-- 하단 고정 버튼 -->
       <div class="layout-section">
         <div class="btn-container">
           <button class="btn btn-shop" onclick="openShopModal()">🛒 상점</button>
@@ -329,7 +330,7 @@
       <div class="modal-content">
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
-          <div class="version-block"><div class="version-title">v7.8.4 (UI 정돈 및 노치 방지 패치)</div><ul><li>인게임 상단 메뉴가 폰 노치(카메라 홀)에 가려지는 현상 완벽 방지</li><li>메인 화면 기기 호환성 및 레이아웃 쾌적화(중앙 스크롤 구조 적용)</li></ul></div>
+          <div class="version-block"><div class="version-title">v7.8.5 (전투 시야 & 메인 레이아웃 최적화)</div><ul><li>조이스틱 및 컨트롤러 영역 최하단 배치 및 전투 시야 공간 대폭 확보</li><li>플레이어 및 몬스터 크기 소폭 축소로 회피 및 플레이 쾌적성 향상</li><li>메인 화면 랭킹 및 랭커 한마디 시인성 강화 및 여백 밸런스 조정</li></ul></div>
         </div>
         <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
         <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
@@ -360,7 +361,7 @@
     <div id="controlArea" class="hidden">
       <div id="joystickStatusNotice">
         <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | <span id="hudLife">❤️ x3</span> | <span id="hudCoins">🪙 +0</span> | <span id="hudScore">Score: 0</span><br>
-        무기: <span id="hudWeaponName">기본 탄환</span> | <span id="hudBulletCount">x1</span> | 데미지: <span id="hudDmgNotice">1</span> (보조기체 데미지: <span id="hudDroneDmgNotice">1</span>)
+        무기: <span id="hudWeaponName">기본 탄환</span> | <span id="hudBulletCount">x1</span> | 데미지: <span id="hudDmgNotice">1</span> (보조기체: <span id="hudDroneDmgNotice">1</span>)
       </div>
       <div id="joystickArea"><div id="joystickKnob"></div></div>
       <div id="dpadContainer" class="dpad-container">
@@ -376,7 +377,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.8.4";
+    var currentVersionKey = "v7.8.5";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -790,7 +791,7 @@
 
     function resizeCanvas() {
       canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
-      if (player) player.y = Math.min(player.y, canvas.height - player.height - 205);
+      if (player) player.y = Math.min(player.y, canvas.height - player.height - 180);
       initStars();
     }
     window.addEventListener('resize', resizeCanvas);
@@ -809,7 +810,7 @@
     }
 
     var playerNickname = "", playerQuote = "";
-    var player = { x: 0, y: 0, width: 28, height: 28, speed: 2.0, tilt: 0, maxTilt: 0.35, lives: 3, invincibleTimer: 0 };
+    var player = { x: 0, y: 0, width: 24, height: 24, speed: 2.0, tilt: 0, maxTilt: 0.35, lives: 3, invincibleTimer: 0 }; // 비행기 크기 소폭 축소
     var bullets = [], monsters = [], items = [], enemyBullets = [], particles = [], damageTexts = [];
     var keys = {}, isGameOver = false, isPaused = false, isCountingDown = false, gameAnimationId;
     var score = 0, bestScore = parseInt(localStorage.getItem("yoon_space_best") || "0"), stage = 1;
@@ -868,7 +869,7 @@
       isPaused = false; isCountingDown = false; gameSpeedMultiplier = 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ 1.0x";
       if (!soundMuted) startBGM();
       
-      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 205; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
+      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 180; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
       player.speed = 2.0 + (shopCandyCount * 0.2); playerDamage = 1 + shopMeatBonusDmg; shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
       
       score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0;
@@ -917,25 +918,25 @@
     }
 
     function spawnMonster() {
-      var w = 32, h = 32, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), r = Math.random(), type = "normal", speed = 0.65, hp = 1;
+      var w = 26, h = 26, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), r = Math.random(), type = "normal", speed = 0.65, hp = 1; // 몬스터 크기 소폭 축소
       if (r < 0.25) { type = "fast"; speed = 1.25; } else if (r < 0.45) { type = "shooter"; speed = 0.42; hp = 10; } else if (r < 0.65) { type = "zigzag"; speed = 0.75; } else if (r < 0.72) { type = "coin_monster"; speed = 1.5; }
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
     }
     function spawnEliteMonster() {
-      triggerWarning("ELITE MONSTER!"); var w = 40, h = 40, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), hp = 20 + Math.floor(Math.pow(stage, 1.4) * 15);
+      triggerWarning("ELITE MONSTER!"); var w = 34, h = 34, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), hp = 20 + Math.floor(Math.pow(stage, 1.4) * 15);
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: 0.35, type: "elite", hp: hp, maxHp: hp, lastShoot: 0 });
     }
     function spawnBoss() {
       triggerWarning("WARNING! BOSS INCOMING!"); bossSpawnCount++; var chp = Math.floor(450 * Math.pow(1.2, bossSpawnCount - 1));
       var types = ["normal", "spinner", "zigzag", "charger"], ct = stage < 3 ? "normal" : types[Math.floor(Math.random() * types.length)];
-      boss = { type: ct, x: canvas.width/2 - 40, y: 40, baseY: 40, width: 80, height: 60, speedX: 1.1, hp: chp, maxHp: chp, lastShoot: 0, patternTimer: 0, designType: ct==="spinner"?4:Math.floor(Math.random()*4), state: 'idle', stateTimer: 0, targetDashX: 0, targetDashY: 0, spinAngle: 0, vx: 0, vy: 0 };
+      boss = { type: ct, x: canvas.width/2 - 35, y: 40, baseY: 40, width: 70, height: 50, speedX: 1.1, hp: chp, maxHp: chp, lastShoot: 0, patternTimer: 0, designType: ct==="spinner"?4:Math.floor(Math.random()*4), state: 'idle', stateTimer: 0, targetDashX: 0, targetDashY: 0, spinAngle: 0, vx: 0, vy: 0 };
     }
     function spawnItem(x, y, fType) {
       if (fType) { if (fType === "upgrade" && bulletCount >= 6) fType = Math.random() > 0.5 ? "coin" : "damage"; items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: fType }); }
       else { var r = Math.random(), wType = r < 0.22 ? "shotgun" : (r < 0.60 ? "saw" : "laser"); items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: wType }); }
     }
     function checkCollision(r1, r2) { return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y; }
-    function checkPlayerHitbox(p, o) { return p.x + 6 < o.x + o.width && p.x + p.width - 6 > o.x && p.y + 6 < o.y + o.height && p.y + p.height - 6 > o.y; }
+    function checkPlayerHitbox(p, o) { return p.x + 4 < o.x + o.width && p.x + p.width - 4 > o.x && p.y + 4 < o.y + o.height && p.y + p.height - 4 > o.y; }
     function handlePlayerHit() {
       if (player.invincibleTimer > 0) return; player.lives--; playSound('hit'); triggerScreenShake(15); createExplosion(player.x+player.width/2, player.y+player.height/2, "#ef4444", 15);
       if (player.lives <= 0) gameOver(); else player.invincibleTimer = 90;
@@ -971,7 +972,7 @@
       if (controlType === "integrated") { mx += joystickAxisX; my += joystickAxisY; }
       if (mx < 0) player.tilt = Math.max(player.tilt - 0.05, -player.maxTilt); else if (mx > 0) player.tilt = Math.min(player.tilt + 0.05, player.maxTilt); else player.tilt *= 0.8;
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x + mx * player.speed * gameSpeedMultiplier));
-      player.y = Math.max(0, Math.min(canvas.height - player.height - 205, player.y + my * player.speed * gameSpeedMultiplier));
+      player.y = Math.max(0, Math.min(canvas.height - player.height - 180, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i]; b.x += (b.vx||0) * gameSpeedMultiplier; b.y += (b.vy !== undefined ? b.vy : -b.speed) * gameSpeedMultiplier;
@@ -1099,14 +1100,14 @@
     function drawPlayer(ctx, x, y, w, h) {
       ctx.save(); var cx = x + w/2, cy = y + h/2; ctx.translate(cx|0, cy|0); ctx.rotate(player.tilt); ctx.translate(-(cx|0), -(cy|0));
       if (player.invincibleTimer > 0) { ctx.save(); ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx|0, (y+h/2)|0, w+4, 0, Math.PI*2); ctx.stroke(); ctx.restore(); if (Math.floor(gameTime / 4) % 2 === 0) { ctx.restore(); return; } }
-      ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444"; ctx.beginPath(); ctx.moveTo((cx-4)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h+8+(Math.random()*3))|0); ctx.lineTo((cx+4)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.moveTo((cx)|0, (y+2)|0); ctx.lineTo((x+w)|0, (y+h-3)|0); ctx.lineTo((x+w-4)|0, (y+h)|0); ctx.lineTo((cx)|0, (y+h-6)|0); ctx.lineTo((x+4)|0, (y+h)|0); ctx.lineTo((x)|0, (y+h-3)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#3b82f6"; ctx.beginPath(); ctx.moveTo((cx)|0, (y)|0); ctx.lineTo((cx+6)|0, (y+11)|0); ctx.lineTo((cx+4)|0, (y+h-3)|0); ctx.lineTo((cx-4)|0, (y+h-3)|0); ctx.lineTo((cx-6)|0, (y+11)|0); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.ellipse((cx)|0, (y+11)|0, 2.5, 5, 0, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "#38bdf8"; ctx.fillRect((x)|0, (y+h-5)|0, 2, 3); ctx.fillRect((x+w-2)|0, (y+h-5)|0, 2, 3);
+      ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#ef4444"; ctx.beginPath(); ctx.moveTo((cx-3)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h+7+(Math.random()*3))|0); ctx.lineTo((cx+3)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.moveTo((cx)|0, (y+2)|0); ctx.lineTo((x+w)|0, (y+h-3)|0); ctx.lineTo((x+w-3)|0, (y+h)|0); ctx.lineTo((cx)|0, (y+h-5)|0); ctx.lineTo((x+3)|0, (y+h)|0); ctx.lineTo((x)|0, (y+h-3)|0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#3b82f6"; ctx.beginPath(); ctx.moveTo((cx)|0, (y)|0); ctx.lineTo((cx+5)|0, (y+9)|0); ctx.lineTo((cx+3)|0, (y+h-3)|0); ctx.lineTo((cx-3)|0, (y+h-3)|0); ctx.lineTo((cx-5)|0, (y+9)|0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.ellipse((cx)|0, (y+9)|0, 2, 4, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = "#38bdf8"; ctx.fillRect((x)|0, (y+h-4)|0, 2, 2); ctx.fillRect((x+w-2)|0, (y+h-4)|0, 2, 2);
       if (hasDrone) {
-        var lx = x - 14, rx = x + w + 2, dy = y + 6;
-        [lx, rx].forEach(function(dx) { ctx.fillStyle = "#0f172a"; ctx.strokeStyle = "#facc15"; ctx.lineWidth = 1.5; ctx.fillRect(dx, dy, 12, 16); ctx.strokeRect(dx, dy, 12, 16); ctx.fillStyle = "#38bdf8"; ctx.fillRect(dx+3, dy+4, 6, 8); ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#facc15"; ctx.fillRect(dx+4, dy+16, 4, 4); });
+        var lx = x - 12, rx = x + w + 2, dy = y + 5;
+        [lx, rx].forEach(function(dx) { ctx.fillStyle = "#0f172a"; ctx.strokeStyle = "#facc15"; ctx.lineWidth = 1.5; ctx.fillRect(dx, dy, 10, 14); ctx.strokeRect(dx, dy, 10, 14); ctx.fillStyle = "#38bdf8"; ctx.fillRect(dx+2, dy+3, 6, 7); ctx.fillStyle = (gameTime % 6 < 3) ? "#ef4444" : "#facc15"; ctx.fillRect(dx+3, dy+14, 4, 3); });
       }
       ctx.restore();
     }
@@ -1115,11 +1116,11 @@
       if (b.designType === 4 || b.type === "spinner") {
         ctx.translate(cx|0, cy|0);
         if (b.state === 'spin') ctx.rotate(gameTime * 0.2); else if (b.state === 'dash' || b.state === 'return') ctx.rotate(Math.atan2(b.state==='dash'?b.targetDashY-b.y:b.baseY-b.y, b.state==='dash'?b.targetDashX-b.x:(canvas.width/2-b.width/2)-b.x) + Math.PI/2); else if (b.state === 'wander' || b.state === 'zigzag') ctx.rotate(Math.atan2(b.vy, b.vx) + Math.PI/2);
-        ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.moveTo(0, -b.height/2); ctx.lineTo(b.width/2, b.height/2); ctx.lineTo(-b.width/2, b.height/2); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
-      } else if (b.designType === 0) { ctx.fillStyle = "#dc2626"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); ctx.fillStyle = "#38bdf8"; ctx.fillRect((b.x+10)|0, (b.y+10)|0, (b.width-20)|0, 8); ctx.fillStyle = "#fef08a"; ctx.fillRect((b.x+12)|0, (b.y+25)|0, 15, 15); ctx.fillRect((b.x+b.width-27)|0, (b.y+25)|0, 15, 15); }
-      else if (b.designType === 1) { ctx.fillStyle = "#9333ea"; ctx.beginPath(); ctx.ellipse(cx|0, cy|0, b.width/2, b.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(cx|0, cy|0, 16, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc((cx+Math.sin(gameTime*0.05)*4)|0, cy|0, 8, 0, Math.PI*2); ctx.fill(); }
-      else if (b.designType === 2) { ctx.fillStyle = "#0284c7"; ctx.fillRect((b.x+15)|0, b.y|0, (b.width-30)|0, b.height|0); ctx.translate(cx|0, cy|0); ctx.rotate(gameTime * 0.03); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.strokeRect((-b.width/2)|0, -10, b.width|0, 20); }
-      else { ctx.fillStyle = "#d97706"; ctx.beginPath(); ctx.moveTo(cx|0, (b.y+b.height)|0); ctx.lineTo((b.x+b.width)|0, b.y|0); ctx.lineTo(b.x|0, b.y|0); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(cx|0, (b.y+20)|0, 10, 0, Math.PI*2); ctx.fill(); }
+        ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.moveTo(0, -b.height/2); ctx.lineTo(b.width/2, b.height/2); ctx.lineTo(-b.width/2, b.height/2); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI*2); ctx.fill();
+      } else if (b.designType === 0) { ctx.fillStyle = "#dc2626"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); ctx.fillStyle = "#38bdf8"; ctx.fillRect((b.x+8)|0, (b.y+8)|0, (b.width-16)|0, 6); ctx.fillStyle = "#fef08a"; ctx.fillRect((b.x+10)|0, (b.y+20)|0, 12, 12); ctx.fillRect((b.x+b.width-22)|0, (b.y+20)|0, 12, 12); }
+      else if (b.designType === 1) { ctx.fillStyle = "#9333ea"; ctx.beginPath(); ctx.ellipse(cx|0, cy|0, b.width/2, b.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(cx|0, cy|0, 14, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc((cx+Math.sin(gameTime*0.05)*4)|0, cy|0, 7, 0, Math.PI*2); ctx.fill(); }
+      else if (b.designType === 2) { ctx.fillStyle = "#0284c7"; ctx.fillRect((b.x+12)|0, b.y|0, (b.width-24)|0, b.height|0); ctx.translate(cx|0, cy|0); ctx.rotate(gameTime * 0.03); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.strokeRect((-b.width/2)|0, -8, b.width|0, 16); }
+      else { ctx.fillStyle = "#d97706"; ctx.beginPath(); ctx.moveTo(cx|0, (b.y+b.height)|0); ctx.lineTo((b.x+b.width)|0, b.y|0); ctx.lineTo(b.x|0, b.y|0); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(cx|0, (b.y+16)|0, 9, 0, Math.PI*2); ctx.fill(); }
       ctx.restore();
       var bw = canvas.width * 0.6, bh = 14, bx = (canvas.width - bw) / 2, by = 35, hr = Math.max(0, b.hp / b.maxHp);
       ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(bx|0, by|0, bw|0, bh|0); ctx.fillStyle = "#ef4444"; ctx.fillRect(bx|0, by|0, (bw*hr)|0, bh|0); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.strokeRect(bx|0, by|0, bw|0, bh|0);
@@ -1150,7 +1151,7 @@
         else if (m.type === "shooter") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#22c55e", [[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,1,1,1,1,1],[0,1,1,0,0,1,1,0],[0,0,1,1,1,1,0,0],[0,0,0,1,1,0,0,0]]);
         else if (m.type === "zigzag") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#f97316", [[0,1,0,0,0,0,1,0],[1,1,1,0,0,1,1,1],[1,0,1,1,1,1,0,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0],[0,1,0,0,0,0,1,0]]);
         else if (m.type === "coin_monster") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#facc15", [[0,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[0,1,1,1,1,1,1,0]]);
-        else if (m.type === "elite") { drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#0284c7", [[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,0,0,1,1,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0]]); ctx.fillStyle="rgba(0,0,0,0.5)"; ctx.fillRect(m.x|0, (m.y-8)|0, m.width|0, 4); ctx.fillStyle="#38bdf8"; ctx.fillRect(m.x|0, (m.y-8)|0, (m.width*(m.hp/m.maxHp))|0, 4); }
+        else if (m.type === "elite") { drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#0284c7", [[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,0,0,1,1,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0]]); ctx.fillStyle="rgba(0,0,0,0.5)"; ctx.fillRect(m.x|0, (m.y-7)|0, m.width|0, 3); ctx.fillStyle="#38bdf8"; ctx.fillRect(m.x|0, (m.y-7)|0, (m.width*(m.hp/m.maxHp))|0, 3); }
         else drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#a855f7", [[0,0,1,0,0,1,0,0],[0,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,0,1,0,0,1,0,1],[0,0,0,1,1,0,0,0]]);
       });
       if (boss) drawBoss(ctx, boss);
