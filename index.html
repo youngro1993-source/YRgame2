@@ -394,7 +394,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v7.9.0"; // 패치 내역 버전 업데이트
+    var currentVersionKey = "v7.9.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -514,7 +514,7 @@
       var currentInterval = Math.round((100 * 1.35) * Math.pow(0.9, shopAppleCount));
       var currentTotalLife = 3 + shopHeartBonusLife;
       var currentSpeed = (2.0 + shopCandyCount * 0.2).toFixed(1);
-      var currentMagnetRange = shopMagnetLevel * 15; // 자석 증가범위 15로 하향
+      var currentMagnetRange = shopMagnetLevel * 15;
 
       document.getElementById('mainCoinDisplay').innerText = userCoins;
       document.getElementById('mainDmgDisplay').innerText = currentBaseDmg;
@@ -553,7 +553,6 @@
         document.getElementById('droneDmgCostText').innerText = Math.floor(droneDmgCost);
         document.getElementById('buyDroneDmgBtn').disabled = userCoins < droneDmgCost;
         
-        // 보조기체 연사 밸런스 패치 (기본 450, 최대 200)
         var cdInterval = Math.max(200, 450 - droneSpeedCount * 25);
         document.getElementById('shopDroneSpeedText').innerText = cdInterval;
         document.getElementById('droneSpeedCostText').innerText = cdInterval <= 200 ? "MAX" : Math.floor(droneSpeedCost);
@@ -1059,7 +1058,6 @@
       for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx * gameSpeedMultiplier; p.y += p.vy * gameSpeedMultiplier; p.alpha -= p.decay * gameSpeedMultiplier; if (p.alpha <= 0) particles.splice(i, 1); }
       for (var i = damageTexts.length - 1; i >= 0; i--) { var dt = damageTexts[i]; dt.y += dt.vy * gameSpeedMultiplier; dt.alpha -= 0.03 * gameSpeedMultiplier; if (dt.alpha <= 0) damageTexts.splice(i, 1); }
 
-      // 자석 무기 끌어당김 방지 및 범위 조정 반영
       var magR = shopMagnetLevel * 15;
       for (var i = items.length - 1; i >= 0; i--) {
         var it = items[i];
@@ -1102,7 +1100,7 @@
           boss.stateTimer += gameSpeedMultiplier;
           if (boss.state === 'idle') {
             boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.08 * gameSpeedMultiplier; boss.y += (boss.baseY - boss.y) * 0.08 * gameSpeedMultiplier;
-            if (boss.stateTimer > 220) { boss.state = 'dash'; boss.stateTimer = 0; boss.targetDashX = player.x; boss.targetDashY = player.y; }
+            if (boss.stateTimer > 220) { boss.state = 'dash'; boss.stateTimer = 0; boss.targetDashX = player.x; boss.targetDashY = Math.min(player.y - 45, canvas.height - 220); }
           } else if (boss.state === 'dash') {
             boss.x += (boss.targetDashX - boss.x) * 0.15 * gameSpeedMultiplier; boss.y += (boss.targetDashY - boss.y) * 0.15 * gameSpeedMultiplier;
             if (boss.stateTimer > 25) { boss.state = 'return'; boss.stateTimer = 0; }
@@ -1115,7 +1113,7 @@
           boss.stateTimer += gameSpeedMultiplier;
           if (boss.state === 'idle') {
             boss.y += (boss.baseY + Math.sin(gameTime * 0.04) * 10 - boss.y) * 0.1 * gameSpeedMultiplier; boss.x += (canvas.width/2 - boss.width/2 - boss.x) * 0.05 * gameSpeedMultiplier; 
-            if (boss.stateTimer > 200) { boss.state = 'dash'; boss.stateTimer = 0; boss.targetDashX = player.x; boss.targetDashY = player.y - boss.height; }
+            if (boss.stateTimer > 200) { boss.state = 'dash'; boss.stateTimer = 0; boss.targetDashX = player.x; boss.targetDashY = Math.min(player.y - 45, canvas.height - 220); }
           } else if (boss.state === 'dash') {
             boss.x += (boss.targetDashX - boss.x) * 0.12 * gameSpeedMultiplier; boss.y += (boss.targetDashY - boss.y) * 0.12 * gameSpeedMultiplier;
             if (boss.stateTimer > 30) { boss.state = 'return'; boss.stateTimer = 0; }
