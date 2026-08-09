@@ -11,21 +11,21 @@
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
     /* 메인 화면 레이아웃 */
-    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px; text-align: center; overflow: hidden; }
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(8px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom)) 10px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
     .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 6px 0; padding: 4px; gap: 8px; }
+    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 4px 0; padding: 2px; gap: 6px; }
     .layout-middle::-webkit-scrollbar { width: 4px; }
     .layout-middle::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 2px; }
 
     .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-    .header-btn-group { display: flex; gap: 8px; }
-    .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 28px; height: 28px; font-size: 0.8rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+    .header-btn-group { display: flex; gap: 6px; }
+    .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 26px; height: 26px; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    h1 { font-size: 0.95rem; margin-top: 0; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    h1 { font-size: 0.9rem; margin-top: 0; margin-bottom: 2px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
-    /* 달 및 랭커 한마디 */
+    /* 달 및 랭커 한마디 (5위까지 한눈에) */
     .moon-container { display: flex; flex-direction: column; align-items: center; margin: 0 auto; position: relative; width: 100%; max-width: 440px; }
     @keyframes heartbeat {
       0% { transform: scale(1); }
@@ -35,118 +35,118 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-    .moon-artwork { width: 36px; height: 36px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4), inset -4px -4px 8px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
+    .moon-artwork { width: 32px; height: 32px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
-    .moon-artwork::before { content: ""; position: absolute; top: 6px; left: 6px; width: 7px; height: 7px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 12px 6px 0 2px rgba(161, 98, 7, 0.25), 4px 14px 0 -2px rgba(161, 98, 7, 0.3); }
+    .moon-artwork::before { content: ""; position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 10px 5px 0 2px rgba(161, 98, 7, 0.25), 3px 12px 0 -2px rgba(161, 98, 7, 0.3); }
 
-    .ranker-bubble-board { margin-top: 4px; width: 100%; display: flex; flex-direction: column; gap: 3px; align-items: center; max-height: 110px; overflow-y: auto; }
-    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1.5px solid #facc15; border-radius: 6px; padding: 5px 10px; font-size: 0.58rem; color: #facc15; max-width: 340px; width: 100%; word-break: break-all; box-shadow: 0 2px 8px rgba(0,0,0,0.6); display: flex; justify-content: space-between; align-items: center; text-align: left; }
+    .ranker-bubble-board { margin-top: 3px; width: 100%; display: flex; flex-direction: column; gap: 2px; align-items: center; }
+    .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1.5px solid #facc15; border-radius: 5px; padding: 3px 8px; font-size: 0.55rem; color: #facc15; max-width: 340px; width: 100%; word-break: break-all; box-shadow: 0 2px 6px rgba(0,0,0,0.6); display: flex; justify-content: space-between; align-items: center; text-align: left; }
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
-    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 4px; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; cursor: pointer; margin-left: 6px; flex-shrink: 0; }
+    .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.48rem; font-weight: bold; padding: 1px 5px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
     /* 명예의 전당 */
-    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 6px; }
-    .ranking-container h3 { font-size: 0.68rem; color: #f87171; margin-bottom: 2px; }
-    .ranking-sub-notice { font-size: 0.52rem; color: #cbd5e1; margin-bottom: 4px; font-weight: bold; text-align: center; }
-    .ranking-scroll-box { max-height: 100px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 5px; }
+    .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; }
+    .ranking-sub-notice { font-size: 0.5rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; }
+    .ranking-scroll-box { max-height: 90px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
     .ranking-scroll-box::-webkit-scrollbar { width: 3px; }
     .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.55rem; }
-    th, td { padding: 3px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.52rem; }
+    th, td { padding: 2px; border-bottom: 1px solid #334155; text-align: center; white-space: nowrap; }
     th { color: #f87171; position: sticky; top: 0; background: rgba(15, 23, 42, 0.95); z-index: 2; }
 
-    /* 아이템 정보 */
-    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 5px 8px; font-size: 0.55rem; text-align: left; }
-    .info-box h4 { color: #facc15; margin-bottom: 3px; text-align: center; font-size: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
+    /* 아이템 정보 (확률 추가 및 2줄 정렬, 높낮이 축소) */
+    .info-box { width: 100%; max-width: 440px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 5px 8px; font-size: 0.52rem; text-align: left; }
+    .info-box h4 { color: #facc15; margin-bottom: 3px; text-align: center; font-size: 0.58rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 2px; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; }
-    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.15; font-size: 0.52rem; }
-    .badge { display: inline-block; width: 11px; height: 11px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 11px; font-size: 0.42rem; margin-right: 4px; flex-shrink: 0; }
+    .info-item { display: flex; align-items: center; color: #f1f5f9; line-height: 1.15; font-size: 0.5rem; }
+    .badge { display: inline-block; width: 10px; height: 10px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 10px; font-size: 0.38rem; margin-right: 4px; flex-shrink: 0; }
     .badge.upgrade { background: #eab308; } .badge.damage { background: #ef4444; color: #fff; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
-    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 5px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .welcome-text { color: #facc15; font-size: 0.62rem; font-weight: bold; min-height: 1em; }
-    input[type="text"] { width: 85%; max-width: 200px; padding: 3px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.72rem; text-align: center; outline: none; }
-    .warning-text { color: #f87171; font-size: 0.52rem; min-height: 0.6em; font-weight: 600; }
+    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .welcome-text { color: #facc15; font-size: 0.58rem; font-weight: bold; min-height: 1em; }
+    input[type="text"] { width: 85%; max-width: 200px; padding: 2px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.68rem; text-align: center; outline: none; }
+    .warning-text { color: #f87171; font-size: 0.48rem; min-height: 0.5em; font-weight: 600; }
 
-    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 3px; }
-    .pilot-status-title { text-align: left; font-size: 0.62rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
-    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.58rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; }
+    .pilot-status-title { text-align: left; font-size: 0.58rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
+    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 4px 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.55rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
     .pilot-status-row { display: flex; justify-content: space-between; align-items: center; }
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
     .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
     /* 하단 고정 버튼 및 알림 마크 */
-    .btn-container { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 4px; }
-    button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4); position: relative; }
+    .btn-container { display: flex; gap: 6px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 2px; }
+    button.btn { flex: 1; padding: 6px 8px; font-size: 0.75rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4); position: relative; }
     button.btn:active { transform: scale(0.95); }
     .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
     .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
     @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     
-    .alert-dot { position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; border: 2px solid #0f172a; box-shadow: 0 0 4px #ef4444; }
+    .alert-dot { position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; border: 2px solid #0f172a; box-shadow: 0 0 4px #ef4444; }
 
-    .credits { margin-top: 1px; font-size: 0.48rem; color: #64748b; letter-spacing: 1px; }
-    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.52rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; position: relative; }
+    .credits { margin-top: 1px; font-size: 0.45rem; color: #64748b; letter-spacing: 1px; }
+    .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.48rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; position: relative; }
 
     /* 인게임 상단 메뉴 */
-    .in-game-top-btns { position: absolute; top: max(12px, env(safe-area-inset-top)); left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 14px; z-index: 9; pointer-events: none; }
-    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.7rem; font-weight: bold; padding: 5px 10px; border-radius: 6px; pointer-events: auto; }
+    .in-game-top-btns { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 12px; z-index: 9; pointer-events: none; }
+    .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.65rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; pointer-events: auto; }
 
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 12px; max-width: 400px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; overflow-y: auto; }
-    .modal-content h3 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 6px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 12px; }
+    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 10px; padding: 10px; max-width: 400px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow-y: auto; }
+    .modal-content h3 { color: #38bdf8; font-size: 0.9rem; margin-bottom: 5px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 5px; }
 
-    /* 상점 UI 개편 스타일 */
-    .shop-category { grid-column: span 2; font-size: 0.75rem; color: #38bdf8; font-weight: bold; margin-top: 10px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px dashed rgba(56,189,248,0.4); text-align: left; }
-    .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
-    .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
-    .shop-item-icon { font-size: 1.4rem; margin-bottom: 2px; }
-    .shop-item-title { font-size: 0.65rem; font-weight: bold; color: #facc15; }
-    .shop-item-status { font-size: 0.6rem; color: #38bdf8; margin-bottom: 4px; }
-    .buy-btn { background: #facc15; color: #000; border: none; padding: 4px 6px; border-radius: 4px; font-weight: bold; font-size: 0.65rem; cursor: pointer; width: 100%; }
+    /* 상점 UI 스타일 */
+    .shop-category { grid-column: span 2; font-size: 0.7rem; color: #38bdf8; font-weight: bold; margin-top: 8px; margin-bottom: 3px; padding-bottom: 3px; border-bottom: 1px dashed rgba(56,189,248,0.4); text-align: left; }
+    .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 6px; }
+    .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
+    .shop-item-icon { font-size: 1.2rem; margin-bottom: 2px; }
+    .shop-item-title { font-size: 0.6rem; font-weight: bold; color: #facc15; }
+    .shop-item-status { font-size: 0.55rem; color: #38bdf8; margin-bottom: 3px; }
+    .buy-btn { background: #facc15; color: #000; border: none; padding: 3px 5px; border-radius: 4px; font-weight: bold; font-size: 0.6rem; cursor: pointer; width: 100%; }
     .buy-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
-    .shop-full-width { grid-column: span 2; display: flex; flex-direction: row; align-items: center; text-align: left; gap: 8px; }
-    .shop-full-width .shop-item-icon { margin-bottom: 0; font-size: 1.8rem; }
+    .shop-full-width { grid-column: span 2; display: flex; flex-direction: row; align-items: center; text-align: left; gap: 6px; }
+    .shop-full-width .shop-item-icon { margin-bottom: 0; font-size: 1.5rem; }
     .shop-full-width .shop-item-info { flex: 1; }
-    .shop-full-width .buy-btn { width: auto; padding: 6px 12px; }
+    .shop-full-width .buy-btn { width: auto; padding: 5px 10px; }
 
-    .mission-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(5, 150, 105, 0.4); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; text-align: left; }
+    .mission-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(5, 150, 105, 0.4); border-radius: 6px; padding: 6px 8px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; text-align: left; }
     .mission-item-info { flex: 1; }
-    .mission-item-title { font-size: 0.75rem; font-weight: bold; color: #34d399; }
-    .mission-item-desc { font-size: 0.68rem; color: #94a3b8; margin: 1px 0; }
-    .mission-item-status { font-size: 0.68rem; color: #facc15; }
+    .mission-item-title { font-size: 0.7rem; font-weight: bold; color: #34d399; }
+    .mission-item-desc { font-size: 0.62rem; color: #94a3b8; margin: 1px 0; }
+    .mission-item-status { font-size: 0.62rem; color: #facc15; }
     .highlight-reward { color: #facc15; font-weight: bold; }
-    .claim-btn { background: #34d399; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.72rem; cursor: pointer; }
+    .claim-btn { background: #34d399; color: #000; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 0.65rem; cursor: pointer; }
     .claim-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
 
-    .story-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 12px; text-align: left; font-size: 0.82rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 12px; }
+    .story-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 10px; text-align: left; font-size: 0.78rem; line-height: 1.5; color: #e2e8f0; margin-bottom: 10px; }
     .story-card span.highlight { color: #facc15; font-weight: bold; }
 
-    .history-scroll-area { overflow-y: auto; padding-right: 6px; flex: 1; text-align: left; max-height: 300px; }
-    .version-block { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #334155; }
-    .version-title { font-size: 0.82rem; font-weight: bold; color: #facc15; margin-bottom: 4px; }
-    .history-scroll-area ul { list-style: none; font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; }
-    .history-scroll-area li { margin-bottom: 4px; position: relative; padding-left: 12px; }
+    .history-scroll-area { overflow-y: auto; padding-right: 4px; flex: 1; text-align: left; max-height: 260px; }
+    .version-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #334155; }
+    .version-title { font-size: 0.78rem; font-weight: bold; color: #facc15; margin-bottom: 3px; }
+    .history-scroll-area ul { list-style: none; font-size: 0.7rem; color: #cbd5e1; line-height: 1.35; }
+    .history-scroll-area li { margin-bottom: 3px; position: relative; padding-left: 10px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
     /* 인게임 하단 조작 영역 */
-    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 130px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
-    #joystickArea { position: absolute; bottom: calc(10px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 66px; height: 66px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
-    #joystickKnob { width: 30px; height: 30px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+    #joystickArea { position: absolute; bottom: calc(8px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    #joystickKnob { width: 26px; height: 26px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
 
-    .dpad-container { position: absolute; bottom: calc(4px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 65px; display: block; z-index: 6; pointer-events: none; }
-    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 10px; pointer-events: auto; }
+    .dpad-container { position: absolute; bottom: calc(4px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 60px; display: block; z-index: 6; pointer-events: none; }
+    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 8px; pointer-events: auto; }
     .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
-    #dpadLeft { bottom: 4px; left: 10px; width: 85px; height: 46px; font-size: 1.5rem; }
-    #dpadRight { bottom: 4px; right: 10px; width: 85px; height: 46px; font-size: 1.5rem; }
-    #dpadUp { bottom: 28px; left: 50%; transform: translateX(-50%); width: 52px; height: 24px; font-size: 0.85rem; }
-    #dpadDown { bottom: 2px; left: 50%; transform: translateX(-50%); width: 52px; height: 24px; font-size: 0.85rem; }
+    #dpadLeft { bottom: 4px; left: 10px; width: 80px; height: 42px; font-size: 1.3rem; }
+    #dpadRight { bottom: 4px; right: 10px; width: 80px; height: 42px; font-size: 1.3rem; }
+    #dpadUp { bottom: 26px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
+    #dpadDown { bottom: 2px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
 
-    #joystickStatusNotice { position: absolute; top: 3px; left: 50%; transform: translateX(-50%); width: 96%; padding: 2px 4px; background: rgba(2, 6, 23, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; text-align: center; font-size: 0.65rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.2; }
+    #joystickStatusNotice { position: absolute; top: 2px; left: 50%; transform: translateX(-50%); width: 96%; padding: 2px; background: rgba(2, 6, 23, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 5px; text-align: center; font-size: 0.6rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.2; }
 
-    .result-card-box { width: 100%; max-width: 400px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; margin: 8px 0; text-align: left; }
-    .result-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
+    .result-card-box { width: 100%; max-width: 380px; background: rgba(30, 41, 59, 0.9); border: 2px solid #38bdf8; border-radius: 8px; padding: 10px; margin: 6px 0; text-align: left; }
+    .result-row { display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 3px; }
     .result-label { color: #94a3b8; } .result-value { color: #facc15; font-weight: bold; }
   </style>
 </head>
@@ -165,13 +165,13 @@
     <div id="startScreen" class="screen">
       <div class="layout-section">
         <div class="top-status-bar">
-          <div style="font-size:0.58rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
+          <div style="font-size:0.55rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
           <div class="header-btn-group">
             <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
             <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
           </div>
         </div>
-        <h1>은하 수호대<br><span style="font-size:0.62rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
+        <h1>은하 수호대<br><span style="font-size:0.58rem; color:#93c5fd;">: YOON 행성을 지켜라</span></h1>
       </div>
 
       <!-- 중앙 스크롤 영역 -->
@@ -200,13 +200,13 @@
         <div class="info-box">
           <h4>🎁 아이템 정보</h4>
           <div class="info-grid">
-            <div class="info-item"><span class="badge coin">🪙</span><span><b>코인</b>: 100킬 10개, 보스 1개</span></div>
-            <div class="info-item"><span class="badge damage">D</span><span><b>데미지</b>: 공격력 +1</span></div>
-            <div class="info-item"><span class="badge upgrade">+1</span><span><b>강화</b>: 탄환 수 증가</span></div>
-            <div class="info-item"><span class="badge heart">H</span><span><b>회복</b>: 보스 처치 체력업</span></div>
-            <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건</b>: 2연발 방사탄</span></div>
-            <div class="info-item"><span class="badge laser">L</span><span><b>레이저</b>: 관통 빔</span></div>
-            <div class="info-item"><span class="badge saw">S</span><span><b>톱니</b>: 다단 회전탄</span></div>
+            <div class="info-item"><span class="badge coin">🪙</span><span><b>코인</b>: 100킬당 +10 / 코인몹 1개</span></div>
+            <div class="info-item"><span class="badge heart">H</span><span><b>회복</b>: 보스 처치 시 드랍</span></div>
+            <div class="info-item"><span class="badge damage">D</span><span><b>데미지</b>: 공격력 +1 (확률 3%)</span></div>
+            <div class="info-item"><span class="badge upgrade">+1</span><span><b>강화</b>: 탄환 수 증가 (확률 2%)</span></div>
+            <div class="info-item"><span class="badge shotgun">G</span><span><b>샷건</b>: 2연발 방사탄 (확률 3.5%)</span></div>
+            <div class="info-item"><span class="badge laser">L</span><span><b>레이저</b>: 관통 빔 (확률 4%)</span></div>
+            <div class="info-item"><span class="badge saw">S</span><span><b>톱니</b>: 다단 회전탄 (확률 4.5%)</span></div>
           </div>
         </div>
 
@@ -224,8 +224,8 @@
               <div class="pilot-status-right">🪙 <span id="mainCoinDisplay">0</span></div>
             </div>
             <div class="pilot-status-row">
-              <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.52rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
-              <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.52rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
+              <div class="pilot-status-left" style="color: #93c5fd; font-size: 0.5rem;">[보조] 상태: <span id="mainDroneStatus">미장착</span></div>
+              <div class="pilot-status-right" style="color: #93c5fd; font-size: 0.5rem;">연사 <span id="mainSpeedDisplay">135</span>ms</div>
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@
         </div>
         <div class="credits">[만든이 : YYR]</div>
         <button class="btn-update" onclick="toggleModal('updateModal', true); checkAlerts();">
-          📜 패치 내역 보기 <span id="updateNewMark" class="hidden" style="color:#ef4444; font-weight:bold; font-size:0.55rem; padding-left:2px;">[N]</span>
+          📜 패치 내역 보기 <span id="updateNewMark" class="hidden" style="color:#ef4444; font-weight:bold; font-size:0.52rem; padding-left:2px;">[N]</span>
         </button>
       </div>
     </div>
@@ -250,33 +250,33 @@
     <div id="settingModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>⚙️ 게임 설정</h3>
-        <div style="margin: 10px 0; display: flex; flex-direction: column; gap: 12px; text-align: left; padding: 0 10px;">
+        <div style="margin: 8px 0; display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 0 8px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.75rem; font-weight: bold; color: #facc15;">사운드 음소거</span>
-            <button class="btn" id="settingSoundToggleBtn" style="padding: 4px 12px; font-size: 0.7rem;" onclick="toggleSoundFromModal()">켜짐</button>
+            <span style="font-size: 0.72rem; font-weight: bold; color: #facc15;">사운드 음소거</span>
+            <button class="btn" id="settingSoundToggleBtn" style="padding: 4px 10px; font-size: 0.68rem;" onclick="toggleSoundFromModal()">켜짐</button>
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.75rem; font-weight: bold; color: #38bdf8;">조작 방식 선택</span>
-            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 12px; font-size: 0.7rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">통합 조작</button>
+            <span style="font-size: 0.72rem; font-weight: bold; color: #38bdf8;">조작 방식 선택</span>
+            <button class="btn" id="settingControlToggleBtn" style="padding: 4px 10px; font-size: 0.68rem; background: linear-gradient(135deg, #059669, #047857);" onclick="toggleControlTypeFromModal()">통합 조작</button>
           </div>
         </div>
-        <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; margin-top: 5px;" onclick="toggleModal('settingModal', false)">확인</button>
+        <button class="btn" style="padding: 5px 18px; font-size: 0.75rem; margin-top: 4px;" onclick="toggleModal('settingModal', false)">확인</button>
       </div>
     </div>
 
     <div id="attendanceModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>📅 일일 출석 체크</h3>
-        <p id="attRewardText" style="margin: 15px 0; font-size: 0.95rem; color: #facc15; font-weight: bold;"></p>
-        <p id="attStreakText" style="font-size: 0.75rem; color: #94a3b8;"></p>
-        <button class="btn" style="margin-top: 15px;" onclick="toggleModal('attendanceModal', false)">보상 받기</button>
+        <p id="attRewardText" style="margin: 12px 0; font-size: 0.9rem; color: #facc15; font-weight: bold;"></p>
+        <p id="attStreakText" style="font-size: 0.72rem; color: #94a3b8;"></p>
+        <button class="btn" style="margin-top: 12px;" onclick="toggleModal('attendanceModal', false)">보상 받기</button>
       </div>
     </div>
 
     <div id="eventModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>🌕 행성 관리자의 선물</h3>
-        <p id="eventMessageText" style="margin: 15px 0; font-size: 0.85rem; color: #facc15; font-weight: bold; white-space: pre-line;"></p>
+        <p id="eventMessageText" style="margin: 12px 0; font-size: 0.82rem; color: #facc15; font-weight: bold; white-space: pre-line;"></p>
         <button class="btn" onclick="toggleModal('eventModal', false)">확인</button>
       </div>
     </div>
@@ -284,8 +284,8 @@
     <div id="editQuoteModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>💬 랭커 한마디 수정</h3>
-        <input type="text" id="modalQuoteInput" placeholder="새로운 한마디 입력" maxlength="25" style="width: 100%; margin: 10px auto;" />
-        <div style="display: flex; gap: 10px; justify-content: center;">
+        <input type="text" id="modalQuoteInput" placeholder="새로운 한마디 입력" maxlength="25" style="width: 100%; margin: 8px auto;" />
+        <div style="display: flex; gap: 8px; justify-content: center;">
           <button class="btn" onclick="saveNewQuoteFromModal()">저장하기</button>
           <button class="btn" style="background: #475569;" onclick="toggleModal('editQuoteModal', false)">취소</button>
         </div>
@@ -294,13 +294,12 @@
 
     <div id="shopModal" class="modal-overlay hidden">
       <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
           <h3 style="margin: 0; border: none;">🛒 수호대 상점</h3>
-          <div style="font-weight: bold; color: #facc15; font-size: 0.8rem;">🪙 <span id="shopCoinDisplay">0</span></div>
+          <div style="font-weight: bold; color: #facc15; font-size: 0.75rem;">🪙 <span id="shopCoinDisplay">0</span></div>
         </div>
         
         <div class="shop-grid">
-          <!-- 카테고리: 본체 강화 -->
           <div class="shop-category">🚀 비행기 본체 강화</div>
           <div class="shop-item-card"><div class="shop-item-icon">🍖</div><div class="shop-item-title">고기 (데미지 +1)</div><div class="shop-item-status">현재: <span id="shopMeatDmg">1</span></div><button class="buy-btn" id="buyMeatBtn" onclick="buyShopItem('meat')"><span id="meatCostText">160</span> 코인</button></div>
           <div class="shop-item-card"><div class="shop-item-icon">🍎</div><div class="shop-item-title">사과 (연사 증가)</div><div class="shop-item-status">현재: <span id="shopAppleSpeed">135</span>ms</div><button class="buy-btn" id="buyAppleBtn" onclick="buyShopItem('apple')"><span id="appleCostText">160</span> 코인</button></div>
@@ -309,37 +308,35 @@
           <div class="shop-item-card">
             <div class="shop-item-icon">🧲</div>
             <div class="shop-item-title">자석 (범위 15증가)</div>
-            <div style="font-size:0.5rem; color:#94a3b8; font-weight:bold;">*무기 아이템 제외</div>
-            <div class="shop-item-status" style="margin-top: 2px;">현재 범위: <span id="shopMagnetRangeText">0</span></div>
+            <div style="font-size:0.45rem; color:#94a3b8; font-weight:bold;">*무기 아이템 제외</div>
+            <div class="shop-item-status" style="margin-top: 2px;">현재: <span id="shopMagnetRangeText">0</span></div>
             <button class="buy-btn" id="buyMagnetBtn" onclick="buyShopItem('magnet')"><span id="magnetCostText">300</span> 코인</button>
           </div>
           
-          <!-- 카테고리: 보조기체 시스템 -->
           <div class="shop-category">🛸 보조기체 시스템</div>
-          <div class="shop-item-card shop-full-width"><div class="shop-item-icon">🛸</div><div class="shop-item-info"><div class="shop-item-title">보조기체 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">좌우 보조기체 2대 추가</div></div><button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button></div>
+          <div class="shop-item-card shop-full-width"><div class="shop-item-icon">🛸</div><div class="shop-item-info"><div class="shop-item-title">보조기체 장착</div><div class="shop-item-desc" style="font-size:0.52rem; color:#94a3b8;">좌우 보조기체 2대 추가</div></div><button class="buy-btn" id="buyDroneBtn" onclick="buyShopItem('drone')"><span id="droneCostText">3000</span> 코인</button></div>
           
           <div class="shop-item-card" id="droneDmgCard" style="display: none;"><div class="shop-item-icon">🔋</div><div class="shop-item-title">보조 데미지 +2 상향</div><div class="shop-item-status">현재: <span id="shopDroneDmgText">1</span></div><button class="buy-btn" id="buyDroneDmgBtn" onclick="buyShopItem('drone_dmg')"><span id="droneDmgCostText">500</span> 코인</button></div>
           <div class="shop-item-card" id="droneSpeedCard" style="display: none;"><div class="shop-item-icon">⚙️</div><div class="shop-item-title">보조 연사 강화</div><div class="shop-item-status">현재: <span id="shopDroneSpeedText">450</span>ms</div><button class="buy-btn" id="buyDroneSpeedBtn" onclick="buyShopItem('drone_speed')"><span id="droneSpeedCostText">500</span> 코인</button></div>
           
-          <div class="shop-item-card shop-full-width" id="droneHomingCard" style="display: none;"><div class="shop-item-icon">🚀</div><div class="shop-item-info"><div class="shop-item-title">보조기체 유도탄 무기 장착</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">보조기체 탄환이 적을 쫓아갑니다</div></div><button class="buy-btn" id="buyDroneHomingBtn" onclick="buyShopItem('drone_homing')">3000 코인</button></div>
+          <div class="shop-item-card shop-full-width" id="droneHomingCard" style="display: none;"><div class="shop-item-icon">🚀</div><div class="shop-item-info"><div class="shop-item-title">보조기체 유도탄 장착</div><div class="shop-item-desc" style="font-size:0.52rem; color:#94a3b8;">보조기체 탄환이 적을 쫓아갑니다</div></div><button class="buy-btn" id="buyDroneHomingBtn" onclick="buyShopItem('drone_homing')">3000 코인</button></div>
           
-          <div class="shop-item-card shop-full-width" id="droneSplashCard" style="display: none;"><div class="shop-item-icon">💥</div><div class="shop-item-info"><div class="shop-item-title">폭발(스플래쉬) 강화</div><div class="shop-item-desc" style="font-size:0.55rem; color:#94a3b8;">명중 시 주변 적에게 광역 피해</div><div class="shop-item-status" style="margin-top:2px;">상태: <span id="shopDroneSplashText">미장착</span></div></div><button class="buy-btn" id="buyDroneSplashBtn" onclick="buyShopItem('drone_splash')"><span id="droneSplashCostText">3000</span> 코인</button></div>
+          <div class="shop-item-card shop-full-width" id="droneSplashCard" style="display: none;"><div class="shop-item-icon">💥</div><div class="shop-item-info"><div class="shop-item-title">폭발(스플래쉬) 강화</div><div class="shop-item-desc" style="font-size:0.52rem; color:#94a3b8;">명중 시 주변 적 광역 피해</div><div class="shop-item-status" style="margin-top:2px;">상태: <span id="shopDroneSplashText">미장착</span></div></div><button class="buy-btn" id="buyDroneSplashBtn" onclick="buyShopItem('drone_splash')"><span id="droneSplashCostText">3000</span> 코인</button></div>
 
-          <!-- 카테고리: 기타 -->
           <div class="shop-category">⚙️ 기타 설정</div>
-          <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);"><div class="shop-item-icon">🔄</div><div class="shop-item-info"><div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div><div class="shop-item-status" style="color:#facc15; margin:0;">환불예상: <span id="shopRefundExpected">0</span> 코인</div></div><button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff; width:auto; padding:6px 12px;" onclick="buyShopItem('reset')">2000 코인</button></div>
+          <div class="shop-item-card shop-full-width" style="border-color:#ef4444; background:rgba(30,0,0,0.5);"><div class="shop-item-icon">🔄</div><div class="shop-item-info"><div class="shop-item-title" style="color:#ef4444;">강화 초기화권</div><div class="shop-item-status" style="color:#facc15; margin:0;">환불예상: <span id="shopRefundExpected">0</span> 코인</div></div><button class="buy-btn" id="buyResetBtn" style="background:#ef4444; color:#fff; width:auto; padding:5px 10px;" onclick="buyShopItem('reset')">2000 코인</button></div>
         </div>
-        <button class="btn" style="padding: 6px 20px; font-size: 0.8rem; width: 100%; margin-top: auto;" onclick="toggleModal('shopModal', false)">닫기</button>
+        <button class="btn" style="padding: 5px 18px; font-size: 0.75rem; width: 100%; margin-top: auto;" onclick="toggleModal('shopModal', false)">닫기</button>
       </div>
     </div>
 
     <div id="missionModal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h3 style="margin-bottom: 8px;">📋 무한 반복 미션</h3>
+        <h3 style="margin-bottom: 6px;">📋 무한 반복 미션</h3>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div><div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div></div><button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
-        <button class="btn" style="margin-top: 8px;" onclick="toggleModal('missionModal', false)">닫기</button>
+        <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
     </div>
 
@@ -347,7 +344,7 @@
       <div class="modal-content">
         <h3>🌌 윤(YOON) 행성의 위기</h3>
         <div class="story-card">서기 2140년, <span class="highlight">'YOON(윤)'</span> 행성에 외계 함 침공했습니다.<br><br>유일한 희망인 <span class="highlight" id="storyPilotName">Pilot</span> 파일럿!<br>적들의 공습을 뚫고 행성의 평화를 되찾아주세요!</div>
-        <div style="text-align: center; margin-bottom: 10px;"><label style="font-size: 0.65rem; color: #facc15;">💬 TOP 10 달성 시 보일 한마디 미리 입력</label><input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 수호자다!" maxlength="25" style="width: 100%; max-width: 280px; margin-top: 4px;" /></div>
+        <div style="text-align: center; margin-bottom: 8px;"><label style="font-size: 0.6rem; color: #facc15;">💬 TOP 10 달성 시 보일 한마디 미리 입력</label><input type="text" id="rankingQuoteInput" placeholder="예: 내가 바로 수호자다!" maxlength="25" style="width: 100%; max-width: 280px; margin-top: 3px;" /></div>
         <button class="btn btn-pulse" onclick="startGame()">🚀 전투 개시!</button>
       </div>
     </div>
@@ -357,27 +354,25 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v8.0.0 (보조기체 밸런스 및 UI 개편)</div>
+            <div class="version-title">v8.1.0 (UI 및 밸런스 최적화)</div>
             <ul>
-              <li>미션 달성 시 🔴 <b>알림 점(배지) 기능</b> 추가 및 클릭 버그 수정</li>
-              <li>안 읽은 패치 내역이 있을 경우 버튼에 <b style="color:#ef4444;">[N] 마크</b> 표시 및 팝업 겹침 해결</li>
-              <li>상점 내 아이템들의 가독성 강화를 위해 [카테고리]별로 보기 쉽게 UI 개편</li>
-              <li>보조기체 데미지 가격은 유지하고, 레벨업 시 데미지 상승량을 기존 +1에서 <b style="color:#ef4444;">+2</b>로 상향</li>
-              <li>상점 내 보조기체 <b>'폭발(스플래쉬) 탄환 장착'</b> 아이템 추가 (성장형/중복가능)</li>
-              <li>보조기체 탄환 색상을 눈에 띄는 <b style="color:#22d3ee;">시안(청록색) 형광</b>으로 변경하여 시인성 개선</li>
+              <li>아이템 정보창에 <b>드랍 확률 및 획득 조건</b> 추가 명시</li>
+              <li>아이템 정보창을 무기와 소모품으로 분류하고 2열 정렬로 높낮이 축소</li>
+              <li>메인 화면 랭커 한마디를 <b>5위까지 한눈에</b> 볼 수 있도록 최적화</li>
+              <li>랭킹 데이터 갱신 시 <b>말풍선 수정 버그(문서 중복 및 타겟팅 오류)</b> 해결</li>
             </ul>
           </div>
         </div>
-        <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.7rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 14px; height: 14px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
-        <button class="btn" style="margin-top: 10px;" onclick="closeUpdateModalWithCheck()">확인</button>
+        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.65rem;"><input type="checkbox" id="dontShowUpdateCheck" style="width: 13px; height: 13px; cursor: pointer;"><label for="dontShowUpdateCheck" style="cursor: pointer; color: #cbd5e1;">다음 업데이트까지 보지 않기</label></div>
+        <button class="btn" style="margin-top: 8px;" onclick="closeUpdateModalWithCheck()">확인</button>
       </div>
     </div>
 
     <div id="pauseModal" class="modal-overlay hidden">
       <div class="modal-content" style="text-align: center;">
         <h3>⏸️ PAUSED</h3>
-        <p style="margin-top: 15px; font-size: 1rem;" id="pauseText">게임이 일시정지 되었습니다.</p>
-        <div style="margin-top: 20px;" id="pauseBtnGroup"><button class="btn" onclick="resumeGameWithCountdown()">계속 하기</button><button class="btn" style="background: linear-gradient(135deg, #475569, #334155); margin-top: 8px;" onclick="quitGame()">게임 종료</button></div>
+        <p style="margin-top: 12px; font-size: 0.95rem;" id="pauseText">게임이 일시정지 되었습니다.</p>
+        <div style="margin-top: 15px;" id="pauseBtnGroup"><button class="btn" onclick="resumeGameWithCountdown()">계속 하기</button><button class="btn" style="background: linear-gradient(135deg, #475569, #334155); margin-top: 6px;" onclick="quitGame()">게임 종료</button></div>
       </div>
     </div>
 
@@ -391,13 +386,13 @@
         <div class="result-row"><span class="result-label">보스 몬스터 처치</span><span class="result-value" id="resBossKills">0마리</span></div>
         <div class="result-row"><span class="result-label">이번 게임 코인 획득</span><span class="result-value" id="resCoins">🪙 0개</span></div>
       </div>
-      <div class="btn-container" style="margin-top: 10px;"><button class="btn" onclick="startGame()">다시 하기</button><button class="btn" style="background: #475569;" onclick="goToMainScreen()">메인 화면</button></div>
+      <div class="btn-container" style="margin-top: 8px;"><button class="btn" onclick="startGame()">다시 하기</button><button class="btn" style="background: #475569;" onclick="goToMainScreen()">메인 화면</button></div>
     </div>
 
     <div id="controlArea" class="hidden">
       <div id="joystickStatusNotice">
         <span id="hudStage" style="color:#38bdf8;">Stage 1</span> | <span id="hudLife">❤️ x3</span> | <span id="hudCoins">🪙 +0</span> | <span id="hudScore">Score: 0</span><br>
-        무기: <span id="hudWeaponName">기본 탄환</span> | <span id="hudBulletCount">x1</span> | 데미지: <span id="hudDmgNotice">1</span> (보조기체: <span id="hudDroneDmgNotice">1</span>)
+        무기: <span id="hudWeaponName">기본 탄환</span> | <span id="hudBulletCount">x1</span> | 데미지: <span id="hudDmgNotice">1</span> (보조: <span id="hudDroneDmgNotice">1</span>)
       </div>
       <div id="joystickArea"><div id="joystickKnob"></div></div>
       <div id="dpadContainer" class="dpad-container">
@@ -413,7 +408,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.0.0";
+    var currentVersionKey = "v8.1.0";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -499,7 +494,6 @@
       if (show) target.classList.remove("hidden"); else target.classList.add("hidden");
     }
 
-    // 알림 마크 체크 로직
     function checkAlerts() {
       var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop);
       if (canClaim) document.getElementById('missionAlertDot').classList.remove('hidden');
@@ -642,7 +636,6 @@
       saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
     }
 
-    // 미션 UI 업데이트 오류 방지용 안정성 강화 (try-catch 적용)
     function updateMissionUI() {
       try {
         document.getElementById('mTargetKillText').innerText = missionTargetKill;
@@ -780,17 +773,19 @@
 
     function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db || nickname === "test123") return;
-      db.collection("rankings").where("nickname", "==", nickname).get().then(function(snapshot) {
+      db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snapshot) {
         if (snapshot.empty) {
           db.collection("rankings").add({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function(){ updateLeaderboardUI(); });
         } else {
           var docs = snapshot.docs, highestDoc = docs[0], highestScore = highestDoc.data().score || 0;
           for (var i=1; i<docs.length; i++) { if (docs[i].data().score > highestScore) { highestScore = docs[i].data().score; highestDoc = docs[i]; } }
           if (score > highestScore) {
-            highestDoc.ref.update({ score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function() {
+            highestDoc.ref.update({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function() {
               var batch = db.batch(); docs.forEach(function(d){ if(d.id !== highestDoc.id) batch.delete(d.ref); });
               batch.commit().then(function(){ updateLeaderboardUI(); });
             });
+          } else {
+            highestDoc.ref.update({ nickname: nickname, quote: quote }).then(function(){ updateLeaderboardUI(); });
           }
         }
       }).catch(function(e){ console.error("점수 저장 실패", e); });
@@ -810,7 +805,12 @@
     function saveNewQuoteFromModal() {
       var newQuote = document.getElementById("modalQuoteInput").value.trim();
       localStorage.setItem("yoon_quote", newQuote); document.getElementById("rankingQuoteInput").value = newQuote; toggleModal("editQuoteModal", false);
-      if (db) db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snap) { if(!snap.empty) snap.docs[0].ref.update({quote: newQuote}).then(function(){ updateLeaderboardUI(); }); });
+      if (db) db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snap) { 
+        if(!snap.empty) {
+          snap.docs.forEach(function(docDoc) { docDoc.ref.update({quote: newQuote}); });
+          setTimeout(updateLeaderboardUI, 300);
+        }
+      });
     }
 
     function openStoryScreen() {
@@ -876,7 +876,7 @@
 
     function resizeCanvas() {
       canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
-      if (player) player.y = Math.min(player.y, canvas.height - player.height - 130);
+      if (player) player.y = Math.min(player.y, canvas.height - player.height - 120);
       initStars();
     }
     window.addEventListener('resize', resizeCanvas);
@@ -954,7 +954,7 @@
       isPaused = false; isCountingDown = false; gameSpeedMultiplier = 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ 1.0x";
       if (!soundMuted) startBGM();
       
-      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 130; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
+      player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 120; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
       player.speed = 2.0 + (shopCandyCount * 0.2); playerDamage = 1 + shopMeatBonusDmg; shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
       
       score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0;
@@ -1014,9 +1014,7 @@
       if (r < 0.22) { type = "fast"; speed = 1.25; } 
       else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
       else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
-      else if (r < 0.70) { 
-        type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; 
-      }
+      else if (r < 0.70) { type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; }
       var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
     }
@@ -1031,7 +1029,7 @@
     }
     function spawnItem(x, y, fType) {
       if (fType) { if (fType === "upgrade" && bulletCount >= 6) fType = Math.random() > 0.5 ? "coin" : "damage"; items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: fType }); }
-      else { var r = Math.random(), wType = r < 0.22 ? "shotgun" : (r < 0.60 ? "saw" : "laser"); items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: wType }); }
+      else { var r = Math.random(), wType = r < 0.28 ? "shotgun" : (r < 0.65 ? "saw" : "laser"); items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: wType }); }
     }
     function checkCollision(r1, r2) { return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y; }
     function checkPlayerHitbox(p, o) { return p.x + 4 < o.x + o.width && p.x + p.width - 4 > o.x && p.y + 4 < o.y + o.height && p.y + p.height - 4 > o.y; }
@@ -1075,7 +1073,7 @@
       if (controlType === "integrated") { mx += joystickAxisX; my += joystickAxisY; }
       if (mx < 0) player.tilt = Math.max(player.tilt - 0.05, -player.maxTilt); else if (mx > 0) player.tilt = Math.min(player.tilt + 0.05, player.maxTilt); else player.tilt *= 0.8;
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x + mx * player.speed * gameSpeedMultiplier));
-      player.y = Math.max(0, Math.min(canvas.height - player.height - 130, player.y + my * player.speed * gameSpeedMultiplier));
+      player.y = Math.max(0, Math.min(canvas.height - player.height - 120, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i];
@@ -1196,7 +1194,6 @@
               boss.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); 
               createExplosion(b.x, b.y, "#facc15", 4); 
               
-              // 보조기체 스플래쉬(폭발) 처리
               if (b.isDrone && droneSplashLevel > 0) {
                 var sRad = 30 + droneSplashLevel * 10;
                 var sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
@@ -1216,7 +1213,8 @@
               playSound('explosion'); triggerScreenShake(20); createExplosion(boss.x+boss.width/2, boss.y+boss.height/2, "#ef4444", 30);
               var cnt = 6 + Math.min(2, Math.floor((stage - 1) / 2));
               for(var k=0; k<cnt; k++) { var ang = (Math.PI*2/cnt)*k; enemyBullets.push({ x: boss.x+boss.width/2-6, y: boss.y+boss.height/2-6, width: 14, height: 14, vx: Math.cos(ang)*1.5, vy: Math.sin(ang)*1.5, isHeavy: true }); }
-              if (Math.random() < 0.25) spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "heart"); if (Math.random() < 0.50) spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "coin");
+              spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "heart");
+              if (Math.random() < 0.50) spawnItem(boss.x+boss.width/2, boss.y+boss.height/2, "coin");
               boss = null; stage++; stageMonsterKills = 0; targetStageKills = 30; spawnTimer = 0; break;
             }
           }
@@ -1249,7 +1247,6 @@
             else { 
               m.hp -= hitDmg; addDamageText(b.x, b.y, "-" + hitDmg, isCrit); 
               
-              // 보조기체 스플래쉬(폭발) 처리
               if (b.isDrone && droneSplashLevel > 0) {
                 var sRad = 30 + droneSplashLevel * 10;
                 var sDmg = (b.damage || 1) * (0.3 + droneSplashLevel * 0.2);
@@ -1273,7 +1270,6 @@
           }
         }
         
-        // 사망 체크 (직접 타격 및 스플래쉬 데미지로 인한 사망 공통 처리)
         if (m.hp <= 0) {
           playSound('explosion'); createExplosion(m.x+m.width/2, m.y+m.height/2, m.type==="coin_monster"?"#facc15":(m.type==="elite"?"#0284c7":"#f97316"), m.type==="elite"?20:10);
           killCount++; totalMonsterKills++; stageMonsterKills++;
