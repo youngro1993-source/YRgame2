@@ -378,21 +378,17 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v8.1.1 (일반게임 몬스터 및 미션 보상 수정)</div>
+            <ul>
+              <li>일반 게임(`isDungeonMode = false`)에서의 코인 몬스터 과다 출현 버그 완벽 수정 (원래 몬스터 비율 복구)</li>
+              <li>성실한 우주 광부 미션 보상 <b>2000 코인</b>으로 정상 반영</li>
+            </ul>
+          </div>
+          <div class="version-block">
             <div class="version-title">v8.1.0 (코인 채굴 던전 추가)</div>
             <ul>
               <li>하루 5번 입장 가능한 <b>[코인 채굴 던전 (우주 광산)]</b> 추가 (3분 타임어택)</li>
               <li>던전 입장 시 탄환 6발(MAX) 및 자석 MAX 풀파워 지원 & 황금 샌드백 보스 등장</li>
-              <li>광부 미션(던전 3회 플레이) 추가 및 보상 시스템 연동</li>
-              <li>미션 알림 점(🔴) 및 패치 내역 [N] 마크 유지 기능 완벽 적용</li>
-            </ul>
-          </div>
-          <div class="version-block">
-            <div class="version-title">v8.0.0 (보조기체 밸런스 및 UI 개편)</div>
-            <ul>
-              <li>상점 내 아이템 가독성 강화를 위한 [카테고리]별 UI 개편</li>
-              <li>보조기체 데미지 가격은 유지하고, 레벨업 시 데미지 상승량을 <b style="color:#ef4444;">+2</b>로 상향</li>
-              <li>상점 내 보조기체 <b>'폭발(스플래쉬) 탄환 장착'</b> 아이템 추가 (성장형/중복가능)</li>
-              <li>보조기체 탄환 시인성을 위한 <b style="color:#22d3ee;">시안(청록색) 형광</b> 이펙트 적용</li>
             </ul>
           </div>
         </div>
@@ -441,7 +437,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.1.0";
+    var currentVersionKey = "v8.1.1";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -1121,7 +1117,7 @@
           type = "fast"; speed = 1.1;
         }
       } else {
-        // 일반 게임 몬스터 확률 복구
+        // 일반 게임 몬스터 확률 완벽 복구
         if (r < 0.22) { type = "fast"; speed = 1.25; } 
         else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
         else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
@@ -1186,7 +1182,7 @@
         spawnTimer = 0;
       }
 
-      if (!isDungeonMode && killCount >= nextEliteKillTarget && !boss && stageMonsterKills < targetStageKills) { spawnEliteMonster(); nextEliteKillTarget += 15; }
+      if (!isDungeonMode && !boss && killCount >= nextEliteKillTarget && stageMonsterKills < targetStageKills) { spawnEliteMonster(); nextEliteKillTarget += 15; }
 
       var mx = 0, my = 0;
       if (keys["ArrowLeft"]||keys["KeyA"]||dpadLeftPressed) mx -= 1; if (keys["ArrowRight"]||keys["KeyD"]||dpadRightPressed) mx += 1;
