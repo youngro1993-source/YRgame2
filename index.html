@@ -126,7 +126,7 @@
     .history-scroll-area li { margin-bottom: 4px; position: relative; padding-left: 12px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    /* 인게임 하단 조작 영역 (경계선을 바짝 내리고 슬림하게 최적화) */
+    /* 인게임 하단 조작 영역 */
     #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 130px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
     #joystickArea { position: absolute; bottom: calc(10px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 66px; height: 66px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
     #joystickKnob { width: 30px; height: 30px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
@@ -923,7 +923,6 @@
       else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
       else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
       else if (r < 0.70) { 
-        // 신규 중급 코인 몬스터 (코인 무조건 드랍 + 유도탄 2발 발사)
         type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; 
       }
       var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
@@ -1009,7 +1008,9 @@
 
       for (var i = enemyBullets.length - 1; i >= 0; i--) {
         var eb = enemyBullets[i];
-        if (eb.isHoming) {
+        // 유도탄 일정 시간(homingTimer) 동안만 추적 후 직진하도록 변경
+        if (eb.isHoming && eb.homingTimer > 0) {
+          eb.homingTimer -= gameSpeedMultiplier;
           var tx = player.x + player.width/2, ty = player.y + player.height/2;
           var angle = Math.atan2(ty - eb.y, tx - eb.x);
           var hSpeed = 1.8;
@@ -1089,9 +1090,9 @@
           enemyBullets.push({ x: m.x+m.width/2-5, y: m.y+m.height, width: 10, height: 10, vx: 0, vy: 1.42+(stage-1)*0.1, isHeavy: false }); m.lastShoot = gameTime;
         }
         if (m.type === "coin_monster" && gameTime - m.lastShoot > 120) {
-          // 유도탄 2발 발사
+          // 유도탄 2발 발사 (약 45프레임 동안만 추적 후 직진)
           [-0.2, 0.2].forEach(function(ang){
-            enemyBullets.push({ x: m.x+m.width/2-6, y: m.y+m.height, width: 12, height: 12, vx: Math.sin(ang)*1.2, vy: Math.cos(ang)*1.2, isHoming: true, isHeavy: true });
+            enemyBullets.push({ x: m.x+m.width/2-6, y: m.y+m.height, width: 12, height: 12, vx: Math.sin(ang)*1.2, vy: Math.cos(ang)*1.2, isHoming: true, isHeavy: true, homingTimer: 45 });
           });
           m.lastShoot = gameTime;
         }
@@ -1111,7 +1112,6 @@
               var mScore = 100; if(m.type==="fast") mScore=150; else if(m.type==="shooter") mScore=200; else if(m.type==="elite") mScore=500; else if(m.type==="coin_monster") { mScore=350; }
               score += mScore; if (score > bestScore) { bestScore = score; localStorage.setItem("yoon_space_best", bestScore); }
               
-              // 아이템 드랍 로직 (코인 몬스터는 무조건 코인 드랍!)
               if (m.type === "coin_monster") {
                 spawnItem(m.x+m.width/2-11, m.y+m.height/2-11, "coin");
               } else {
@@ -1131,34 +1131,27 @@
 
     function drawPixelMonster(ctx, x, y, w, h, col, shape) { ctx.fillStyle = col; var u = w / 8; for(var r=0; r<shape.length; r++) { for(var c=0; c<shape[r].length; c++) { if (shape[r][c]===1) ctx.fillRect((x+c*u)|0, (y+r*u)|0, u|0, u|0); } } }
     
-    /* 세련되게 리뉴얼된 플레이어 & 보조기체 그래픽 */
     function drawPlayer(ctx, x, y, w, h) {
       ctx.save(); var cx = x + w/2, cy = y + h/2; ctx.translate(cx|0, cy|0); ctx.rotate(player.tilt); ctx.translate(-(cx|0), -(cy|0));
       if (player.invincibleTimer > 0) { ctx.save(); ctx.strokeStyle = "rgba(56, 189, 248, " + (0.4 + Math.sin(gameTime * 0.3) * 0.3) + ")"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx|0, (y+h/2)|0, w+4, 0, Math.PI*2); ctx.stroke(); ctx.restore(); if (Math.floor(gameTime / 4) % 2 === 0) { ctx.restore(); return; } }
       
-      // 엔진 제트 화염 (더 샤프하고 화려하게)
       ctx.fillStyle = (gameTime % 6 < 3) ? "#f97316" : "#fbbf24";
       ctx.beginPath(); ctx.moveTo((cx-3)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h+10+(Math.random()*4))|0); ctx.lineTo((cx+3)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
 
-      // 메인 기체 동체 (세련된 다크 블루 & 네온 사이언 엣지)
       ctx.fillStyle = "#0f172a";
       ctx.beginPath(); ctx.moveTo((cx)|0, (y)|0); ctx.lineTo((x+w)|0, (y+h-2)|0); ctx.lineTo((cx)|0, (y+h-5)|0); ctx.lineTo((x)|0, (y+h-2)|0); ctx.closePath(); ctx.fill();
       
-      // 날개 및 에너지 라인
       ctx.fillStyle = "#2563eb";
       ctx.beginPath(); ctx.moveTo((cx)|0, (y+4)|0); ctx.lineTo((x+w+2)|0, (y+h)|0); ctx.lineTo((cx)|0, (y+h-8)|0); ctx.lineTo((x-2)|0, (y+h)|0); ctx.closePath(); ctx.fill();
 
-      // 조종석 캐노피 (네온 글로우)
       ctx.fillStyle = "#38bdf8";
       ctx.beginPath(); ctx.ellipse((cx)|0, (y+10)|0, 2.5, 6, 0, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = "#e0f2fe";
       ctx.beginPath(); ctx.ellipse((cx)|0, (y+9)|0, 1, 3, 0, 0, Math.PI*2); ctx.fill();
 
-      // 무기 포신 포인트
       ctx.fillStyle = "#facc15";
       ctx.fillRect((x+2)|0, (y+h-6)|0, 2, 4); ctx.fillRect((x+w-4)|0, (y+h-6)|0, 2, 4);
 
-      // 세련된 보조기체 (드론)
       if (hasDrone) {
         var lx = x - 13, rx = x + w + 3, dy = y + 5;
         [lx, rx].forEach(function(dx) {
@@ -1212,7 +1205,6 @@
         else if (m.type === "shooter") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#22c55e", [[1,1,1,1,1,1,1,1],[1,0,1,1,1,1,0,1],[1,1,1,1,1,1,1,1],[0,1,1,0,0,1,1,0],[0,0,1,1,1,1,0,0],[0,0,0,1,1,0,0,0]]);
         else if (m.type === "zigzag") drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#f97316", [[0,1,0,0,0,0,1,0],[1,1,1,0,0,1,1,1],[1,0,1,1,1,1,0,1],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0],[0,1,0,0,0,0,1,0]]);
         else if (m.type === "coin_monster") {
-          // 중급 코인 몬스터 외형 (황금빛 코인 패턴)
           drawPixelMonster(ctx, m.x, m.y, m.width, m.height, "#eab308", [[0,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1],[1,1,0,1,1,0,1,1],[1,1,1,1,1,1,1,1],[1,1,0,0,0,0,1,1],[0,1,1,1,1,1,1,0]]);
           ctx.fillStyle="rgba(0,0,0,0.5)"; ctx.fillRect(m.x|0, (m.y-7)|0, m.width|0, 3);
           ctx.fillStyle="#facc15"; ctx.fillRect(m.x|0, (m.y-7)|0, (m.width*(m.hp/m.maxHp))|0, 3);
