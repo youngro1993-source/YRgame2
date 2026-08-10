@@ -7,7 +7,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body, html { width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; background-color: #050515; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
-    #gameContainer { position: relative; width: 100%; height: 100%; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; overflow: hidden; }
+    #gameContainer { position: relative; width: 100%; height: 100%; margin: 0 auto; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); touch-action: none; overflow: hidden; transition: background 1s ease-in-out; }
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
     /* 메인 화면 레이아웃 */
@@ -435,20 +435,20 @@
     var soundMuted = false;
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
-    var isPaused = false, isCountingDown = false, isPlaying = false, lastSoundTime = 0; // isPlaying 변수 추가됨
-    var currentVersionKey = "v8.4.0"; // 패치노트 표기없이 내부 코드 업데이트 적용완료
+    var isPaused = false, isCountingDown = false, isPlaying = false, lastSoundTime = 0; 
+    var currentVersionKey = "v8.4.0"; // 패치노트 유지, 몰래 업데이트 완료
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
 
-    // 닉네임 필터링 (요청 단어 마스킹 처리)
-    function sanitizeNickname(str) {
-      if (!str) return "익명";
+    // 닉네임과 명예의전당 한마디(말풍선)에 모두 적용될 통합 필터링 함수
+    function sanitizeText(str, fallback) {
+      if (!str) return fallback !== undefined ? fallback : "익명";
       var s = str.trim();
       s = s.replace(/윤영로윤어게인/g, "***윤어게인");
       s = s.replace(/윤영로/g, "***");
       s = s.replace(/영로/g, "**");
-      return s === "" ? "익명" : s;
+      return s === "" ? (fallback !== undefined ? fallback : "익명") : s;
     }
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
@@ -481,7 +481,6 @@
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
 
-    // 미션 데이터
     var missionTargetKill = parseInt(localStorage.getItem("yoon_m_target_kill") || "100");
     var missionRewardKill = parseInt(localStorage.getItem("yoon_m_reward_kill") || "50");
     var missionTargetBoss = parseInt(localStorage.getItem("yoon_m_target_boss") || "3");
@@ -497,7 +496,6 @@
     var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "300"); 
     var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "50");
 
-    // 신규: 달 클릭 누적 미션
     var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "30");
     var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "40");
 
@@ -515,7 +513,7 @@
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
             checkAndResetWeeklyRanking();
-            startPresenceSystem(); // 실시간 접속자 체크 시작
+            startPresenceSystem();
           } catch(e) {
             console.error(e);
             updateLeaderboardUI(true);
@@ -524,7 +522,7 @@
       });
       var savedNick = localStorage.getItem("yoon_nickname") || "";
       if (savedNick) { 
-        savedNick = sanitizeNickname(savedNick);
+        savedNick = sanitizeText(savedNick, "익명");
         document.getElementById("nicknameInput").value = savedNick; 
         checkNicknameInput(savedNick); 
       }
@@ -533,13 +531,11 @@
 
       updateShopUI(); updateMissionUI(); checkDailyAttendance(); checkAlerts();
 
-      // 수정됨: isPlaying(게임 중)일 때만 일시정지가 되도록 조건 추가
       document.addEventListener("visibilitychange", function() {
         if (document.hidden && isPlaying && !isGameOver && !isPaused && !isCountingDown) triggerAutoPause();
       });
     });
 
-    /* 실시간 접속자 수 파이어베이스 로직 */
     function startPresenceSystem() {
       if (!db) return;
       function sendHeartbeat() {
@@ -548,9 +544,8 @@
         }, { merge: true }).catch(function(e){});
       }
       sendHeartbeat();
-      setInterval(sendHeartbeat, 30000); // 30초마다 생존신호
+      setInterval(sendHeartbeat, 30000);
 
-      // 최근 2분 내 접속한 유저 카운트
       setInterval(function() {
         var twoMinutesAgo = new Date(Date.now() - 120000);
         db.collection("active_users").where("lastSeen", ">=", twoMinutesAgo).get().then(function(snap) {
@@ -757,7 +752,6 @@
         var claimTimeBtn = document.getElementById('claimTimeBtn');
         if (totalPlaytime >= missionTargetPlaytime) { claimTimeBtn.innerText = "보상 받기"; claimTimeBtn.disabled = false; } else { claimTimeBtn.innerText = "진행중"; claimTimeBtn.disabled = true; }
 
-        // 달 클릭 미션 UI
         document.getElementById('mTargetMoonText').innerText = missionTargetMoon;
         document.getElementById('mTargetMoonSub').innerText = missionTargetMoon;
         document.getElementById('mRewardMoonText').innerText = missionRewardMoon;
@@ -854,7 +848,7 @@
         
         querySnapshot.forEach(function(doc) {
           var data = doc.data();
-          data.nickname = sanitizeNickname(data.nickname);
+          data.nickname = sanitizeText(data.nickname, "익명");
           var nick = data.nickname;
           if (!seenNicknames[nick]) { seenNicknames[nick] = true; rankings.push(data); }
         });
@@ -862,7 +856,11 @@
         
         var bubbleHtml = "";
         for (var i = 0; i < Math.min(5, rankings.length); i++) {
-          var r = rankings[i], qText = r.quote ? r.quote : "(한마디 없음)";
+          var r = rankings[i];
+          // 말풍선에도 동일한 필터 적용
+          var qText = r.quote ? sanitizeText(r.quote, "") : "";
+          if (qText === "") qText = "(한마디 없음)";
+          
           bubbleHtml += '<div class="ranker-speech-bubble"><div class="bubble-text-part">[' + (i+1) + '위] ' + r.nickname + ': "' + qText + '"</div>';
           if (r.deviceId === deviceId) bubbleHtml += '<button class="bubble-edit-btn" onclick="openEditQuoteModal()">수정</button>';
           bubbleHtml += '</div>';
@@ -875,7 +873,6 @@
           var r = rankings[i];
           var dateObj = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : new Date();
           
-          // 연.월.일 시:분 포맷으로 가독성 대폭 향상
           var yy = String(dateObj.getFullYear()).slice(-2);
           var mm = String(dateObj.getMonth() + 1).padStart(2, '0');
           var dd = String(dateObj.getDate()).padStart(2, '0');
@@ -894,8 +891,8 @@
 
     function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db || nickname === "test123") return;
-      var safeNickname = sanitizeNickname(nickname);
-      var safeQuote = quote || "";
+      var safeNickname = sanitizeText(nickname, "익명");
+      var safeQuote = sanitizeText(quote || "", "");
 
       db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snapshot) {
         if (snapshot.empty) {
@@ -916,7 +913,7 @@
     }
 
     function checkNicknameInput(val) {
-      var sanitized = sanitizeNickname(val);
+      var sanitized = sanitizeText(val, "익명");
       document.getElementById("welcomeMessage").textContent = val.trim() ? "환영합니다, " + sanitized + " 파일럿님!" : "";
     }
     
@@ -927,7 +924,8 @@
     }
     function openEditQuoteModal() { initAudio(); document.getElementById("modalQuoteInput").value = localStorage.getItem("yoon_quote") || ""; toggleModal("editQuoteModal", true); }
     function saveNewQuoteFromModal() {
-      var newQuote = document.getElementById("modalQuoteInput").value.trim();
+      // 입력한 새로운 한마디에도 필터링 적용
+      var newQuote = sanitizeText(document.getElementById("modalQuoteInput").value.trim(), "");
       localStorage.setItem("yoon_quote", newQuote); document.getElementById("rankingQuoteInput").value = newQuote; toggleModal("editQuoteModal", false);
       if (db) db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snap) { 
         if(!snap.empty) {
@@ -940,7 +938,7 @@
     function openStoryScreen() {
       initAudio();
       var inputVal = document.getElementById("nicknameInput").value;
-      var sanitizedVal = sanitizeNickname(inputVal);
+      var sanitizedVal = sanitizeText(inputVal, "익명");
       if (!inputVal.trim()) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); return; }
       document.getElementById("nicknameWarning").textContent = "";
       
@@ -1005,20 +1003,50 @@
       canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
       if (player) player.y = Math.min(player.y, canvas.height - player.height - 120);
       initStars();
+      initClouds(); // 구름 초기화 추가
     }
     window.addEventListener('resize', resizeCanvas);
     document.addEventListener("touchmove", function(e) { if (!e.target.closest('.screen') && !e.target.closest('.modal-overlay') && !e.target.closest('.layout-middle') && !e.target.closest('.ranking-scroll-box')) e.preventDefault(); }, { passive: false });
 
     var stars = [];
+    var clouds = [];
     function initStars() { stars = []; for (var i = 0; i < 50; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2 + 0.5, speed: (Math.random() * 1.5 + 0.5) * 0.8, alpha: Math.random() * 0.8 + 0.2 }); }
+    function initClouds() { clouds = []; for (var i = 0; i < 12; i++) clouds.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, speed: Math.random() * 2 + 2, size: Math.random() * 30 + 20 }); }
+    
     function updateAndDrawStars() {
       ctx.fillStyle = "#ffffff";
+      // 20스테이지 이상일 경우 별 이동 속도 3배 증가
+      var bgSpeedMult = (stage >= 20) ? 3.0 : 1.0;
       for (var i = 0; i < stars.length; i++) {
-        var s = stars[i]; s.y += s.speed * gameSpeedMultiplier;
+        var s = stars[i]; s.y += s.speed * gameSpeedMultiplier * bgSpeedMult;
         if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
-        ctx.globalAlpha = s.alpha; ctx.fillRect(s.x | 0, s.y | 0, s.size, s.size);
+        
+        // 속도감(워프) 연출을 위해 선 형태로 그림
+        if (stage >= 20) {
+            ctx.globalAlpha = s.alpha * 0.6;
+            ctx.fillRect(s.x | 0, s.y | 0, s.size * 0.5, s.size * 4);
+        } else {
+            ctx.globalAlpha = s.alpha;
+            ctx.fillRect(s.x | 0, s.y | 0, s.size, s.size);
+        }
       }
       ctx.globalAlpha = 1.0;
+    }
+    
+    function updateAndDrawClouds() {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+      for (var i = 0; i < clouds.length; i++) {
+        var c = clouds[i];
+        c.y += c.speed * gameSpeedMultiplier;
+        if (c.y > canvas.height + c.size) { c.y = -c.size - 20; c.x = Math.random() * canvas.width; }
+        
+        // 둥글둥글한 구름 그리기
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.size * 0.6, 0, Math.PI * 2);
+        ctx.arc(c.x + c.size * 0.5, c.y + c.size * 0.2, c.size * 0.5, 0, Math.PI * 2);
+        ctx.arc(c.x - c.size * 0.5, c.y + c.size * 0.2, c.size * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     var playerNickname = "", playerQuote = "";
@@ -1044,7 +1072,6 @@
     }
     function resetJoystick() { joystickKnob.style.transform = "translate(0px, 0px)"; joystickAxisX = 0; joystickAxisY = 0; joystickTouchId = null; }
     
-    // 조이스틱 및 패드 렉 제거를 위해 initAudio 등 무거운 호출을 반복 이벤트에서 삭제
     joystickArea.addEventListener("touchstart", function(e) { e.preventDefault(); if (joystickTouchId===null) { joystickTouchId = e.changedTouches[0].identifier; handleJoystickMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY); }});
     joystickArea.addEventListener("touchmove", function(e) { e.preventDefault(); for(var i=0;i<e.touches.length;i++){ if(e.touches[i].identifier===joystickTouchId){ handleJoystickMove(e.touches[i].clientX, e.touches[i].clientY); break; } }});
     joystickArea.addEventListener("touchend", function(e) { e.preventDefault(); for(var i=0;i<e.changedTouches.length;i++){ if(e.changedTouches[i].identifier===joystickTouchId){ resetJoystick(); break; } }});
@@ -1064,7 +1091,6 @@
     }
     setupDpadButton("dpadLeft", "left"); setupDpadButton("dpadRight", "right"); setupDpadButton("dpadUp", "up"); setupDpadButton("dpadDown", "down");
     
-    // 키보드 연타 시 렉 유발 방지를 위한 방어 로직 추가 (!e.repeat)
     document.addEventListener("keydown", function(e) { if(!e.repeat) { initAudio(); } keys[e.code] = true; }); 
     document.addEventListener("keyup", function(e) { keys[e.code] = false; });
 
@@ -1078,12 +1104,15 @@
     }
 
     function startGame() {
-      var nick = sanitizeNickname(document.getElementById("nicknameInput").value);
+      var nick = sanitizeText(document.getElementById("nicknameInput").value, "익명");
       playerNickname = nick; playerQuote = document.getElementById("rankingQuoteInput").value.trim();
       localStorage.setItem("yoon_nickname", playerNickname); localStorage.setItem("yoon_quote", playerQuote);
       toggleModal("storyModal", false); document.getElementById("startScreen").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden");
       document.getElementById("controlArea").classList.remove("hidden"); document.getElementById("inGameTopBtns").classList.remove("hidden");
       applyControlTypeUI(); resizeCanvas();
+      
+      // 인게임 진입 시 배경 초기화
+      document.getElementById("gameContainer").style.background = "radial-gradient(circle at center, #0f172a 0%, #020617 100%)";
       
       isPaused = false; isCountingDown = false; gameSpeedMultiplier = 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ 1.0x";
       if (!soundMuted) startBGM();
@@ -1095,7 +1124,6 @@
       stageMonsterKills = 0; targetStageKills = 30; nextEliteKillTarget = 15; bulletCount = 1; gameTime = 0; spawnTimer = 0; bossSpawnCount = 0; currentWeapon = "normal"; warningTimer = 0;
       boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
       
-      // isPlaying 상태를 true로 변경하여 화면 일시정지 인식 활성화
       resetJoystick(); updateStatusDisplay(); isGameOver = false; isPlaying = true;
       
       if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
@@ -1487,9 +1515,27 @@
     }
     
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.save();
-      if (shakeTimer > 0) { ctx.translate((Math.random()-0.5)*8|0, (Math.random()-0.5)*8|0); shakeTimer--; }
-      updateAndDrawStars();
+      ctx.clearRect(0, 0, canvas.width, canvas.height); 
+      ctx.save();
+      
+      if (shakeTimer > 0) { 
+        ctx.translate((Math.random()-0.5)*8|0, (Math.random()-0.5)*8|0); 
+        shakeTimer--; 
+      }
+      
+      // 배경 연출 분기 처리 (40스테이지 이상은 하늘과 구름)
+      if (stage >= 40) {
+        var bgGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        bgGrd.addColorStop(0, "#0ea5e9"); // 짙은 하늘색
+        bgGrd.addColorStop(1, "#bae6fd"); // 옅은 하늘색
+        // 흔들림 보정을 위해 넉넉한 영역 칠하기
+        ctx.fillStyle = bgGrd;
+        ctx.fillRect(-20, -20, canvas.width + 40, canvas.height + 40);
+        updateAndDrawClouds();
+      } else {
+        updateAndDrawStars();
+      }
+      
       bullets.forEach(function(b) {
         ctx.save(); ctx.globalAlpha = 0.65;
         if (b.type === "laser") { ctx.fillStyle = "#4ade80"; ctx.fillRect(b.x|0, b.y|0, b.width|0, b.height|0); }
