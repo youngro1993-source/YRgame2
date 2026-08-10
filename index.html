@@ -435,7 +435,7 @@
     var soundMuted = false;
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
-    var isPaused = false, isCountingDown = false, lastSoundTime = 0;
+    var isPaused = false, isCountingDown = false, isPlaying = false, lastSoundTime = 0; // isPlaying 변수 추가됨
     var currentVersionKey = "v8.4.0"; // 패치노트 표기없이 내부 코드 업데이트 적용완료
 
     var deviceId = localStorage.getItem("yoon_device_id");
@@ -533,8 +533,9 @@
 
       updateShopUI(); updateMissionUI(); checkDailyAttendance(); checkAlerts();
 
+      // 수정됨: isPlaying(게임 중)일 때만 일시정지가 되도록 조건 추가
       document.addEventListener("visibilitychange", function() {
-        if (document.hidden && !isGameOver && !isPaused && !isCountingDown) triggerAutoPause();
+        if (document.hidden && isPlaying && !isGameOver && !isPaused && !isCountingDown) triggerAutoPause();
       });
     });
 
@@ -1093,7 +1094,9 @@
       score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0; sessionPlayFrames = 0;
       stageMonsterKills = 0; targetStageKills = 30; nextEliteKillTarget = 15; bulletCount = 1; gameTime = 0; spawnTimer = 0; bossSpawnCount = 0; currentWeapon = "normal"; warningTimer = 0;
       boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
-      resetJoystick(); updateStatusDisplay(); isGameOver = false;
+      
+      // isPlaying 상태를 true로 변경하여 화면 일시정지 인식 활성화
+      resetJoystick(); updateStatusDisplay(); isGameOver = false; isPlaying = true;
       
       if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
       gameLoop();
@@ -1107,7 +1110,7 @@
     }
     function quitGame() { isPaused = false; isCountingDown = false; toggleModal("pauseModal", false); gameOver(); }
     function toggleGameSpeed() { initAudio(); gameSpeedMultiplier = (gameSpeedMultiplier === 1.0) ? 1.5 : 1.0; document.getElementById("speedToggleBtn").textContent = "⚡ " + gameSpeedMultiplier + "x"; }
-    function goToMainScreen() { stopBGM(); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden"); document.getElementById("controlArea").classList.add("hidden"); document.getElementById("startScreen").classList.remove("hidden"); updateShopUI(); updateMissionUI(); checkAlerts(); checkAndResetWeeklyRanking(); }
+    function goToMainScreen() { isPlaying = false; stopBGM(); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden"); document.getElementById("controlArea").classList.add("hidden"); document.getElementById("startScreen").classList.remove("hidden"); updateShopUI(); updateMissionUI(); checkAlerts(); checkAndResetWeeklyRanking(); }
 
     function triggerScreenShake(d) { shakeTimer = d; }
     function triggerWarning(txt) { warningTimer = 90; warningTextStr = txt; }
@@ -1211,7 +1214,7 @@
       player.y = Math.max(0, Math.min(canvas.height - player.height - 120, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
-        var b = bullets[j=i]; // typo fix in older versions not present here
+        var b = bullets[j=i]; 
         if (b.type === "drone_homing" && b.homingTimer > 0) {
           b.homingTimer -= gameSpeedMultiplier;
           var target = null;
@@ -1534,7 +1537,7 @@
     function gameLoop() { if (!isPaused && !isGameOver && !isCountingDown) { update(); draw(); gameAnimationId = requestAnimationFrame(gameLoop); } }
     
     function gameOver() {
-      isGameOver = true; stopBGM(); playSound('gameover'); cancelAnimationFrame(gameAnimationId);
+      isGameOver = true; isPlaying = false; stopBGM(); playSound('gameover'); cancelAnimationFrame(gameAnimationId);
       
       totalPlaytime += Math.floor(sessionPlayFrames / 60);
 
