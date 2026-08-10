@@ -11,11 +11,11 @@
     canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 
     /* 메인 화면 레이아웃 */
-    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(6px, env(safe-area-inset-top)) 10px max(6px, env(safe-area-inset-bottom)) 10px; text-align: center; overflow: hidden; }
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); z-index: 10; padding: max(8px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom)) 10px; text-align: center; overflow: hidden; }
     .hidden { display: none !important; }
 
     .layout-section { width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 3px 0; padding: 2px; gap: 5px; }
+    .layout-middle { flex: 1; justify-content: flex-start; overflow-y: auto; width: 100%; max-width: 440px; margin: 4px 0; padding: 2px; gap: 6px; }
     .layout-middle::-webkit-scrollbar { width: 4px; }
     .layout-middle::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 2px; }
 
@@ -23,7 +23,7 @@
     .header-btn-group { display: flex; gap: 6px; }
     .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 26px; height: 26px; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    h1 { font-size: 0.88rem; margin-top: 0; margin-bottom: 1px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
+    h1 { font-size: 0.9rem; margin-top: 0; margin-bottom: 1px; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); word-break: keep-all; }
 
     /* 달 및 랭커들의 한마디 통합 박스 */
     .moon-container { display: flex; flex-direction: column; align-items: center; margin: 0 auto; position: relative; width: 100%; max-width: 440px; }
@@ -35,22 +35,22 @@
       60% { transform: scale(1); }
       100% { transform: scale(1); }
     }
-    .moon-artwork { width: 28px; height: 28px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; margin-bottom: 3px; }
+    .moon-artwork { width: 30px; height: 30px; background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 50%, #ca8a04 100%); border-radius: 50%; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; animation: heartbeat 2.5s infinite ease-in-out; margin-bottom: 4px; }
     .moon-artwork:active { animation: none; transform: scale(0.9); }
-    .moon-artwork::before { content: ""; position: absolute; top: 4px; left: 4px; width: 5px; height: 5px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 8px 4px 0 2px rgba(161, 98, 7, 0.25), 2px 10px 0 -2px rgba(161, 98, 7, 0.3); }
+    .moon-artwork::before { content: ""; position: absolute; top: 4px; left: 4px; width: 6px; height: 6px; background: rgba(161, 98, 7, 0.35); border-radius: 50%; box-shadow: 8px 4px 0 2px rgba(161, 98, 7, 0.25), 2px 10px 0 -2px rgba(161, 98, 7, 0.3); }
 
-    .ranker-group-box { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid #facc15; border-radius: 8px; padding: 4px 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .ranker-group-title { font-size: 0.6rem; color: #facc15; font-weight: bold; margin-bottom: 3px; text-align: center; border-bottom: 1px dashed rgba(250,204,21,0.3); padding-bottom: 2px; }
-    .ranker-bubble-board { width: 100%; display: flex; flex-direction: column; gap: 2px; align-items: center; }
+    .ranker-group-box { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid #facc15; border-radius: 8px; padding: 6px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); margin-bottom: 2px; }
+    .ranker-group-title { font-size: 0.65rem; color: #facc15; font-weight: bold; margin-bottom: 4px; text-align: center; border-bottom: 1px dashed rgba(250,204,21,0.3); padding-bottom: 4px; }
+    .ranker-bubble-board { width: 100%; display: flex; flex-direction: column; gap: 3px; align-items: center; }
     .ranker-speech-bubble { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(250, 204, 21, 0.5); border-radius: 4px; padding: 2px 6px; font-size: 0.52rem; color: #facc15; width: 100%; word-break: break-all; display: flex; justify-content: space-between; align-items: center; text-align: left; }
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
     .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.45rem; font-weight: bold; padding: 1px 4px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
-    /* 명예의 전당 (여백 채우기 위해 높이 및 스크롤 확장) */
-    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 5px; }
-    .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; }
-    .ranking-sub-notice { font-size: 0.48rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; }
-    .ranking-scroll-box { max-height: 155px; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    /* 명예의 전당 (여백 채우기) */
+    .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 5px; flex: 1; min-height: 120px; display: flex; flex-direction: column; }
+    .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; flex-shrink: 0; }
+    .ranking-sub-notice { font-size: 0.48rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; flex-shrink: 0; }
+    .ranking-scroll-box { flex: 1; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
     .ranking-scroll-box::-webkit-scrollbar { width: 3px; }
     .ranking-scroll-box::-webkit-scrollbar-thumb { background: #f87171; border-radius: 2px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.52rem; }
@@ -65,29 +65,29 @@
     .badge { display: inline-block; width: 10px; height: 10px; border-radius: 50%; color: #000; font-weight: bold; text-align: center; line-height: 10px; font-size: 0.38rem; margin-right: 4px; flex-shrink: 0; }
     .badge.upgrade { background: #eab308; } .badge.damage { background: #ef4444; color: #fff; } .badge.laser { background: #22c55e; } .badge.saw { background: #c084fc; } .badge.shotgun { background: #f97316; } .badge.heart { background: #ec4899; color: #fff; } .badge.coin { background: #facc15; color: #000; }
 
-    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .nickname-box { width: 100%; max-width: 440px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; }
     .welcome-text { color: #facc15; font-size: 0.58rem; font-weight: bold; min-height: 1em; }
     input[type="text"] { width: 85%; max-width: 200px; padding: 2px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.68rem; text-align: center; outline: none; }
     .warning-text { color: #f87171; font-size: 0.48rem; min-height: 0.5em; font-weight: 600; }
 
     /* 비행기 현재상태 (출격하기 위쪽 배치) */
-    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 2px; }
+    .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; }
     .pilot-status-title { text-align: left; font-size: 0.58rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
-    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 4px 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.55rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
+    .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.55rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
     .pilot-status-row { display: flex; justify-content: space-between; align-items: center; }
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
     .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
     /* 하단 고정 버튼 및 알림 마크 */
-    .btn-container { display: flex; gap: 6px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 2px; }
-    button.btn { flex: 1; padding: 6px 8px; font-size: 0.75rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4); position: relative; }
+    .btn-container { display: flex; gap: 6px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 4px; }
+    button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4); position: relative; }
     button.btn:active { transform: scale(0.95); }
     .btn-shop { background: linear-gradient(135deg, #d97706, #b45309) !important; }
     .btn-mission { background: linear-gradient(135deg, #059669, #047857) !important; }
     .btn-pulse { animation: pulseEffect 2s infinite ease-in-out; }
     @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     
-    .alert-dot { position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; border: 2px solid #0f172a; box-shadow: 0 0 4px #ef4444; }
+    .alert-dot { position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; border: 2px solid #0f172a; box-shadow: 0 0 4px #ef4444; }
 
     .credits { margin-top: 1px; font-size: 0.45rem; color: #64748b; letter-spacing: 1px; }
     .btn-update { background: transparent !important; border: none !important; color: #93c5fd !important; font-size: 0.48rem !important; text-decoration: underline; cursor: pointer; margin-top: 1px; position: relative; }
@@ -97,7 +97,7 @@
     .in-game-top-btn { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-size: 0.65rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; pointer-events: auto; }
 
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 20; display: flex; justify-content: center; align-items: center; padding: 12px; }
-    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 10px; padding: 10px; max-width: 400px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow-y: auto; }
+    .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; max-width: 400px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow-y: auto; }
     .modal-content h3 { color: #38bdf8; font-size: 0.9rem; margin-bottom: 5px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 5px; }
 
     /* 상점 UI 스타일 */
@@ -107,20 +107,20 @@
     .shop-item-icon { font-size: 1.2rem; margin-bottom: 2px; }
     .shop-item-title { font-size: 0.6rem; font-weight: bold; color: #facc15; }
     .shop-item-status { font-size: 0.55rem; color: #38bdf8; margin-bottom: 3px; }
-    .buy-btn { background: #facc15; color: #000; border: none; padding: 3px 5px; border-radius: 4px; font-weight: bold; font-size: 0.6rem; cursor: pointer; width: 100%; }
+    .buy-btn { background: #facc15; color: #000; border: none; padding: 4px 5px; border-radius: 4px; font-weight: bold; font-size: 0.6rem; cursor: pointer; width: 100%; }
     .buy-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
     .shop-full-width { grid-column: span 2; display: flex; flex-direction: row; align-items: center; text-align: left; gap: 6px; }
     .shop-full-width .shop-item-icon { margin-bottom: 0; font-size: 1.5rem; }
     .shop-full-width .shop-item-info { flex: 1; }
     .shop-full-width .buy-btn { width: auto; padding: 5px 10px; }
 
-    .mission-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(5, 150, 105, 0.4); border-radius: 6px; padding: 6px 8px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; text-align: left; }
+    .mission-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(5, 150, 105, 0.4); border-radius: 6px; padding: 8px 10px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; text-align: left; }
     .mission-item-info { flex: 1; }
-    .mission-item-title { font-size: 0.7rem; font-weight: bold; color: #34d399; }
-    .mission-item-desc { font-size: 0.62rem; color: #94a3b8; margin: 1px 0; }
+    .mission-item-title { font-size: 0.72rem; font-weight: bold; color: #34d399; margin-bottom: 2px; }
+    .mission-item-desc { font-size: 0.62rem; color: #94a3b8; margin: 2px 0; }
     .mission-item-status { font-size: 0.62rem; color: #facc15; }
     .highlight-reward { color: #facc15; font-weight: bold; }
-    .claim-btn { background: #34d399; color: #000; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 0.65rem; cursor: pointer; }
+    .claim-btn { background: #34d399; color: #000; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 0.68rem; cursor: pointer; flex-shrink: 0; }
     .claim-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
 
     .story-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 10px; text-align: left; font-size: 0.78rem; line-height: 1.5; color: #e2e8f0; margin-bottom: 10px; }
@@ -133,18 +133,20 @@
     .history-scroll-area li { margin-bottom: 3px; position: relative; padding-left: 10px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    /* 인게임 하단 조작 영역 (좌우 화살표 경계선에 딱 맞춤) */
-    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
-    #joystickArea { position: absolute; bottom: calc(8px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
+    /* 인게임 하단 조작 영역 (화면 경계 및 바닥에 딱 맞춤) */
+    #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; }
+    #joystickArea { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
     #joystickKnob { width: 26px; height: 26px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
 
-    .dpad-container { position: absolute; bottom: calc(4px + env(safe-area-inset-bottom)); left: 0; width: 100%; height: 60px; display: block; z-index: 6; pointer-events: none; }
-    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(56, 189, 248, 0.9); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 8px; pointer-events: auto; }
-    .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; }
-    #dpadLeft { bottom: 4px; left: 0px; width: 95px; height: 42px; font-size: 1.3rem; border-top-left-radius: 0; border-bottom-left-radius: 0; }
-    #dpadRight { bottom: 4px; right: 0px; width: 95px; height: 42px; font-size: 1.3rem; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-    #dpadUp { bottom: 26px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
-    #dpadDown { bottom: 2px; left: 50%; transform: translateX(-50%); width: 48px; height: 22px; font-size: 0.8rem; }
+    .dpad-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; z-index: 6; pointer-events: none; }
+    .dpad-btn { position: absolute; background: rgba(30, 41, 59, 0.85); border: 1.5px solid rgba(56, 189, 248, 0.7); color: #38bdf8; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 0; pointer-events: auto; box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.2); }
+    .dpad-btn:active, .dpad-btn.pressed { background: rgba(56, 189, 248, 0.45); color: #fff; box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.6); }
+    
+    #dpadLeft { top: 0; left: 0; width: 110px; height: 100%; font-size: 1.8rem; border-top-right-radius: 12px; border-left: none; border-bottom: none; }
+    #dpadRight { top: 0; right: 0; width: 110px; height: 100%; font-size: 1.8rem; border-top-left-radius: 12px; border-right: none; border-bottom: none; }
+    
+    #dpadUp { top: 10px; left: 50%; transform: translateX(-50%); width: 60px; height: 42px; font-size: 1rem; border-radius: 8px; }
+    #dpadDown { bottom: 10px; left: 50%; transform: translateX(-50%); width: 60px; height: 42px; font-size: 1rem; border-radius: 8px; }
 
     #joystickStatusNotice { position: absolute; top: 2px; left: 50%; transform: translateX(-50%); width: 96%; padding: 2px; background: rgba(2, 6, 23, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 5px; text-align: center; font-size: 0.6rem; color: #facc15; font-weight: 600; z-index: 8; line-height: 1.2; }
 
@@ -342,6 +344,10 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div><div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div></div><button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
+        
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">5분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">5분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
+
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
     </div>
@@ -360,12 +366,14 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v8.2.0 (레이아웃 및 UI 재배치)</div>
+            <div class="version-title">v8.3.1 (버그 픽스 및 미션 개편)</div>
             <ul>
-              <li>인게임 좌우 조작 버튼을 <b>화면 경계선에 딱 맞춰</b> 확장</li>
-              <li>내 비행기 현재상태 카드를 하단 출격하기 버튼 위쪽으로 이동</li>
-              <li>달 밑 상단에 <b>'👑 랭커들의 한마디' 통합 박스</b>를 생성하여 1~5위 말풍선 묶음 배치</li>
-              <li>남은 여백을 채우기 위해 <b>명예의 전당(TOP 10) 창의 높이와 스크롤 영역을 확대</b></li>
+              <li><b>명예의 전당 버그 수정:</b> 간헐적으로 랭커 닉네임이 '익명'이나 빈칸으로 뜨는 렌더링 오류를 완벽하게 개선 및 방어코드 추가</li>
+              <li>인게임 좌우 조작 버튼(D-패드) 크기 화면 가장자리에 맞게 전체 확장</li>
+              <li>하트(회복 아이템) 습득 시 최대 체력 제한선 해제 (무한 회복)</li>
+              <li>내 비행기 상태 카드 위치 최하단으로 이동 & 명예의 전당 높이 확장</li>
+              <li>'👑 랭커들의 한마디' 상단 통합 박스 배치</li>
+              <li><b>신규 무한 반복 미션 추가:</b> [행운의 사나이] 코인 획득, [시간 탐험가] 플레이 타임 누적</li>
             </ul>
           </div>
         </div>
@@ -414,7 +422,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.2.0";
+    var currentVersionKey = "v8.3.1";
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -449,12 +457,22 @@
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
 
+    // 기존 미션 데이터
     var missionTargetKill = parseInt(localStorage.getItem("yoon_m_target_kill") || "100");
     var missionRewardKill = parseInt(localStorage.getItem("yoon_m_reward_kill") || "50");
     var missionTargetBoss = parseInt(localStorage.getItem("yoon_m_target_boss") || "3");
     var missionRewardBoss = parseInt(localStorage.getItem("yoon_m_reward_boss") || "100");
     var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
     var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
+
+    // 신규 미션 데이터
+    var totalPickedCoins = parseInt(localStorage.getItem("yoon_m_total_picked") || "0");
+    var missionTargetPickedCoin = parseInt(localStorage.getItem("yoon_m_target_picked") || "50");
+    var missionRewardPickedCoin = parseInt(localStorage.getItem("yoon_m_reward_picked") || "30");
+    
+    var totalPlaytime = parseInt(localStorage.getItem("yoon_m_total_time") || "0");
+    var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "300"); 
+    var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "50");
 
     function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
@@ -501,7 +519,7 @@
     }
 
     function checkAlerts() {
-      var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop);
+      var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop) || (totalPickedCoins >= missionTargetPickedCoin) || (totalPlaytime >= missionTargetPlaytime);
       if (canClaim) document.getElementById('missionAlertDot').classList.remove('hidden');
       else document.getElementById('missionAlertDot').classList.add('hidden');
 
@@ -529,9 +547,13 @@
       [30, 300, 400, 500, 1000].forEach(k => localStorage.setItem("yoon_moon_reward_" + k, moonRewardClaimed[k]));
       localStorage.setItem("yoon_total_kills", totalMonsterKills); localStorage.setItem("yoon_total_boss_kills", totalBossKills);
       localStorage.setItem("yoon_shop_purchase_count", shopPurchaseCount);
+      
       localStorage.setItem("yoon_m_target_kill", missionTargetKill); localStorage.setItem("yoon_m_reward_kill", missionRewardKill);
       localStorage.setItem("yoon_m_target_boss", missionTargetBoss); localStorage.setItem("yoon_m_reward_boss", missionRewardBoss);
       localStorage.setItem("yoon_m_target_shop", missionTargetShop); localStorage.setItem("yoon_m_reward_shop", missionRewardShop);
+      
+      localStorage.setItem("yoon_m_total_picked", totalPickedCoins); localStorage.setItem("yoon_m_target_picked", missionTargetPickedCoin); localStorage.setItem("yoon_m_reward_picked", missionRewardPickedCoin);
+      localStorage.setItem("yoon_m_total_time", totalPlaytime); localStorage.setItem("yoon_m_target_time", missionTargetPlaytime); localStorage.setItem("yoon_m_reward_time", missionRewardPlaytime);
     }
 
     function calculateRefund() {
@@ -664,6 +686,22 @@
         document.getElementById('missionShopProgress').innerText = Math.min(missionTargetShop, shopPurchaseCount);
         var claimShopBtn = document.getElementById('claimShopBtn');
         if (shopPurchaseCount >= missionTargetShop) { claimShopBtn.innerText = "보상 받기"; claimShopBtn.disabled = false; } else { claimShopBtn.innerText = "진행중"; claimShopBtn.disabled = true; }
+
+        document.getElementById('mTargetPickedText').innerText = missionTargetPickedCoin;
+        document.getElementById('mTargetPickedSub').innerText = missionTargetPickedCoin;
+        document.getElementById('mRewardPickedText').innerText = missionRewardPickedCoin;
+        document.getElementById('missionPickedProgress').innerText = Math.min(missionTargetPickedCoin, totalPickedCoins);
+        var claimPickedBtn = document.getElementById('claimPickedBtn');
+        if (totalPickedCoins >= missionTargetPickedCoin) { claimPickedBtn.innerText = "보상 받기"; claimPickedBtn.disabled = false; } else { claimPickedBtn.innerText = "진행중"; claimPickedBtn.disabled = true; }
+
+        var targetTimeMins = Math.floor(missionTargetPlaytime / 60);
+        document.getElementById('mTargetTimeText').innerText = targetTimeMins + "분";
+        document.getElementById('mTargetTimeSub').innerText = targetTimeMins + "분";
+        document.getElementById('mRewardTimeText').innerText = missionRewardPlaytime;
+        document.getElementById('missionTimeProgress').innerText = Math.floor(totalPlaytime / 60) + "분";
+        var claimTimeBtn = document.getElementById('claimTimeBtn');
+        if (totalPlaytime >= missionTargetPlaytime) { claimTimeBtn.innerText = "보상 받기"; claimTimeBtn.disabled = false; } else { claimTimeBtn.innerText = "진행중"; claimTimeBtn.disabled = true; }
+        
       } catch (e) {
         console.error("Mission UI Update Error:", e);
       }
@@ -674,6 +712,8 @@
       if (type === 'kill' && totalMonsterKills >= missionTargetKill) { userCoins += missionRewardKill; missionTargetKill *= 2; missionRewardKill *= 2; }
       else if (type === 'boss' && totalBossKills >= missionTargetBoss) { userCoins += missionRewardBoss; missionTargetBoss *= 2; missionRewardBoss *= 2; }
       else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) { userCoins += missionRewardShop; missionTargetShop *= 2; missionRewardShop *= 2; }
+      else if (type === 'picked' && totalPickedCoins >= missionTargetPickedCoin) { userCoins += missionRewardPickedCoin; missionTargetPickedCoin *= 2; missionRewardPickedCoin *= 2; }
+      else if (type === 'time' && totalPlaytime >= missionTargetPlaytime) { userCoins += missionRewardPlaytime; missionTargetPlaytime *= 2; missionRewardPlaytime *= 2; }
       saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
     }
 
@@ -747,8 +787,13 @@
 
       db.collection("rankings").orderBy("score", "desc").limit(50).get().then(function(querySnapshot) {
         var rankings = [], seenNicknames = {};
+        
+        // 익명 버그 방어 코드: 데이터 파싱 시 강제로 올바른 닉네임 삽입
         querySnapshot.forEach(function(doc) {
-          var data = doc.data(), nick = data.nickname || "익명";
+          var data = doc.data();
+          data.nickname = (data.nickname && data.nickname.trim() !== "") ? data.nickname : "익명";
+          
+          var nick = data.nickname;
           if (!seenNicknames[nick]) { seenNicknames[nick] = true; rankings.push(data); }
         });
         rankings = rankings.slice(0, 10);
@@ -756,11 +801,11 @@
         var bubbleHtml = "";
         for (var i = 0; i < Math.min(5, rankings.length); i++) {
           var r = rankings[i], qText = r.quote ? r.quote : "(한마디 없음)";
-          bubbleHtml += '<div class="ranker-speech-bubble"><div class="bubble-text-part">👑 [' + (i+1) + '위] ' + r.nickname + ': "' + qText + '"</div>';
+          bubbleHtml += '<div class="ranker-speech-bubble"><div class="bubble-text-part">[' + (i+1) + '위] ' + r.nickname + ': "' + qText + '"</div>';
           if (r.deviceId === deviceId) bubbleHtml += '<button class="bubble-edit-btn" onclick="openEditQuoteModal()">수정</button>';
           bubbleHtml += '</div>';
         }
-        if(bubbleHtml === "") bubbleHtml = '<div class="ranker-speech-bubble"><div class="bubble-text-part">👑 [안내] 첫 번째 랭커가 되어보세요!</div></div>';
+        if(bubbleHtml === "") bubbleHtml = '<div class="ranker-speech-bubble"><div class="bubble-text-part">[안내] 첫 번째 랭커가 되어보세요!</div></div>';
         bubbleBoard.innerHTML = bubbleHtml;
 
         var htmlContent = rankings.length === 0 ? "<tr><td colspan='6'>등록된 기록이 없습니다.</td></tr>" : "";
@@ -768,7 +813,7 @@
           var r = rankings[i];
           var dateObj = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : new Date();
           var dtStr = (dateObj.getMonth()+1) + "/" + dateObj.getDate() + " " + dateObj.getHours() + ":" + (dateObj.getMinutes()<10?"0":"") + dateObj.getMinutes();
-          htmlContent += "<tr><td>" + (i+1) + "</td><td>" + dtStr + "</td><td>" + (r.nickname||"익명") + "</td><td>" + (r.monsterKills||0) + "</td><td>" + (r.bossKills||0) + "</td><td>" + (r.score||0) + "</td></tr>";
+          htmlContent += "<tr><td>" + (i+1) + "</td><td>" + dtStr + "</td><td>" + r.nickname + "</td><td>" + (r.monsterKills||0) + "</td><td>" + (r.bossKills||0) + "</td><td>" + (r.score||0) + "</td></tr>";
         }
         bodyEl.innerHTML = htmlContent;
       }).catch(function(err) {
@@ -779,19 +824,25 @@
 
     function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db || nickname === "test123") return;
+      
+      // 저장 시 익명 버그 방지 2차 방어코드
+      var safeNickname = (nickname && nickname.trim() !== "") ? nickname : (localStorage.getItem("yoon_nickname") || "익명");
+      var safeQuote = quote || "";
+
       db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snapshot) {
         if (snapshot.empty) {
-          db.collection("rankings").add({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function(){ updateLeaderboardUI(); });
+          db.collection("rankings").add({ nickname: safeNickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: safeQuote, deviceId: deviceId, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function(){ updateLeaderboardUI(); });
         } else {
           var docs = snapshot.docs, highestDoc = docs[0], highestScore = highestDoc.data().score || 0;
           for (var i=1; i<docs.length; i++) { if (docs[i].data().score > highestScore) { highestScore = docs[i].data().score; highestDoc = docs[i]; } }
           if (score > highestScore) {
-            highestDoc.ref.update({ nickname: nickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: quote, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function() {
+            highestDoc.ref.update({ nickname: safeNickname, score: score, monsterKills: monsterKills, bossKills: bossKills, quote: safeQuote, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function() {
               var batch = db.batch(); docs.forEach(function(d){ if(d.id !== highestDoc.id) batch.delete(d.ref); });
               batch.commit().then(function(){ updateLeaderboardUI(); });
             });
           } else {
-            highestDoc.ref.update({ nickname: nickname, quote: quote }).then(function(){ updateLeaderboardUI(); });
+            // 점수가 낮더라도 최신 닉네임과 한마디 업데이트 방어 로직 반영
+            highestDoc.ref.update({ nickname: safeNickname, quote: safeQuote }).then(function(){ updateLeaderboardUI(); });
           }
         }
       }).catch(function(e){ console.error("점수 저장 실패", e); });
@@ -909,6 +960,7 @@
     var stageMonsterKills = 0, targetStageKills = 30, nextEliteKillTarget = 15;
     var bulletCount = 1, playerDamage = 1, currentWeapon = "normal", boss = null, bossSpawnCount = 0, lastShootTime = 0, shootInterval = 100 * 1.35;
     var weaponNames = { "normal": "기본 탄환", "laser": "레이저 (L)", "saw": "톱니 (S)", "shotgun": "샷건 (G)" };
+    var sessionPlayFrames = 0;
 
     var joystickAxisX = 0, joystickAxisY = 0, joystickTouchId = null;
     var dpadLeftPressed = false, dpadRightPressed = false, dpadUpPressed = false, dpadDownPressed = false;
@@ -963,7 +1015,7 @@
       player.x = canvas.width/2 - player.width/2; player.y = canvas.height - player.height - 120; player.lives = 3 + shopHeartBonusLife; player.invincibleTimer = 0; player.tilt = 0;
       player.speed = 2.0 + (shopCandyCount * 0.2); playerDamage = 1 + shopMeatBonusDmg; shootInterval = (100 * 1.35) * Math.pow(0.9, shopAppleCount);
       
-      score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0;
+      score = 0; stage = 1; killCount = 0; bossKillCount = 0; sessionCoinsEarned = 0; sessionPlayFrames = 0;
       stageMonsterKills = 0; targetStageKills = 30; nextEliteKillTarget = 15; bulletCount = 1; gameTime = 0; spawnTimer = 0; bossSpawnCount = 0; currentWeapon = "normal"; warningTimer = 0;
       boss = null; bullets = []; monsters = []; items = []; enemyBullets = []; particles = []; damageTexts = [];
       resetJoystick(); updateStatusDisplay(); isGameOver = false;
@@ -1056,6 +1108,8 @@
       if (isGameOver || isPaused || isCountingDown) return;
       gameTime += gameSpeedMultiplier; if (player.invincibleTimer > 0) player.invincibleTimer -= gameSpeedMultiplier; if (warningTimer > 0) warningTimer -= gameSpeedMultiplier;
       var now = Date.now(); if (now - lastShootTime > (shootInterval / gameSpeedMultiplier)) { shoot(); lastShootTime = now; } shootDrones();
+      
+      sessionPlayFrames += 1;
 
       if (!boss && stageMonsterKills >= targetStageKills) { monsters = []; enemyBullets = []; spawnBoss(); }
       
@@ -1129,8 +1183,12 @@
         if (checkPlayerHitbox(player, it)) {
           playSound('item');
           if (it.type === "upgrade") bulletCount = Math.min(6, bulletCount + 1); else if (it.type === "damage") playerDamage++;
-          else if (it.type === "coin") { userCoins++; sessionCoinsEarned++; addDamageText(it.x, it.y, "+1 COIN!", true); }
-          else if (it.type === "heart") player.lives = Math.min(5 + shopHeartBonusLife, player.lives + 1);
+          else if (it.type === "coin") { 
+            userCoins++; sessionCoinsEarned++; totalPickedCoins++; addDamageText(it.x, it.y, "+1 COIN!", true); 
+          }
+          else if (it.type === "heart") {
+            player.lives += 1;
+          }
           else currentWeapon = it.type;
           score += 50; createExplosion(it.x, it.y, "#ec4899", 10); items.splice(i, 1);
         } else if (it.y > canvas.height) items.splice(i, 1);
@@ -1403,6 +1461,10 @@
     
     function gameOver() {
       isGameOver = true; stopBGM(); playSound('gameover'); cancelAnimationFrame(gameAnimationId);
+      
+      // 순수 플레이 타임 저장 로직 (1프레임을 대략 1/60초로 계산)
+      totalPlaytime += Math.floor(sessionPlayFrames / 60);
+
       document.getElementById("controlArea").classList.add("hidden"); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.remove("hidden");
       document.getElementById("resPilotName").textContent = playerNickname; document.getElementById("resScore").textContent = score + "점" + (score >= bestScore && score > 0 ? " (NEW BEST!)" : "");
       document.getElementById("resStage").textContent = "Stage " + stage; document.getElementById("resKills").textContent = killCount + "마리";
