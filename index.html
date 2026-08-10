@@ -20,6 +20,10 @@
     .layout-middle::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 2px; }
 
     .top-status-bar { width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+    .online-badge { display: flex; align-items: center; gap: 4px; font-size: 0.55rem; color: #94a3b8; font-weight: bold; }
+    .online-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 6px #22c55e; animation: blink 1.5s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
     .header-btn-group { display: flex; gap: 6px; }
     .main-sound-btn, .main-setting-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; border-radius: 50%; width: 26px; height: 26px; font-size: 0.75rem; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
@@ -46,7 +50,7 @@
     .bubble-text-part { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
     .bubble-edit-btn { background: #facc15; color: #000; border: none; border-radius: 3px; font-size: 0.45rem; font-weight: bold; padding: 1px 4px; cursor: pointer; margin-left: 4px; flex-shrink: 0; }
 
-    /* 명예의 전당 (여백 채우기) */
+    /* 명예의 전당 */
     .ranking-container { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 8px; padding: 5px; flex: 1; min-height: 120px; display: flex; flex-direction: column; }
     .ranking-container h3 { font-size: 0.65rem; color: #f87171; margin-bottom: 2px; flex-shrink: 0; }
     .ranking-sub-notice { font-size: 0.48rem; color: #cbd5e1; margin-bottom: 3px; font-weight: bold; text-align: center; flex-shrink: 0; }
@@ -70,7 +74,7 @@
     input[type="text"] { width: 85%; max-width: 200px; padding: 2px 6px; border: 1.5px solid #60a5fa; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.68rem; text-align: center; outline: none; }
     .warning-text { color: #f87171; font-size: 0.48rem; min-height: 0.5em; font-weight: 600; }
 
-    /* 비행기 현재상태 (출격하기 위쪽 배치) */
+    /* 비행기 현재상태 */
     .pilot-status-wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; }
     .pilot-status-title { text-align: left; font-size: 0.58rem; font-weight: bold; color: #38bdf8; padding-left: 2px; }
     .pilot-status-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 8px; padding: 5px 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.55rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
@@ -78,7 +82,7 @@
     .pilot-status-left { color: #38bdf8; font-weight: bold; text-align: left; }
     .pilot-status-right { color: #facc15; font-weight: bold; text-align: right; white-space: nowrap; margin-left: 4px; }
 
-    /* 하단 고정 버튼 및 알림 마크 */
+    /* 하단 고정 버튼 */
     .btn-container { display: flex; gap: 6px; justify-content: center; width: 100%; max-width: 380px; margin-bottom: 4px; }
     button.btn { flex: 1; padding: 8px 10px; font-size: 0.8rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4); position: relative; }
     button.btn:active { transform: scale(0.95); }
@@ -100,7 +104,7 @@
     .modal-content { background: #1e293b; border: 2px solid #38bdf8; border-radius: 10px; padding: 12px; max-width: 400px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow-y: auto; }
     .modal-content h3 { color: #38bdf8; font-size: 0.9rem; margin-bottom: 5px; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 5px; }
 
-    /* 상점 UI 스타일 */
+    /* 상점 UI */
     .shop-category { grid-column: span 2; font-size: 0.7rem; color: #38bdf8; font-weight: bold; margin-top: 8px; margin-bottom: 3px; padding-bottom: 3px; border-bottom: 1px dashed rgba(56,189,248,0.4); text-align: left; }
     .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 6px; }
     .shop-item-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px; display: flex; flex-direction: column; text-align: center; justify-content: space-between; }
@@ -133,7 +137,7 @@
     .history-scroll-area li { margin-bottom: 3px; position: relative; padding-left: 10px; }
     .history-scroll-area li::before { content: "•"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
 
-    /* 인게임 하단 조작 영역 (화면 경계 및 바닥에 딱 맞춤) */
+    /* 인게임 하단 조작 영역 */
     #controlArea { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(15, 23, 42, 0.95); border-top: 1.5px solid rgba(56, 189, 248, 0.5); backdrop-filter: blur(8px); z-index: 5; }
     #joystickArea { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: rgba(30, 41, 59, 0.7); border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 7; }
     #joystickKnob { width: 26px; height: 26px; background: radial-gradient(circle, #38bdf8 0%, #1d4ed8 100%); border: 2px solid #ffffff; border-radius: 50%; position: absolute; pointer-events: none; }
@@ -170,7 +174,10 @@
     <div id="startScreen" class="screen">
       <div class="layout-section">
         <div class="top-status-bar">
-          <div style="font-size:0.55rem; color:#94a3b8; font-weight: bold;">은하 수호대 본부</div>
+          <div class="online-badge">
+            <span class="online-dot"></span>
+            <span>접속자 <span id="onlineUserCount" style="color:#38bdf8;">1</span>명</span>
+          </div>
           <div class="header-btn-group">
             <button class="main-sound-btn" id="mainSoundBtn" onclick="toggleSound()">🔊</button>
             <button class="main-setting-btn" id="mainSettingBtn" onclick="openSettingModal()">⚙️</button>
@@ -196,7 +203,7 @@
           <div class="ranking-scroll-box">
             <table>
               <thead>
-                <tr><th>순위</th><th>날짜</th><th>닉네임</th><th>몬스터</th><th>보스</th><th>점수</th></tr>
+                <tr><th>순위</th><th>날짜/시간</th><th>닉네임</th><th>몬스터</th><th>보스</th><th>점수</th></tr>
               </thead>
               <tbody id="mainRankingBody">
                 <tr><td colspan="6">로딩 중...</td></tr>
@@ -226,7 +233,7 @@
 
       </div>
 
-      <!-- 하단 고정 버튼 영역 (출격하기 바로 위쪽에 비행기 현재상태 배치) -->
+      <!-- 하단 고정 버튼 영역 -->
       <div class="layout-section">
         <div class="pilot-status-wrapper">
           <div class="pilot-status-title">✈️ 내 비행기 현재상태</div>
@@ -344,9 +351,10 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">적 몬스터 사냥꾼 (목표: <span id="mTargetKillText">100</span>)</div><div class="mission-item-desc">보상: <span id="mRewardKillText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionKillProgress">0</span> / <span id="mTargetKillSub">100</span></div></div><button class="claim-btn" id="claimKillBtn" onclick="claimMission('kill')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
-        
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">5분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">5분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
+        <!-- 달 클릭 신규 미션 -->
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">30</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">40</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">30</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
 
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
@@ -366,14 +374,21 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
+            <div class="version-title">v8.4.0 (실시간 접속자 & 신규 기능 추가)</div>
+            <ul>
+              <li><b>실시간 접속자 시스템 구축:</b> 현재 동시 접속 중인 파일럿 수를 상단 헤더에 실시간으로 표시</li>
+              <li><b>명예의 전당 날짜 포맷 개편:</b> `YY.MM.DD HH:mm` 표기로 가독성 대폭 향상</li>
+              <li><b>신규 무한 미션 추가:</b> [달의 인도자] 달 클릭 누적 미션 추가</li>
+              <li><b>패치 히스토리 보존:</b> 업데이트 시 과거 패치 내역이 사라지지 않도록 누적 체계화</li>
+            </ul>
+          </div>
+          <div class="version-block">
             <div class="version-title">v8.3.1 (버그 픽스 및 미션 개편)</div>
             <ul>
-              <li><b>명예의 전당 버그 수정:</b> 간헐적으로 랭커 닉네임이 '익명'이나 빈칸으로 뜨는 렌더링 오류를 완벽하게 개선 및 방어코드 추가</li>
-              <li>인게임 좌우 조작 버튼(D-패드) 크기 화면 가장자리에 맞게 전체 확장</li>
-              <li>하트(회복 아이템) 습득 시 최대 체력 제한선 해제 (무한 회복)</li>
-              <li>내 비행기 상태 카드 위치 최하단으로 이동 & 명예의 전당 높이 확장</li>
-              <li>'👑 랭커들의 한마디' 상단 통합 박스 배치</li>
-              <li><b>신규 무한 반복 미션 추가:</b> [행운의 사나이] 코인 획득, [시간 탐험가] 플레이 타임 누적</li>
+              <li><b>명예의 전당 버그 수정:</b> 랭커 닉네임 누락 오류 개선 및 방어코드 추가</li>
+              <li>인게임 좌우 조작 버튼(D-패드) 화면 가장자리 확장</li>
+              <li>하트 습득 시 최대 체력 제한 해제 (무한 회복)</li>
+              <li><b>신규 반복 미션 추가:</b> [행운의 사나이] 코인 획득, [시간 탐험가] 플레이 타임 누적</li>
             </ul>
           </div>
         </div>
@@ -422,10 +437,20 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.3.1";
+    var currentVersionKey = "v8.4.0"; // 패치 노트에는 반영하지 않고 코드만 수정
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
+
+    // 닉네임 필터링 (요청 단어 마스킹 처리)
+    function sanitizeNickname(str) {
+      if (!str) return "익명";
+      var s = str.trim();
+      s = s.replace(/윤영로윤어게인/g, "***윤어게인");
+      s = s.replace(/윤영로/g, "***");
+      s = s.replace(/영로/g, "**");
+      return s === "" ? "익명" : s;
+    }
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     var shopMeatCost = parseFloat(localStorage.getItem("yoon_meat_cost") || "160");
@@ -457,7 +482,7 @@
     var totalBossKills = parseInt(localStorage.getItem("yoon_total_boss_kills") || "0");
     var shopPurchaseCount = parseInt(localStorage.getItem("yoon_shop_purchase_count") || "0");
 
-    // 기존 미션 데이터
+    // 미션 데이터
     var missionTargetKill = parseInt(localStorage.getItem("yoon_m_target_kill") || "100");
     var missionRewardKill = parseInt(localStorage.getItem("yoon_m_reward_kill") || "50");
     var missionTargetBoss = parseInt(localStorage.getItem("yoon_m_target_boss") || "3");
@@ -465,7 +490,6 @@
     var missionTargetShop = parseInt(localStorage.getItem("yoon_m_target_shop") || "1");
     var missionRewardShop = parseInt(localStorage.getItem("yoon_m_reward_shop") || "30");
 
-    // 신규 미션 데이터
     var totalPickedCoins = parseInt(localStorage.getItem("yoon_m_total_picked") || "0");
     var missionTargetPickedCoin = parseInt(localStorage.getItem("yoon_m_target_picked") || "50");
     var missionRewardPickedCoin = parseInt(localStorage.getItem("yoon_m_reward_picked") || "30");
@@ -473,6 +497,10 @@
     var totalPlaytime = parseInt(localStorage.getItem("yoon_m_total_time") || "0");
     var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "300"); 
     var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "50");
+
+    // 신규: 달 클릭 누적 미션
+    var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "30");
+    var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "40");
 
     function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
@@ -488,6 +516,7 @@
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
             checkAndResetWeeklyRanking();
+            startPresenceSystem(); // 실시간 접속자 체크 시작
           } catch(e) {
             console.error(e);
             updateLeaderboardUI(true);
@@ -495,7 +524,11 @@
         });
       });
       var savedNick = localStorage.getItem("yoon_nickname") || "";
-      if (savedNick) { document.getElementById("nicknameInput").value = savedNick; checkNicknameInput(savedNick); }
+      if (savedNick) { 
+        savedNick = sanitizeNickname(savedNick);
+        document.getElementById("nicknameInput").value = savedNick; 
+        checkNicknameInput(savedNick); 
+      }
       var savedQuote = localStorage.getItem("yoon_quote") || "";
       if (savedQuote) document.getElementById("rankingQuoteInput").value = savedQuote;
 
@@ -505,6 +538,27 @@
         if (document.hidden && !isGameOver && !isPaused && !isCountingDown) triggerAutoPause();
       });
     });
+
+    /* 실시간 접속자 수 파이어베이스 로직 */
+    function startPresenceSystem() {
+      if (!db) return;
+      function sendHeartbeat() {
+        db.collection("active_users").doc(deviceId).set({
+          lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }).catch(function(e){});
+      }
+      sendHeartbeat();
+      setInterval(sendHeartbeat, 30000); // 30초마다 생존신호
+
+      // 최근 2분 내 접속한 유저 카운트
+      setInterval(function() {
+        var twoMinutesAgo = new Date(Date.now() - 120000);
+        db.collection("active_users").where("lastSeen", ">=", twoMinutesAgo).get().then(function(snap) {
+          var count = Math.max(1, snap.size);
+          document.getElementById("onlineUserCount").textContent = count;
+        }).catch(function(e){});
+      }, 15000);
+    }
 
     function triggerAutoPause() {
       isPaused = true; stopBGM();
@@ -519,7 +573,7 @@
     }
 
     function checkAlerts() {
-      var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop) || (totalPickedCoins >= missionTargetPickedCoin) || (totalPlaytime >= missionTargetPlaytime);
+      var canClaim = (totalMonsterKills >= missionTargetKill) || (totalBossKills >= missionTargetBoss) || (shopPurchaseCount >= missionTargetShop) || (totalPickedCoins >= missionTargetPickedCoin) || (totalPlaytime >= missionTargetPlaytime) || (moonClickCount >= missionTargetMoon);
       if (canClaim) document.getElementById('missionAlertDot').classList.remove('hidden');
       else document.getElementById('missionAlertDot').classList.add('hidden');
 
@@ -554,6 +608,7 @@
       
       localStorage.setItem("yoon_m_total_picked", totalPickedCoins); localStorage.setItem("yoon_m_target_picked", missionTargetPickedCoin); localStorage.setItem("yoon_m_reward_picked", missionRewardPickedCoin);
       localStorage.setItem("yoon_m_total_time", totalPlaytime); localStorage.setItem("yoon_m_target_time", missionTargetPlaytime); localStorage.setItem("yoon_m_reward_time", missionRewardPlaytime);
+      localStorage.setItem("yoon_m_target_moon", missionTargetMoon); localStorage.setItem("yoon_m_reward_moon", missionRewardMoon);
     }
 
     function calculateRefund() {
@@ -701,7 +756,15 @@
         document.getElementById('missionTimeProgress').innerText = Math.floor(totalPlaytime / 60) + "분";
         var claimTimeBtn = document.getElementById('claimTimeBtn');
         if (totalPlaytime >= missionTargetPlaytime) { claimTimeBtn.innerText = "보상 받기"; claimTimeBtn.disabled = false; } else { claimTimeBtn.innerText = "진행중"; claimTimeBtn.disabled = true; }
-        
+
+        // 달 클릭 미션 UI
+        document.getElementById('mTargetMoonText').innerText = missionTargetMoon;
+        document.getElementById('mTargetMoonSub').innerText = missionTargetMoon;
+        document.getElementById('mRewardMoonText').innerText = missionRewardMoon;
+        document.getElementById('missionMoonProgress').innerText = Math.min(missionTargetMoon, moonClickCount);
+        var claimMoonBtn = document.getElementById('claimMoonBtn');
+        if (moonClickCount >= missionTargetMoon) { claimMoonBtn.innerText = "보상 받기"; claimMoonBtn.disabled = false; } else { claimMoonBtn.innerText = "진행중"; claimMoonBtn.disabled = true; }
+
       } catch (e) {
         console.error("Mission UI Update Error:", e);
       }
@@ -714,6 +777,7 @@
       else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) { userCoins += missionRewardShop; missionTargetShop *= 2; missionRewardShop *= 2; }
       else if (type === 'picked' && totalPickedCoins >= missionTargetPickedCoin) { userCoins += missionRewardPickedCoin; missionTargetPickedCoin *= 2; missionRewardPickedCoin *= 2; }
       else if (type === 'time' && totalPlaytime >= missionTargetPlaytime) { userCoins += missionRewardPlaytime; missionTargetPlaytime *= 2; missionRewardPlaytime *= 2; }
+      else if (type === 'moon' && moonClickCount >= missionTargetMoon) { userCoins += missionRewardMoon; missionTargetMoon *= 2; missionRewardMoon *= 2; }
       saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
     }
 
@@ -721,14 +785,14 @@
     function openMissionModal() { initAudio(); updateMissionUI(); toggleModal('missionModal', true); }
 
     function handleMoonClick() {
-      initAudio(); moonClickCount++;
+      initAudio(); moonClickCount++; saveShopData(); updateMissionUI(); checkAlerts();
       var rewards = { 30: 1000, 300: 3000, 400: 4000, 500: 5000, 1000: 100000 };
       var msgs = {
-        30: "당신의 손길에 감동받아 코인 1000개를 지급합니다.\n-YOON행성 관리자-",
-        300: "당신의 손길에 감동받아 코인 3000개를 지급합니다.\n-YOON행성 관리자-",
-        400: "당신의 끝없는 손길에 감동받아 코인 4000개를 지급합니다.\n-YOON행성 관리자-",
-        500: "당신의 엄청난 끈기에 감동받아 코인 5000개를 지급합니다.\n(마지막 코인 지급입니다!)\n-YOON행성 관리자-",
-        1000: "경이로운 손길에 경의를 표하며 코인 100,000개를 지급합니다.\n-YOON행성 관리자-"
+        30: "달이 기분 좋게 요동칩니다!\n달의 축복으로 🪙 1,000 코인을 획득했습니다.\n\n-YOON행성 관리자-",
+        300: "달이 기분 좋게 요동칩니다!\n달의 축복으로 🪙 3,000 코인을 획득했습니다.\n\n-YOON행성 관리자-",
+        400: "달의 강력한 울림이 느껴집니다!\n달의 축복으로 🪙 4,000 코인을 획득했습니다.\n\n-YOON행성 관리자-",
+        500: "달의 강력한 울림이 느껴집니다!\n달의 축복으로 🪙 5,000 코인을 획득했습니다.\n(마지막 축복입니다!)\n\n-YOON행성 관리자-",
+        1000: "경이로운 손길에 달이 찬란하게 빛납니다!\n달의 전설적인 축복으로 🪙 100,000 코인을 획득했습니다.\n\n-YOON행성 관리자-"
       };
       for (var k in rewards) {
         if (moonClickCount === parseInt(k) && !moonRewardClaimed[k]) {
@@ -788,11 +852,9 @@
       db.collection("rankings").orderBy("score", "desc").limit(50).get().then(function(querySnapshot) {
         var rankings = [], seenNicknames = {};
         
-        // 익명 버그 방어 코드: 데이터 파싱 시 강제로 올바른 닉네임 삽입
         querySnapshot.forEach(function(doc) {
           var data = doc.data();
-          data.nickname = (data.nickname && data.nickname.trim() !== "") ? data.nickname : "익명";
-          
+          data.nickname = sanitizeNickname(data.nickname);
           var nick = data.nickname;
           if (!seenNicknames[nick]) { seenNicknames[nick] = true; rankings.push(data); }
         });
@@ -812,7 +874,15 @@
         for (var i = 0; i < rankings.length; i++) {
           var r = rankings[i];
           var dateObj = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : new Date();
-          var dtStr = (dateObj.getMonth()+1) + "/" + dateObj.getDate() + " " + dateObj.getHours() + ":" + (dateObj.getMinutes()<10?"0":"") + dateObj.getMinutes();
+          
+          // 연.월.일 시:분 포맷으로 가독성 대폭 향상
+          var yy = String(dateObj.getFullYear()).slice(-2);
+          var mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+          var dd = String(dateObj.getDate()).padStart(2, '0');
+          var hh = String(dateObj.getHours()).padStart(2, '0');
+          var min = String(dateObj.getMinutes()).padStart(2, '0');
+          var dtStr = yy + "." + mm + "." + dd + " " + hh + ":" + min;
+
           htmlContent += "<tr><td>" + (i+1) + "</td><td>" + dtStr + "</td><td>" + r.nickname + "</td><td>" + (r.monsterKills||0) + "</td><td>" + (r.bossKills||0) + "</td><td>" + (r.score||0) + "</td></tr>";
         }
         bodyEl.innerHTML = htmlContent;
@@ -824,9 +894,7 @@
 
     function saveScore(nickname, score, monsterKills, bossKills, quote) {
       if (!db || nickname === "test123") return;
-      
-      // 저장 시 익명 버그 방지 2차 방어코드
-      var safeNickname = (nickname && nickname.trim() !== "") ? nickname : (localStorage.getItem("yoon_nickname") || "익명");
+      var safeNickname = sanitizeNickname(nickname);
       var safeQuote = quote || "";
 
       db.collection("rankings").where("deviceId", "==", deviceId).get().then(function(snapshot) {
@@ -841,7 +909,6 @@
               batch.commit().then(function(){ updateLeaderboardUI(); });
             });
           } else {
-            // 점수가 낮더라도 최신 닉네임과 한마디 업데이트 방어 로직 반영
             highestDoc.ref.update({ nickname: safeNickname, quote: safeQuote }).then(function(){ updateLeaderboardUI(); });
           }
         }
@@ -849,8 +916,8 @@
     }
 
     function checkNicknameInput(val) {
-      var trimmed = val.trim();
-      document.getElementById("welcomeMessage").textContent = trimmed ? "환영합니다, " + trimmed + " 파일럿님!" : "";
+      var sanitized = sanitizeNickname(val);
+      document.getElementById("welcomeMessage").textContent = val.trim() ? "환영합니다, " + sanitized + " 파일럿님!" : "";
     }
     
     function closeUpdateModalWithCheck() {
@@ -872,11 +939,14 @@
 
     function openStoryScreen() {
       initAudio();
-      var inputVal = document.getElementById("nicknameInput").value.trim();
-      if (!inputVal) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); return; }
+      var inputVal = document.getElementById("nicknameInput").value;
+      var sanitizedVal = sanitizeNickname(inputVal);
+      if (!inputVal.trim()) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); return; }
       document.getElementById("nicknameWarning").textContent = "";
-      localStorage.setItem("yoon_nickname", inputVal);
-      document.getElementById("storyPilotName").textContent = inputVal;
+      
+      playerNickname = sanitizedVal;
+      localStorage.setItem("yoon_nickname", sanitizedVal);
+      document.getElementById("storyPilotName").textContent = sanitizedVal;
       toggleModal("storyModal", true);
     }
 
@@ -1001,8 +1071,7 @@
     }
 
     function startGame() {
-      var nick = document.getElementById("nicknameInput").value.trim();
-      if (!nick) { document.getElementById("nicknameWarning").textContent = "⚠️ 닉네임을 입력해야 출격할 수 있습니다!"; document.getElementById("nicknameInput").focus(); return; }
+      var nick = sanitizeNickname(document.getElementById("nicknameInput").value);
       playerNickname = nick; playerQuote = document.getElementById("rankingQuoteInput").value.trim();
       localStorage.setItem("yoon_nickname", playerNickname); localStorage.setItem("yoon_quote", playerQuote);
       toggleModal("storyModal", false); document.getElementById("startScreen").classList.add("hidden"); document.getElementById("rankScreen").classList.add("hidden");
@@ -1137,7 +1206,6 @@
 
       for (var i = bullets.length - 1; i >= 0; i--) {
         var b = bullets[i];
-        
         if (b.type === "drone_homing" && b.homingTimer > 0) {
           b.homingTimer -= gameSpeedMultiplier;
           var target = null;
@@ -1462,7 +1530,6 @@
     function gameOver() {
       isGameOver = true; stopBGM(); playSound('gameover'); cancelAnimationFrame(gameAnimationId);
       
-      // 순수 플레이 타임 저장 로직 (1프레임을 대략 1/60초로 계산)
       totalPlaytime += Math.floor(sessionPlayFrames / 60);
 
       document.getElementById("controlArea").classList.add("hidden"); document.getElementById("inGameTopBtns").classList.add("hidden"); document.getElementById("rankScreen").classList.remove("hidden");
