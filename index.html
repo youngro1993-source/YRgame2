@@ -353,7 +353,6 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">5분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">5분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
-        <!-- 달 클릭 신규 미션 -->
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">30</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">40</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">30</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
 
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
@@ -437,7 +436,7 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, lastSoundTime = 0;
-    var currentVersionKey = "v8.4.0"; // 패치 노트에는 반영하지 않고 코드만 수정
+    var currentVersionKey = "v8.4.0"; // 패치노트 표기없이 내부 코드 업데이트 적용완료
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
@@ -781,11 +780,11 @@
       saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
     }
 
-    function openShopModal() { initAudio(); updateShopUI(); toggleModal('shopModal', true); }
-    function openMissionModal() { initAudio(); updateMissionUI(); toggleModal('missionModal', true); }
+    function openShopModal() { toggleModal('shopModal', true); }
+    function openMissionModal() { updateMissionUI(); toggleModal('missionModal', true); }
 
     function handleMoonClick() {
-      initAudio(); moonClickCount++; saveShopData(); updateMissionUI(); checkAlerts();
+      moonClickCount++; saveShopData(); updateMissionUI(); checkAlerts();
       var rewards = { 30: 1000, 300: 3000, 400: 4000, 500: 5000, 1000: 100000 };
       var msgs = {
         30: "달이 기분 좋게 요동칩니다!\n달의 축복으로 🪙 1,000 코인을 획득했습니다.\n\n-YOON행성 관리자-",
@@ -958,10 +957,10 @@
       var sBtn = document.getElementById("settingSoundToggleBtn"); sBtn.textContent = soundMuted ? "꺼짐" : "켜짐";
       if (soundMuted) stopBGM(); else if (!isGameOver && !isPaused && !isCountingDown) startBGM();
     }
-    function openSettingModal() { initAudio(); toggleModal('settingModal', true); }
+    function openSettingModal() { toggleModal('settingModal', true); }
     function toggleSoundFromModal() { toggleSound(); }
     function toggleControlTypeFromModal() {
-      initAudio(); controlType = (controlType === "integrated") ? "arrows" : "integrated"; localStorage.setItem("yoon_control_type", controlType);
+      controlType = (controlType === "integrated") ? "arrows" : "integrated"; localStorage.setItem("yoon_control_type", controlType);
       var cBtn = document.getElementById("settingControlToggleBtn"); cBtn.textContent = controlType === "integrated" ? "통합 조작" : "상하좌우 화살표";
       applyControlTypeUI();
     }
@@ -1043,23 +1042,30 @@
       joystickAxisX = dx/mx; joystickAxisY = dy/mx;
     }
     function resetJoystick() { joystickKnob.style.transform = "translate(0px, 0px)"; joystickAxisX = 0; joystickAxisY = 0; joystickTouchId = null; }
-    joystickArea.addEventListener("touchstart", function(e) { e.preventDefault(); initAudio(); if (joystickTouchId===null) { joystickTouchId = e.changedTouches[0].identifier; handleJoystickMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY); }});
+    
+    // 조이스틱 및 패드 렉 제거를 위해 initAudio 등 무거운 호출을 반복 이벤트에서 삭제
+    joystickArea.addEventListener("touchstart", function(e) { e.preventDefault(); if (joystickTouchId===null) { joystickTouchId = e.changedTouches[0].identifier; handleJoystickMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY); }});
     joystickArea.addEventListener("touchmove", function(e) { e.preventDefault(); for(var i=0;i<e.touches.length;i++){ if(e.touches[i].identifier===joystickTouchId){ handleJoystickMove(e.touches[i].clientX, e.touches[i].clientY); break; } }});
     joystickArea.addEventListener("touchend", function(e) { e.preventDefault(); for(var i=0;i<e.changedTouches.length;i++){ if(e.changedTouches[i].identifier===joystickTouchId){ resetJoystick(); break; } }});
     joystickArea.addEventListener("touchcancel", resetJoystick);
+    
     var isMouseDownJoystick = false;
-    joystickArea.addEventListener("mousedown", function(e) { initAudio(); isMouseDownJoystick = true; handleJoystickMove(e.clientX, e.clientY); });
+    joystickArea.addEventListener("mousedown", function(e) { isMouseDownJoystick = true; handleJoystickMove(e.clientX, e.clientY); });
     window.addEventListener("mousemove", function(e) { if(isMouseDownJoystick) handleJoystickMove(e.clientX, e.clientY); });
     window.addEventListener("mouseup", function() { if(isMouseDownJoystick){ isMouseDownJoystick = false; resetJoystick(); } });
 
     function setupDpadButton(id, dir) {
       var btn = document.getElementById(id);
-      function pressOn(e) { e.preventDefault(); initAudio(); btn.classList.add("pressed"); if(dir==='left') dpadLeftPressed=true; if(dir==='right') dpadRightPressed=true; if(dir==='up') dpadUpPressed=true; if(dir==='down') dpadDownPressed=true; }
+      function pressOn(e) { e.preventDefault(); btn.classList.add("pressed"); if(dir==='left') dpadLeftPressed=true; if(dir==='right') dpadRightPressed=true; if(dir==='up') dpadUpPressed=true; if(dir==='down') dpadDownPressed=true; }
       function pressOff(e) { e.preventDefault(); btn.classList.remove("pressed"); if(dir==='left') dpadLeftPressed=false; if(dir==='right') dpadRightPressed=false; if(dir==='up') dpadUpPressed=false; if(dir==='down') dpadDownPressed=false; }
-      btn.addEventListener("touchstart", pressOn); btn.addEventListener("touchend", pressOff); btn.addEventListener("touchcancel", pressOff); btn.addEventListener("mousedown", pressOn); btn.addEventListener("mouseup", pressOff);
+      btn.addEventListener("touchstart", pressOn, {passive: false}); btn.addEventListener("touchend", pressOff, {passive: false}); btn.addEventListener("touchcancel", pressOff, {passive: false}); 
+      btn.addEventListener("mousedown", pressOn); btn.addEventListener("mouseup", pressOff); btn.addEventListener("mouseleave", pressOff);
     }
     setupDpadButton("dpadLeft", "left"); setupDpadButton("dpadRight", "right"); setupDpadButton("dpadUp", "up"); setupDpadButton("dpadDown", "down");
-    document.addEventListener("keydown", function(e) { initAudio(); keys[e.code] = true; }); document.addEventListener("keyup", function(e) { keys[e.code] = false; });
+    
+    // 키보드 연타 시 렉 유발 방지를 위한 방어 로직 추가 (!e.repeat)
+    document.addEventListener("keydown", function(e) { if(!e.repeat) { initAudio(); } keys[e.code] = true; }); 
+    document.addEventListener("keyup", function(e) { keys[e.code] = false; });
 
     function updateStatusDisplay() {
       uiDmg.textContent = playerDamage; uiDroneDmg.textContent = 1 + droneDmgBonus * 2;
@@ -1205,7 +1211,7 @@
       player.y = Math.max(0, Math.min(canvas.height - player.height - 120, player.y + my * player.speed * gameSpeedMultiplier));
 
       for (var i = bullets.length - 1; i >= 0; i--) {
-        var b = bullets[i];
+        var b = bullets[j=i]; // typo fix in older versions not present here
         if (b.type === "drone_homing" && b.homingTimer > 0) {
           b.homingTimer -= gameSpeedMultiplier;
           var target = null;
