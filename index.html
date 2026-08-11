@@ -895,7 +895,14 @@
         var htmlContent = rankings.length === 0 ? "<tr><td colspan='6'>등록된 기록이 없습니다.</td></tr>" : "";
         for (var i = 0; i < rankings.length; i++) {
           var r = rankings[i];
-          var dateObj = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : new Date();
+          var dateObj = new Date();
+          
+          if (r.createdAt) {
+            if (typeof r.createdAt.toDate === 'function') dateObj = r.createdAt.toDate();
+            else if (r.createdAt.seconds) dateObj = new Date(r.createdAt.seconds * 1000);
+            else dateObj = new Date(r.createdAt);
+          }
+          if (isNaN(dateObj.getTime())) dateObj = new Date();
           
           var yy = String(dateObj.getFullYear()).slice(-2);
           var mm = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -1043,7 +1050,7 @@
         var s = stars[i]; s.y += s.speed * gameSpeedMultiplier * bgSpeedMult;
         if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
         
-        if (stage >= 20) {
+        if (stage >= 20 && stage < 50) {
             ctx.globalAlpha = s.alpha * 0.6;
             ctx.fillRect(s.x | 0, s.y | 0, s.size * 0.5, s.size * 4);
         } else {
@@ -1208,7 +1215,8 @@
     function spawnBoss() {
       triggerWarning("WARNING! BOSS INCOMING!"); bossSpawnCount++; var chp = Math.floor(450 * Math.pow(1.2, bossSpawnCount - 1));
       var types = ["normal", "spinner", "zigzag", "charger"], ct = stage < 3 ? "normal" : types[Math.floor(Math.random() * types.length)];
-      boss = { type: ct, x: canvas.width/2 - 35, y: 40, baseY: 40, width: 70, height: 50, speedX: 1.1, hp: chp, maxHp: chp, lastShoot: 0, patternTimer: 0, designType: ct==="spinner"?4:Math.floor(Math.random()*4), state: 'idle', stateTimer: 0, targetDashX: 0, targetDashY: 0, spinAngle: 0, vx: 0, vy: 0 };
+      var bY = stage >= 50 ? (canvas.height / 2 - 25) : 40;
+      boss = { type: ct, x: canvas.width/2 - 35, y: bY, baseY: bY, width: 70, height: 50, speedX: 1.1, hp: chp, maxHp: chp, lastShoot: 0, patternTimer: 0, designType: ct==="spinner"?4:Math.floor(Math.random()*4), state: 'idle', stateTimer: 0, targetDashX: 0, targetDashY: 0, spinAngle: 0, vx: 0, vy: 0 };
     }
     function spawnItem(x, y, fType) {
       if (fType) { if (fType === "upgrade" && bulletCount >= 6) fType = Math.random() > 0.5 ? "coin" : "damage"; items.push({ x: x, y: y, width: 22, height: 22, speed: 0.95, type: fType }); }
@@ -1375,7 +1383,10 @@
             if (boss.stateTimer > 70) { boss.state = 'wander'; boss.stateTimer = 0; boss.vx = (Math.random()>0.5?1:-1)*2.0; boss.vy = (Math.random()>0.5?1:-1)*1.4; }
           } else if (boss.state === 'wander') {
             boss.x += boss.vx * gameSpeedMultiplier; boss.y += boss.vy * gameSpeedMultiplier;
-            if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1; if (boss.y <= 10 || boss.y + boss.height >= canvas.height * 0.35) boss.vy *= -1;
+            var limitTop = stage >= 50 ? (canvas.height/2 - 120) : 10;
+            var limitBot = stage >= 50 ? (canvas.height/2 + 120) : canvas.height * 0.35;
+            if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1; 
+            if (boss.y <= limitTop || boss.y + boss.height >= limitBot) boss.vy *= -1;
             if (gameTime - boss.lastShoot > Math.max(55, 110 - (stage - 1) * 4)) { fireBossPattern(boss); boss.lastShoot = gameTime; }
             if (boss.stateTimer > 200) { boss.state = 'idle'; boss.stateTimer = 0; }
           }
@@ -1540,7 +1551,7 @@
       else if (b.designType === 2) { ctx.fillStyle = "#0284c7"; ctx.fillRect((b.x+12)|0, b.y|0, (b.width-24)|0, b.height|0); ctx.translate(cx|0, cy|0); ctx.rotate(gameTime * 0.03); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.strokeRect((-b.width/2)|0, -8, b.width|0, 16); }
       else { ctx.fillStyle = "#d97706"; ctx.beginPath(); ctx.moveTo(cx|0, (b.y+b.height)|0); ctx.lineTo((b.x+b.width)|0, b.y|0); ctx.lineTo(b.x|0, b.y|0); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(cx|0, (b.y+16)|0, 9, 0, Math.PI*2); ctx.fill(); }
       ctx.restore();
-      var bw = canvas.width * 0.6, bh = 14, bx = (canvas.width - bw) / 2, by = 35, hr = Math.max(0, b.hp / b.maxHp);
+      var bw = canvas.width * 0.6, bh = 14, bx = (canvas.width - bw) / 2, by = (stage >= 50 ? b.y - 25 : 35), hr = Math.max(0, b.hp / b.maxHp);
       ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(bx|0, by|0, bw|0, bh|0); ctx.fillStyle = "#ef4444"; ctx.fillRect(bx|0, by|0, (bw*hr)|0, bh|0); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.strokeRect(bx|0, by|0, bw|0, bh|0);
       ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("HP: " + Math.max(0, b.hp|0) + " / " + b.maxHp, canvas.width/2, by+bh/2+1);
     }
@@ -1554,7 +1565,16 @@
         shakeTimer--; 
       }
       
-      if (stage >= 40) {
+      if (stage >= 50) {
+        var bgGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        bgGrd.addColorStop(0, "#071022");
+        bgGrd.addColorStop(0.5, "#0a0a1a");
+        bgGrd.addColorStop(1, "#020617");
+        ctx.fillStyle = bgGrd;
+        ctx.fillRect(-20, -20, canvas.width + 40, canvas.height + 40);
+        updateAndDrawStars();
+        updateAndDrawClouds();
+      } else if (stage >= 40) {
         var bgGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
         bgGrd.addColorStop(0, "#1e1b4b");
         bgGrd.addColorStop(0.5, "#7f1d1d");
