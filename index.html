@@ -354,10 +354,10 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
         
-        <!-- 시간 미션: 2분 / 150코인 -->
+        <!-- 시간 미션 -->
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">2분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">150</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">2분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
         
-        <!-- 달 클릭 미션: 15회 / 100코인 -->
+        <!-- 달 클릭 미션 -->
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">15</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">15</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
 
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
@@ -378,21 +378,11 @@
         <h3>📜 패치 내역</h3>
         <div class="history-scroll-area">
           <div class="version-block">
-            <div class="version-title">v8.4.0 (실시간 접속자 & 신규 기능 추가)</div>
+            <div class="version-title">v8.4.1 (미션 중복 수령 및 무한 보상 버그 수정)</div>
             <ul>
-              <li><b>실시간 접속자 시스템 구축:</b> 현재 동시 접속 중인 파일럿 수를 상단 헤더에 실시간으로 표시</li>
+              <li><b>미션 상태 저장 오류 즉시 수정:</b> 보상 받기 시 다음 단계 수치 및 변경 사항이 즉시 브라우저 저장소에 영구 동기화 되도록 보완</li>
+              <li><b>실시간 접속자 시스템 구축:</b> 동시 접속 중인 파일럿 수 헤더 표시</li>
               <li><b>명예의 전당 날짜 포맷 개편:</b> `YY.MM.DD HH:mm` 표기로 가독성 대폭 향상</li>
-              <li><b>신규 무한 미션 추가:</b> [달의 인도자] 달 클릭 누적 미션 추가</li>
-              <li><b>패치 히스토리 보존:</b> 업데이트 시 과거 패치 내역이 사라지지 않도록 누적 체계화</li>
-            </ul>
-          </div>
-          <div class="version-block">
-            <div class="version-title">v8.3.1 (버그 픽스 및 미션 개편)</div>
-            <ul>
-              <li><b>명예의 전당 버그 수정:</b> 랭커 닉네임 누락 오류 개선 및 방어코드 추가</li>
-              <li>인게임 좌우 조작 버튼(D-패드) 화면 가장자리 확장</li>
-              <li>하트 습득 시 최대 체력 제한 해제 (무한 회복)</li>
-              <li><b>신규 반복 미션 추가:</b> [행운의 사나이] 코인 획득, [시간 탐험가] 플레이 타임 누적</li>
             </ul>
           </div>
         </div>
@@ -441,38 +431,20 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, isPlaying = false, lastSoundTime = 0; 
-    var currentVersionKey = "v8.4.0"; 
+    var currentVersionKey = "v8.4.1"; 
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
 
-    // 윤영로 우회 필터링
     function sanitizeText(str, fallback) {
       if (!str) return fallback !== undefined ? fallback : "익명";
       var s = String(str).trim();
-      
       var yoonPattern = /[윤\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[영\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[로\u3131-\u318E]/gi;
       var youngPattern = /[영\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[로\u3131-\u318E]/gi;
-      
       s = s.replace(yoonPattern, "***");
       s = s.replace(youngPattern, "**");
-      
       return s === "" ? (fallback !== undefined ? fallback : "익명") : s;
     }
-
-    // --- 기존 브라우저에 구버전 미션 목표값이 저장되어 있는 경우 신버전 데이터로 강제 초기화/동기화 ---
-    (function syncStorageForMissions() {
-      var savedTimeTarget = parseInt(localStorage.getItem("yoon_m_target_time") || "0");
-      if (savedTimeTarget > 120 || savedTimeTarget === 300 || savedTimeTarget === 0) {
-        localStorage.setItem("yoon_m_target_time", "120");
-        localStorage.setItem("yoon_m_reward_time", "150");
-      }
-      var savedMoonTarget = parseInt(localStorage.getItem("yoon_m_target_moon") || "0");
-      if (savedMoonTarget > 15 || savedMoonTarget === 30 || savedMoonTarget === 0) {
-        localStorage.setItem("yoon_m_target_moon", "15");
-        localStorage.setItem("yoon_m_reward_moon", "100");
-      }
-    })();
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     var shopMeatCost = parseFloat(localStorage.getItem("yoon_meat_cost") || "160");
@@ -515,12 +487,10 @@
     var missionTargetPickedCoin = parseInt(localStorage.getItem("yoon_m_target_picked") || "50");
     var missionRewardPickedCoin = parseInt(localStorage.getItem("yoon_m_reward_picked") || "30");
     
-    // 시간 미션: 120초(2분) / 150 코인
     var totalPlaytime = parseInt(localStorage.getItem("yoon_m_total_time") || "0");
     var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "120"); 
     var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "150");
 
-    // 달 미션: 15회 / 100 코인
     var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "15");
     var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "100");
 
@@ -769,7 +739,6 @@
         var claimPickedBtn = document.getElementById('claimPickedBtn');
         if (totalPickedCoins >= missionTargetPickedCoin) { claimPickedBtn.innerText = "보상 받기"; claimPickedBtn.disabled = false; } else { claimPickedBtn.innerText = "진행중"; claimPickedBtn.disabled = true; }
 
-        // 시간 미션 UI 갱신
         var targetTimeMins = Math.max(1, Math.floor(missionTargetPlaytime / 60));
         document.getElementById('mTargetTimeText').innerText = targetTimeMins + "분";
         document.getElementById('mTargetTimeSub').innerText = targetTimeMins + "분";
@@ -778,7 +747,6 @@
         var claimTimeBtn = document.getElementById('claimTimeBtn');
         if (totalPlaytime >= missionTargetPlaytime) { claimTimeBtn.innerText = "보상 받기"; claimTimeBtn.disabled = false; } else { claimTimeBtn.innerText = "진행중"; claimTimeBtn.disabled = true; }
 
-        // 달 미션 UI 갱신
         document.getElementById('mTargetMoonText').innerText = missionTargetMoon;
         document.getElementById('mTargetMoonSub').innerText = missionTargetMoon;
         document.getElementById('mRewardMoonText').innerText = missionRewardMoon;
@@ -792,14 +760,44 @@
     }
 
     function claimMission(type) {
+      if (type === 'kill' && totalMonsterKills >= missionTargetKill) { 
+        userCoins += missionRewardKill; 
+        missionTargetKill *= 2; 
+        missionRewardKill *= 2; 
+      }
+      else if (type === 'boss' && totalBossKills >= missionTargetBoss) { 
+        userCoins += missionRewardBoss; 
+        missionTargetBoss *= 2; 
+        missionRewardBoss *= 2; 
+      }
+      else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) { 
+        userCoins += missionRewardShop; 
+        missionTargetShop *= 2; 
+        missionRewardShop *= 2; 
+      }
+      else if (type === 'picked' && totalPickedCoins >= missionTargetPickedCoin) { 
+        userCoins += missionRewardPickedCoin; 
+        missionTargetPickedCoin *= 2; 
+        missionRewardPickedCoin *= 2; 
+      }
+      else if (type === 'time' && totalPlaytime >= missionTargetPlaytime) { 
+        userCoins += missionRewardPlaytime; 
+        missionTargetPlaytime *= 2; 
+        missionRewardPlaytime *= 2; 
+      }
+      else if (type === 'moon' && moonClickCount >= missionTargetMoon) { 
+        userCoins += missionRewardMoon; 
+        missionTargetMoon *= 2; 
+        missionRewardMoon *= 2; 
+      } else {
+        return; 
+      }
+
       playSound('item');
-      if (type === 'kill' && totalMonsterKills >= missionTargetKill) { userCoins += missionRewardKill; missionTargetKill *= 2; missionRewardKill *= 2; }
-      else if (type === 'boss' && totalBossKills >= missionTargetBoss) { userCoins += missionRewardBoss; missionTargetBoss *= 2; missionRewardBoss *= 2; }
-      else if (type === 'shop' && shopPurchaseCount >= missionTargetShop) { userCoins += missionRewardShop; missionTargetShop *= 2; missionRewardShop *= 2; }
-      else if (type === 'picked' && totalPickedCoins >= missionTargetPickedCoin) { userCoins += missionRewardPickedCoin; missionTargetPickedCoin *= 2; missionRewardPickedCoin *= 2; }
-      else if (type === 'time' && totalPlaytime >= missionTargetPlaytime) { userCoins += missionRewardPlaytime; missionTargetPlaytime *= 2; missionRewardPlaytime *= 2; }
-      else if (type === 'moon' && moonClickCount >= missionTargetMoon) { userCoins += missionRewardMoon; missionTargetMoon *= 2; missionRewardMoon *= 2; }
-      saveShopData(); updateShopUI(); updateMissionUI(); checkAlerts();
+      saveShopData(); 
+      updateShopUI(); 
+      updateMissionUI(); 
+      checkAlerts();
     }
 
     function openShopModal() { toggleModal('shopModal', true); }
