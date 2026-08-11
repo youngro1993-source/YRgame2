@@ -345,7 +345,7 @@
       </div>
     </div>
 
-    <!-- 미션 모달 (보상/목표치 반영 완료) -->
+    <!-- 미션 모달 -->
     <div id="missionModal" class="modal-overlay hidden">
       <div class="modal-content">
         <h3 style="margin-bottom: 6px;">📋 무한 반복 미션</h3>
@@ -354,10 +354,10 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
         
-        <!-- 수정된 시간 미션: 2분 / 150코인 -->
+        <!-- 시간 미션: 2분 / 150코인 -->
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">2분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">150</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">2분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
         
-        <!-- 수정된 달 클릭 미션: 15회 / 100코인 -->
+        <!-- 달 클릭 미션: 15회 / 100코인 -->
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">15</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">15</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
 
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
@@ -446,12 +446,11 @@
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
 
-    // [수정완료] 윤영로 필터링 함수 (모든 문자, 공백, 숫자, 자음/모음 조합 감지 정규식)
+    // 윤영로 우회 필터링
     function sanitizeText(str, fallback) {
       if (!str) return fallback !== undefined ? fallback : "익명";
       var s = String(str).trim();
       
-      // 정규식: 윤, 영, 로 사이에 한글 자음/모음, 숫자, 특수문자, 공백 등 어떠한 문자(0~5개)가 끼어있어도 강력 필터링
       var yoonPattern = /[윤\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[영\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[로\u3131-\u318E]/gi;
       var youngPattern = /[영\u3131-\u318E][\s\d\w\W_~`!?@#$%^&*()+\-=\[\]{};:'",.<>\/?\u3131-\u318E]{0,5}[로\u3131-\u318E]/gi;
       
@@ -460,6 +459,20 @@
       
       return s === "" ? (fallback !== undefined ? fallback : "익명") : s;
     }
+
+    // --- 기존 브라우저에 구버전 미션 목표값이 저장되어 있는 경우 신버전 데이터로 강제 초기화/동기화 ---
+    (function syncStorageForMissions() {
+      var savedTimeTarget = parseInt(localStorage.getItem("yoon_m_target_time") || "0");
+      if (savedTimeTarget > 120 || savedTimeTarget === 300 || savedTimeTarget === 0) {
+        localStorage.setItem("yoon_m_target_time", "120");
+        localStorage.setItem("yoon_m_reward_time", "150");
+      }
+      var savedMoonTarget = parseInt(localStorage.getItem("yoon_m_target_moon") || "0");
+      if (savedMoonTarget > 15 || savedMoonTarget === 30 || savedMoonTarget === 0) {
+        localStorage.setItem("yoon_m_target_moon", "15");
+        localStorage.setItem("yoon_m_reward_moon", "100");
+      }
+    })();
 
     var userCoins = parseInt(localStorage.getItem("yoon_coins") || "0");
     var shopMeatCost = parseFloat(localStorage.getItem("yoon_meat_cost") || "160");
@@ -502,12 +515,12 @@
     var missionTargetPickedCoin = parseInt(localStorage.getItem("yoon_m_target_picked") || "50");
     var missionRewardPickedCoin = parseInt(localStorage.getItem("yoon_m_reward_picked") || "30");
     
-    // [수정완료] 시간 미션: 목표 120초(2분) 및 보상 150 코인으로 조정
+    // 시간 미션: 120초(2분) / 150 코인
     var totalPlaytime = parseInt(localStorage.getItem("yoon_m_total_time") || "0");
     var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "120"); 
     var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "150");
 
-    // [수정완료] 달 미션: 목표 15회 및 보상 100 코인으로 조정
+    // 달 미션: 15회 / 100 코인
     var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "15");
     var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "100");
 
@@ -756,7 +769,7 @@
         var claimPickedBtn = document.getElementById('claimPickedBtn');
         if (totalPickedCoins >= missionTargetPickedCoin) { claimPickedBtn.innerText = "보상 받기"; claimPickedBtn.disabled = false; } else { claimPickedBtn.innerText = "진행중"; claimPickedBtn.disabled = true; }
 
-        // [수정완료] 시간 미션 표시 업데이트
+        // 시간 미션 UI 갱신
         var targetTimeMins = Math.max(1, Math.floor(missionTargetPlaytime / 60));
         document.getElementById('mTargetTimeText').innerText = targetTimeMins + "분";
         document.getElementById('mTargetTimeSub').innerText = targetTimeMins + "분";
@@ -765,7 +778,7 @@
         var claimTimeBtn = document.getElementById('claimTimeBtn');
         if (totalPlaytime >= missionTargetPlaytime) { claimTimeBtn.innerText = "보상 받기"; claimTimeBtn.disabled = false; } else { claimTimeBtn.innerText = "진행중"; claimTimeBtn.disabled = true; }
 
-        // [수정완료] 달 미션 표시 업데이트
+        // 달 미션 UI 갱신
         document.getElementById('mTargetMoonText').innerText = missionTargetMoon;
         document.getElementById('mTargetMoonSub').innerText = missionTargetMoon;
         document.getElementById('mRewardMoonText').innerText = missionRewardMoon;
