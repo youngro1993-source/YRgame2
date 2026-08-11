@@ -352,8 +352,9 @@
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">보스 슬레이어 (목표: <span id="mTargetBossText">3</span>)</div><div class="mission-item-desc">보상: <span id="mRewardBossText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionBossProgress">0</span> / <span id="mTargetBossSub">3</span></div></div><button class="claim-btn" id="claimBossBtn" onclick="claimMission('boss')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">상점 VIP (목표: <span id="mTargetShopText">1</span>회 구매)</div><div class="mission-item-desc">보상: <span id="mRewardShopText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionShopProgress">0</span> / <span id="mTargetShopSub">1</span></div></div><button class="claim-btn" id="claimShopBtn" onclick="claimMission('shop')" disabled>보상 받기</button></div>
         <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">행운의 사나이 (목표: <span id="mTargetPickedText">50</span>개 획득)</div><div class="mission-item-desc">필드 코인 보상: <span id="mRewardPickedText" class="highlight-reward">30</span> 코인</div><div class="mission-item-status">진행: <span id="missionPickedProgress">0</span> / <span id="mTargetPickedSub">50</span></div></div><button class="claim-btn" id="claimPickedBtn" onclick="claimMission('picked')" disabled>보상 받기</button></div>
-        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">5분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">50</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">5분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
-        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">30</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">40</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">30</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
+        <!-- 시간 및 달 미션 보상/목표치 조정 반영 -->
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">시간 탐험가 (목표: <span id="mTargetTimeText">2분</span> 플레이)</div><div class="mission-item-desc">인게임 누적 보상: <span id="mRewardTimeText" class="highlight-reward">150</span> 코인</div><div class="mission-item-status">진행: <span id="missionTimeProgress">0분</span> / <span id="mTargetTimeSub">2분</span></div></div><button class="claim-btn" id="claimTimeBtn" onclick="claimMission('time')" disabled>보상 받기</button></div>
+        <div class="mission-item-card"><div class="mission-item-info"><div class="mission-item-title">달의 인도자 (목표: 달 <span id="mTargetMoonText">15</span>회 클릭)</div><div class="mission-item-desc">달 터치 보상: <span id="mRewardMoonText" class="highlight-reward">100</span> 코인</div><div class="mission-item-status">진행: <span id="missionMoonProgress">0</span> / <span id="mTargetMoonSub">15</span></div></div><button class="claim-btn" id="claimMoonBtn" onclick="claimMission('moon')" disabled>보상 받기</button></div>
 
         <button class="btn" style="margin-top: 6px;" onclick="toggleModal('missionModal', false)">닫기</button>
       </div>
@@ -436,17 +437,20 @@
     var controlType = localStorage.getItem("yoon_control_type") || "integrated"; 
     var gameSpeedMultiplier = 1.0; 
     var isPaused = false, isCountingDown = false, isPlaying = false, lastSoundTime = 0; 
-    var currentVersionKey = "v8.4.0"; // 패치노트 유지, 몰래 업데이트 완료
+    var currentVersionKey = "v8.4.0"; 
 
     var deviceId = localStorage.getItem("yoon_device_id");
     if (!deviceId) { deviceId = 'id_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now(); localStorage.setItem("yoon_device_id", deviceId); }
 
+    // 윤영로 우회 입력 강제 필터링 정규식 (숫자, 기호, 공백, 자음/모음 전부 무시 감지)
     function sanitizeText(str, fallback) {
       if (!str) return fallback !== undefined ? fallback : "익명";
       var s = str.trim();
-      s = s.replace(/윤영로윤어게인/g, "***윤어게인");
-      s = s.replace(/윤영로/g, "***");
-      s = s.replace(/영로/g, "**");
+      
+      // 윤, 영, 로 사이에 어떠한 기호/숫자/공백이 들어가도 필터링
+      s = s.replace(/윤[^영로]{0,5}영[^로]{0,5}로/g, "***");
+      s = s.replace(/영[^로]{0,5}로/g, "**");
+      
       return s === "" ? (fallback !== undefined ? fallback : "익명") : s;
     }
 
@@ -491,12 +495,14 @@
     var missionTargetPickedCoin = parseInt(localStorage.getItem("yoon_m_target_picked") || "50");
     var missionRewardPickedCoin = parseInt(localStorage.getItem("yoon_m_reward_picked") || "30");
     
+    // 시간 미션 목표 120초(2분)로 낮추고 보상 150코인으로 상향
     var totalPlaytime = parseInt(localStorage.getItem("yoon_m_total_time") || "0");
-    var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "300"); 
-    var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "50");
+    var missionTargetPlaytime = parseInt(localStorage.getItem("yoon_m_target_time") || "120"); 
+    var missionRewardPlaytime = parseInt(localStorage.getItem("yoon_m_reward_time") || "150");
 
-    var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "30");
-    var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "40");
+    // 달 미션 목표 15회로 낮추고 보상 100코인으로 상향
+    var missionTargetMoon = parseInt(localStorage.getItem("yoon_m_target_moon") || "15");
+    var missionRewardMoon = parseInt(localStorage.getItem("yoon_m_reward_moon") || "100");
 
     function loadScript(src, callback) { var s = document.createElement('script'); s.src = src; s.onload = callback; s.onerror = function() { console.warn("Firebase CDN 로드 실패"); updateLeaderboardUI(true); }; document.head.appendChild(s); }
     
@@ -743,7 +749,7 @@
         var claimPickedBtn = document.getElementById('claimPickedBtn');
         if (totalPickedCoins >= missionTargetPickedCoin) { claimPickedBtn.innerText = "보상 받기"; claimPickedBtn.disabled = false; } else { claimPickedBtn.innerText = "진행중"; claimPickedBtn.disabled = true; }
 
-        var targetTimeMins = Math.floor(missionTargetPlaytime / 60);
+        var targetTimeMins = Math.max(1, Math.floor(missionTargetPlaytime / 60));
         document.getElementById('mTargetTimeText').innerText = targetTimeMins + "분";
         document.getElementById('mTargetTimeSub').innerText = targetTimeMins + "분";
         document.getElementById('mRewardTimeText').innerText = missionRewardPlaytime;
@@ -1008,8 +1014,6 @@
     var stars = [];
     var clouds = [];
     function initStars() { stars = []; for (var i = 0; i < 50; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2 + 0.5, speed: (Math.random() * 1.5 + 0.5) * 0.8, alpha: Math.random() * 0.8 + 0.2 }); }
-    
-    // 구름 개수를 5개로 줄이고 덜 눈에 띄게 조정
     function initClouds() { clouds = []; for (var i = 0; i < 5; i++) clouds.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, speed: Math.random() * 2 + 2, size: Math.random() * 30 + 30 }); }
     
     function updateAndDrawStars() {
@@ -1031,7 +1035,6 @@
     }
     
     function updateAndDrawClouds() {
-      // 쨍한 흰색 대신 노을과 어울리는 옅은 살구빛으로 투명하게 변경
       ctx.fillStyle = "rgba(253, 186, 116, 0.12)";
       for (var i = 0; i < clouds.length; i++) {
         var c = clouds[i];
@@ -1201,7 +1204,6 @@
     function fireBossPattern(b) {
       var ox = b.x + b.width/2, oy = b.y + b.height;
       
-      // 40스테이지 이상일 때 35% 확률로 보스 고유 패턴 시 대형 톱니바퀴 동시 발사
       if (stage >= 40 && Math.random() < 0.35) {
         var dx=(player.x+player.width/2)-ox, dy=(player.y+player.height/2)-oy, dist=Math.sqrt(dx*dx+dy*dy);
         enemyBullets.push({ x: ox-18, y: oy, width: 36, height: 36, vx: (dx/dist)*1.6, vy: (dy/dist)*1.6, isHeavy: true, isSawblade: true, angle: 0 });
@@ -1314,7 +1316,6 @@
           eb.vy = Math.sin(angle) * hSpeed;
         }
         
-        // 거대 톱니바퀴 회전 적용
         if (eb.isSawblade) {
             eb.angle = (eb.angle || 0) + 0.15 * gameSpeedMultiplier;
         }
@@ -1533,12 +1534,11 @@
         shakeTimer--; 
       }
       
-      // 40스테이지 이상 석양 배경 연출
       if (stage >= 40) {
         var bgGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        bgGrd.addColorStop(0, "#1e1b4b"); // 매우 어두운 보라색 (우주와 닿은 느낌)
-        bgGrd.addColorStop(0.5, "#7f1d1d"); // 어두운 붉은색
-        bgGrd.addColorStop(1, "#b45309"); // 짙은 오렌지색
+        bgGrd.addColorStop(0, "#1e1b4b");
+        bgGrd.addColorStop(0.5, "#7f1d1d");
+        bgGrd.addColorStop(1, "#b45309");
         ctx.fillStyle = bgGrd;
         ctx.fillRect(-20, -20, canvas.width + 40, canvas.height + 40);
         updateAndDrawClouds();
@@ -1565,16 +1565,15 @@
       });
       drawPlayer(ctx, player.x, player.y, player.width, player.height);
       
-      // 적 총알 렌더링 (일반 총알 vs 톱니바퀴)
       enemyBullets.forEach(function(eb) { 
         ctx.save(); 
         if (eb.isSawblade) {
           ctx.translate((eb.x+eb.width/2)|0, (eb.y+eb.height/2)|0);
           ctx.rotate(eb.angle||0);
           ctx.shadowColor = "#991b1b"; ctx.shadowBlur = 10;
-          ctx.fillStyle = "#7f1d1d"; // 어두운 빨간색
+          ctx.fillStyle = "#7f1d1d";
           ctx.fillRect((-eb.width/2)|0, (-eb.height/2)|0, eb.width|0, eb.height|0);
-          ctx.fillStyle = "#fca5a5"; // 밝은 빨간색
+          ctx.fillStyle = "#fca5a5";
           ctx.fillRect((-eb.width/4)|0, (-eb.height/4)|0, (eb.width/2)|0, (eb.height/2)|0);
         } else {
           ctx.shadowColor = eb.isHeavy ? "#f87171" : "#ff0055"; ctx.shadowBlur = 6; 
