@@ -1205,17 +1205,24 @@
       else if (r < 0.40) { type = "shooter"; speed = 0.42; hp = 10; } 
       else if (r < 0.58) { type = "zigzag"; speed = 0.75; } 
       else if (r < 0.70) { type = "coin_monster"; speed = 0.5; w = 34; h = 34; hp = 14; }
+      
+      if (stage >= 55) {
+        if (type === "shooter" || type === "coin_monster") hp = hp * 8 + 300;
+        else hp = hp * 4 + 50; 
+      }
+
       var x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w)));
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: speed, type: type, hp: hp, maxHp: hp, lastShoot: 0 });
     }
     function spawnEliteMonster() {
       triggerWarning("ELITE MONSTER!"); var w = 34, h = 34, x = Math.max(0, Math.min(canvas.width - w, Math.random() * (canvas.width - w))), hp = 20 + Math.floor(Math.pow(stage, 1.4) * 15);
+      if (stage >= 55) { hp = hp * 6 + 1000; }
       monsters.push({ id: Math.random().toString(), x: x, startX: x, y: -h, width: w, height: h, speed: 0.35, type: "elite", hp: hp, maxHp: hp, lastShoot: 0 });
     }
     function spawnBoss() {
       triggerWarning("WARNING! BOSS INCOMING!"); bossSpawnCount++; var chp = Math.floor(450 * Math.pow(1.2, bossSpawnCount - 1));
       var types = ["normal", "spinner", "zigzag", "charger"], ct = stage < 3 ? "normal" : types[Math.floor(Math.random() * types.length)];
-      var bY = stage >= 50 ? (canvas.height / 2 - 25) : 40;
+      var bY = stage >= 50 ? (canvas.height * 0.25) : 40;
       boss = { type: ct, x: canvas.width/2 - 35, y: bY, baseY: bY, width: 70, height: 50, speedX: 1.1, hp: chp, maxHp: chp, lastShoot: 0, patternTimer: 0, designType: ct==="spinner"?4:Math.floor(Math.random()*4), state: 'idle', stateTimer: 0, targetDashX: 0, targetDashY: 0, spinAngle: 0, vx: 0, vy: 0 };
     }
     function spawnItem(x, y, fType) {
@@ -1383,8 +1390,8 @@
             if (boss.stateTimer > 70) { boss.state = 'wander'; boss.stateTimer = 0; boss.vx = (Math.random()>0.5?1:-1)*2.0; boss.vy = (Math.random()>0.5?1:-1)*1.4; }
           } else if (boss.state === 'wander') {
             boss.x += boss.vx * gameSpeedMultiplier; boss.y += boss.vy * gameSpeedMultiplier;
-            var limitTop = stage >= 50 ? (canvas.height/2 - 120) : 10;
-            var limitBot = stage >= 50 ? (canvas.height/2 + 120) : canvas.height * 0.35;
+            var limitTop = stage >= 50 ? (canvas.height * 0.15) : 10;
+            var limitBot = stage >= 50 ? (canvas.height * 0.45) : canvas.height * 0.35;
             if (boss.x <= 0 || boss.x + boss.width >= canvas.width) boss.vx *= -1; 
             if (boss.y <= limitTop || boss.y + boss.height >= limitBot) boss.vy *= -1;
             if (gameTime - boss.lastShoot > Math.max(55, 110 - (stage - 1) * 4)) { fireBossPattern(boss); boss.lastShoot = gameTime; }
@@ -1551,7 +1558,7 @@
       else if (b.designType === 2) { ctx.fillStyle = "#0284c7"; ctx.fillRect((b.x+12)|0, b.y|0, (b.width-24)|0, b.height|0); ctx.translate(cx|0, cy|0); ctx.rotate(gameTime * 0.03); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.strokeRect((-b.width/2)|0, -8, b.width|0, 16); }
       else { ctx.fillStyle = "#d97706"; ctx.beginPath(); ctx.moveTo(cx|0, (b.y+b.height)|0); ctx.lineTo((b.x+b.width)|0, b.y|0); ctx.lineTo(b.x|0, b.y|0); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#facc15"; ctx.beginPath(); ctx.arc(cx|0, (b.y+16)|0, 9, 0, Math.PI*2); ctx.fill(); }
       ctx.restore();
-      var bw = canvas.width * 0.6, bh = 14, bx = (canvas.width - bw) / 2, by = (stage >= 50 ? b.y - 25 : 35), hr = Math.max(0, b.hp / b.maxHp);
+      var bw = canvas.width * 0.6, bh = 14, bx = (canvas.width - bw) / 2, by = 40, hr = Math.max(0, b.hp / b.maxHp);
       ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(bx|0, by|0, bw|0, bh|0); ctx.fillStyle = "#ef4444"; ctx.fillRect(bx|0, by|0, (bw*hr)|0, bh|0); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.strokeRect(bx|0, by|0, bw|0, bh|0);
       ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("HP: " + Math.max(0, b.hp|0) + " / " + b.maxHp, canvas.width/2, by+bh/2+1);
     }
@@ -1567,8 +1574,8 @@
       
       if (stage >= 50) {
         var bgGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        bgGrd.addColorStop(0, "#071022");
-        bgGrd.addColorStop(0.5, "#0a0a1a");
+        bgGrd.addColorStop(0, "#0b194a");
+        bgGrd.addColorStop(0.5, "#081030");
         bgGrd.addColorStop(1, "#020617");
         ctx.fillStyle = bgGrd;
         ctx.fillRect(-20, -20, canvas.width + 40, canvas.height + 40);
